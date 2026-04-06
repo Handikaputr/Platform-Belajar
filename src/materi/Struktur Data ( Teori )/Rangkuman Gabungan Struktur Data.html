@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rangkuman Struktur Data — DPTEI FT UNY</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08090c;--surface:#0f1117;--surface2:#171b24;--surface3:#1e2435;
+  --border:#252d3d;--border2:#2d3850;
+  --c1:#6ee7f7;--c2:#a78bfa;--c3:#34d399;--c4:#fb923c;--c5:#f472b6;
+  --text:#c8d3e8;--muted:#5a6480;--heading:#eef2ff;
+  --mono:'Space Mono',monospace;--body:'Space Grotesk',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;}
+
+/* HERO */
+.hero{min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:64px 24px 52px;background:radial-gradient(ellipse 100% 80% at 50% -10%,rgba(110,231,247,.06) 0%,transparent 70%);border-bottom:1px solid var(--border);position:relative;}
+.hero-kicker{font-family:var(--mono);font-size:10px;color:var(--c1);letter-spacing:.2em;margin-bottom:16px;text-transform:uppercase;}
+.hero h1{font-size:clamp(28px,5.5vw,56px);font-weight:700;color:var(--heading);line-height:1.15;margin-bottom:12px;}
+.hero h1 .gr{background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{color:var(--muted);font-size:14px;max-width:500px;}
+.hero-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px;}
+.pill{font-size:11px;font-family:var(--mono);padding:4px 12px;border-radius:20px;border:1px solid var(--border2);}
+.pill-1{color:var(--c1);border-color:rgba(110,231,247,.25);}
+.pill-2{color:var(--c2);border-color:rgba(167,139,250,.25);}
+.pill-3{color:var(--c3);border-color:rgba(52,211,153,.25);}
+.pill-4{color:var(--c4);border-color:rgba(251,146,60,.25);}
+
+/* SIDEBAR NAV */
+.layout{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 310px);}
+@media(max-width:700px){.layout{grid-template-columns:1fr;}}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+@media(max-width:700px){.sidebar{display:none;}}
+.sidebar-section{padding:8px 16px 4px;font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;}
+.sidebar-link{display:block;padding:7px 20px;font-size:13px;color:var(--muted);cursor:pointer;border-left:3px solid transparent;transition:.2s;text-decoration:none;}
+.sidebar-link:hover{color:var(--text);background:var(--surface2);}
+.sidebar-link.active{color:var(--c1);border-left-color:var(--c1);background:rgba(110,231,247,.04);}
+
+/* MOBILE NAV */
+.mobile-nav{display:none;background:var(--surface);border-bottom:1px solid var(--border);padding:0;overflow-x:auto;position:sticky;top:0;z-index:100;}
+@media(max-width:700px){.mobile-nav{display:flex;}}
+.mnav-tab{padding:12px 14px;font-size:11px;font-family:var(--mono);color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;}
+.mnav-tab.active{color:var(--c1);border-bottom-color:var(--c1);}
+
+/* CONTENT */
+.content{padding:32px 28px 80px;max-width:720px;}
+@media(max-width:700px){.content{padding:24px 16px 60px;max-width:100%;}}
+
+/* Chapter headings */
+.chapter{margin-bottom:48px;}
+.chapter-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.chapter-num{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--border2);padding:3px 8px;border-radius:4px;}
+.chapter h2{font-size:22px;font-weight:600;color:var(--heading);}
+.chapter-bar{height:2px;width:40px;border-radius:2px;margin-bottom:20px;}
+
+/* Card */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:14px;}
+.card-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;}
+.card p{font-size:14px;color:var(--muted);line-height:1.7;}
+.card h3{font-size:16px;font-weight:600;color:var(--heading);margin-bottom:8px;}
+
+/* Grid */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.grid-2{grid-template-columns:1fr;}}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:580px){.grid-3{grid-template-columns:1fr 1fr;}}
+
+/* Info rows */
+.info-row{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;}
+.info-dot{width:6px;height:6px;border-radius:50%;margin-top:7px;flex-shrink:0;}
+.info-row h4{font-size:13px;font-weight:600;color:var(--heading);margin-bottom:2px;}
+.info-row p{font-size:12px;color:var(--muted);}
+
+/* Code */
+.code{background:#020408;border:1px solid var(--border);border-radius:8px;padding:16px;font-family:var(--mono);font-size:12px;line-height:1.9;overflow-x:auto;color:#b0c4de;}
+.kw{color:#ff7b72;}.cl{color:#79c0ff;}.st{color:#a5d6ff;}.cm{color:#4d5f7a;font-style:italic;}.nm{color:#bd93f9;}.fn{color:#50fa7b;}
+
+/* Linked list visual */
+.ll-row{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin:10px 0;}
+.ll-n{display:flex;align-items:center;}
+.ll-box{display:flex;border:1.5px solid var(--border2);border-radius:6px;overflow:hidden;font-family:var(--mono);font-size:12px;}
+.ll-d{padding:7px 12px;background:var(--surface2);}
+.ll-p{padding:7px 7px;color:var(--muted);border-left:1px solid var(--border);font-size:10px;}
+.ll-n .ll-box.h{border-color:var(--c3);}
+.ll-n .ll-box.t{border-color:var(--c4);}
+.ll-a{font-size:13px;color:var(--muted);padding:0 3px;}
+
+/* Array vis */
+.arr{display:flex;overflow-x:auto;padding-bottom:4px;gap:0;}
+.ac{display:flex;flex-direction:column;align-items:center;}
+.ai{font-family:var(--mono);font-size:10px;color:var(--muted);padding:2px 0;}
+.ab{min-width:52px;height:40px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;border:1.5px solid var(--border);background:var(--surface2);}
+.ac:first-child .ab{border-radius:6px 0 0 6px;}
+.ac:last-child .ab{border-radius:0 6px 6px 0;}
+.ab.h{border-color:var(--c1);color:var(--c1);}
+
+/* Matrix */
+.mx{display:inline-flex;flex-direction:column;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;}
+.mr{display:flex;}
+.mc{min-width:44px;height:36px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+.mc:last-child{border-right:none;}
+.mr:last-child .mc{border-bottom:none;}
+.mc.h{background:var(--surface3);color:var(--c2);font-size:10px;}
+.mc.hl{color:var(--c1);}
+
+/* Big-O */
+.bo-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bo-l{font-family:var(--mono);font-size:12px;color:var(--c1);min-width:88px;}
+.bo-bar{height:16px;border-radius:3px;min-width:4px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-family:var(--mono);color:rgba(255,255,255,.7);}
+.bo-d{font-size:12px;color:var(--muted);min-width:90px;}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.tbl th{background:var(--surface2);color:var(--c1);font-family:var(--mono);font-size:10px;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--muted);}
+.tbl td:first-child{font-family:var(--mono);color:var(--c3);}
+.tbl tr:hover td{background:var(--surface2);}
+
+/* Tag */
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-family:var(--mono);margin:2px;}
+.t1{background:rgba(110,231,247,.08);color:var(--c1);border:1px solid rgba(110,231,247,.2);}
+.t2{background:rgba(167,139,250,.08);color:var(--c2);border:1px solid rgba(167,139,250,.2);}
+.t3{background:rgba(52,211,153,.08);color:var(--c3);border:1px solid rgba(52,211,153,.2);}
+.t4{background:rgba(251,146,60,.08);color:var(--c4);border:1px solid rgba(251,146,60,.2);}
+.t5{background:rgba(244,114,182,.08);color:var(--c5);border:1px solid rgba(244,114,182,.2);}
+
+.divider{border:none;border-top:1px solid var(--border);margin:36px 0;}
+
+/* Callout */
+.callout{padding:14px 18px;border-radius:8px;margin:14px 0;font-size:13px;}
+.callout-blue{background:rgba(110,231,247,.06);border:1px solid rgba(110,231,247,.2);color:var(--c1);}
+.callout-purple{background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.2);color:var(--c2);}
+
+/* Sections hidden on mobile */
+.ch-section{display:block;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-kicker">Rangkuman Lengkap · Inisiasi 1–4</div>
+  <h1>Struktur Data<br><span class="gr">DPTEI FT UNY</span></h1>
+  <p class="hero-sub">Zaenal Mustofa, M.Kom. — Teknologi Informasi Universitas Negeri Yogyakarta</p>
+  <div class="hero-pills">
+    <div class="pill pill-1">Pendahuluan SD</div>
+    <div class="pill pill-2">Tipe Data &amp; Array</div>
+    <div class="pill pill-3">Array 2D &amp; Linked List</div>
+    <div class="pill pill-4">Praktikum Array</div>
+  </div>
+</div>
+
+<div class="mobile-nav">
+  <div class="mnav-tab active" onclick="mNav(0)">Inisiasi 1</div>
+  <div class="mnav-tab" onclick="mNav(1)">Inisiasi 2</div>
+  <div class="mnav-tab" onclick="mNav(2)">Inisiasi 3</div>
+  <div class="mnav-tab" onclick="mNav(3)">Inisiasi 4</div>
+</div>
+
+<div class="layout">
+
+<div class="sidebar">
+  <div class="sidebar-section">Inisiasi 1</div>
+  <a class="sidebar-link active" href="#ch1" onclick="setActive(this)">Apa itu Struktur Data?</a>
+  <a class="sidebar-link" href="#ch2" onclick="setActive(this)">Interface &amp; ADT</a>
+  <a class="sidebar-link" href="#ch3" onclick="setActive(this)">Notasi Big-Oh</a>
+  <a class="sidebar-link" href="#ch4" onclick="setActive(this)">Performa SD</a>
+  <div class="sidebar-section">Inisiasi 2</div>
+  <a class="sidebar-link" href="#ch5" onclick="setActive(this)">Terminologi Java</a>
+  <a class="sidebar-link" href="#ch6" onclick="setActive(this)">Tipe Data Java</a>
+  <a class="sidebar-link" href="#ch7" onclick="setActive(this)">Array 1 Dimensi</a>
+  <a class="sidebar-link" href="#ch8" onclick="setActive(this)">ArrayList</a>
+  <div class="sidebar-section">Inisiasi 3</div>
+  <a class="sidebar-link" href="#ch9" onclick="setActive(this)">Array 2 Dimensi</a>
+  <a class="sidebar-link" href="#ch10" onclick="setActive(this)">Singly Linked List</a>
+  <a class="sidebar-link" href="#ch11" onclick="setActive(this)">Doubly Linked List</a>
+  <div class="sidebar-section">Inisiasi 4</div>
+  <a class="sidebar-link" href="#ch12" onclick="setActive(this)">Hello World</a>
+  <a class="sidebar-link" href="#ch13" onclick="setActive(this)">Array — Praktik</a>
+  <a class="sidebar-link" href="#ch14" onclick="setActive(this)">Input Keyboard</a>
+</div>
+
+<div class="content">
+
+<!-- ===== INISIASI 1 ===== -->
+<div class="chapter ch-section" id="ini1">
+
+<div id="ch1" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 1</span>
+    <h2 style="color:var(--c1);">Apa itu Struktur Data?</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c1);"></div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--c1);">Definisi</div>
+    <p>Struktur data adalah cara mengorganisasikan dan menyimpan data di komputer agar bisa diakses dan dimodifikasi secara efisien. Struktur data ada di mana-mana dalam kehidupan digital kita.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="info-row"><div class="info-dot" style="background:var(--c1);"></div><div><h4>Membuka File</h4><p>Jutaan file diorganisir dalam struktur data agar bisa dicari cepat.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c2);"></div><div><h4>Cari Kontak</h4><p>Hasil pencarian kontak dalam milidetik menggunakan algoritma SD.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c3);"></div><div><h4>Login Sosmed</h4><p>Verifikasi akun terhadap jutaan pengguna menggunakan SD yang efisien.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c4);"></div><div><h4>Layanan Darurat</h4><p>Lokasi penelepon langsung ditemukan via SD dan peta dikirim ke tim darurat.</p></div></div>
+  </div>
+
+  <div class="callout callout-blue" style="margin-top:16px;">
+    Tiga kebutuhan efisiensi: <strong>Data set yang berkembang</strong> → <strong>Kecepatan proses</strong> → <strong>Jumlah operasi</strong>. Solusinya adalah organisasi data yang tepat menggunakan struktur data.
+  </div>
+</div>
+
+<div id="ch2" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 1</span>
+    <h2 style="color:var(--c1);">Interface &amp; ADT</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c1);"></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Interface (ADT)</h3>
+      <p>Abstract Data Type — mendefinisikan operasi yang didukung beserta semantiknya. Contoh: Queue, Stack, List.</p>
+    </div>
+    <div class="card">
+      <h3>Implementasi</h3>
+      <p>Kode nyata yang merealisasikan interface. Contoh: sorting diimplementasikan dalam Java menggunakan interface List.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:4px;">
+    <div class="card-label" style="color:var(--c1);">Tiga Interface Utama</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+        <div style="font-size:13px;font-weight:600;color:var(--c1);margin-bottom:4px;">Queue — FIFO (First In, First Out)</div>
+        <div style="font-size:12px;color:var(--muted);">add(x)/enqueue(x) masuk dari satu sisi, remove()/dequeue() keluar dari sisi lain. Contoh: antrian kasir.</div>
+      </div>
+      <div style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+        <div style="font-size:13px;font-weight:600;color:var(--c2);margin-bottom:4px;">Stack — LIFO (Last In, First Out)</div>
+        <div style="font-size:12px;color:var(--muted);">push(x) menambah ke top, pop() mengambil dari top. Contoh: tumpukan piring, call stack.</div>
+      </div>
+      <div style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;">
+        <div style="font-size:13px;font-weight:600;color:var(--c3);margin-bottom:4px;">Linear Sequence (List)</div>
+        <div style="font-size:12px;color:var(--muted);">Diindeks 0 sampai n-1. Operasi: get(i), set(i,x), add(i,x), remove(i).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="ch3" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 1</span>
+    <h2 style="color:var(--c1);">Notasi Big-Oh &amp; Matematika SD</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c1);"></div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--c1);">Big-Oh O(f(n)) — Kompleksitas Waktu</div>
+    <p style="margin-bottom:14px;font-size:13px;">Mengukur batas atas pertumbuhan waktu eksekusi. g(n) ≤ c·f(n) untuk semua n ≥ n₀.</p>
+    <div class="bo-row"><div class="bo-l">O(1)</div><div class="bo-bar" style="width:8%;background:#059669;">─</div><div class="bo-d">Konstan</div></div>
+    <div class="bo-row"><div class="bo-l">O(log n)</div><div class="bo-bar" style="width:22%;background:#0891b2;">──</div><div class="bo-d">Logaritmik</div></div>
+    <div class="bo-row"><div class="bo-l">O(n)</div><div class="bo-bar" style="width:42%;background:#7c3aed;">──────</div><div class="bo-d">Linear</div></div>
+    <div class="bo-row"><div class="bo-l">O(n log n)</div><div class="bo-bar" style="width:62%;background:#b45309;">────────</div><div class="bo-d">Linearitmik</div></div>
+    <div class="bo-row"><div class="bo-l">O(n²)</div><div class="bo-bar" style="width:85%;background:#dc2626;">───────────────</div><div class="bo-d">Kuadratik</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card"><div class="card-label" style="color:var(--c1);">Eksponensial &amp; Log</div><div style="font-family:var(--mono);font-size:13px;color:var(--c1);">b^x &nbsp; log_b(k)</div><p style="font-size:12px;margin-top:6px;">Keduanya saling kebalikan. b^(log_b k) = k</p></div>
+    <div class="card"><div class="card-label" style="color:var(--c2);">Faktorial</div><div style="font-family:var(--mono);font-size:13px;color:var(--c2);">n! = 1·2·3···n</div><p style="font-size:12px;margin-top:6px;">C(n,k) = n! / k!(n-k)! — kombinasi</p></div>
+  </div>
+</div>
+
+<div id="ch4" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 1</span>
+    <h2 style="color:var(--c1);">Performa Struktur Data</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c1);"></div>
+
+  <div class="grid-3" style="margin-bottom:14px;">
+    <div style="padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;text-align:center;"><div style="font-size:12px;color:var(--c3);font-weight:600;margin-bottom:6px;">Correctness</div><div style="font-size:11px;color:var(--muted);">Interface yang tepat untuk kebutuhan yang tepat</div></div>
+    <div style="padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;text-align:center;"><div style="font-size:12px;color:var(--c1);font-weight:600;margin-bottom:6px;">Time Complexity</div><div style="font-size:11px;color:var(--muted);">Running time sekecil mungkin</div></div>
+    <div style="padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;text-align:center;"><div style="font-size:12px;color:var(--c4);font-weight:600;margin-bottom:6px;">Space Complexity</div><div style="font-size:11px;color:var(--muted);">Penggunaan memori seefisien mungkin</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="color:var(--c1);">List Implementations — Ringkasan</div>
+    <div style="overflow-x:auto;"><table class="tbl">
+      <thead><tr><th>Struktur</th><th>get/set</th><th>add/remove</th></tr></thead>
+      <tbody>
+        <tr><td>ArrayStack</td><td>O(1)</td><td>O(1+n-i)ᴬ</td></tr>
+        <tr><td>DLList</td><td>O(min{i,n-i})</td><td>O(min{i,n-i})</td></tr>
+        <tr><td>SkiplistList</td><td>O(log n)ᴱ</td><td>O(log n)ᴱ</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px;">ᴬ = amortized &nbsp;·&nbsp; ᴱ = expected</p>
+  </div>
+</div>
+
+</div><!-- end ini1 -->
+
+<hr class="divider">
+
+<!-- ===== INISIASI 2 ===== -->
+<div class="chapter ch-section" id="ini2">
+
+<div id="ch5" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 2</span>
+    <h2 style="color:var(--c2);">Terminologi Bahasa Pemrograman Java</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c2);"></div>
+  <div class="grid-2">
+    <div class="info-row"><div class="info-dot" style="background:var(--c2);"></div><div><h4>Syntax</h4><p>Teks dari bahasa pemrograman — aturan penulisan kode Java.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c2);"></div><div><h4>Compiler</h4><p>Tools untuk mengeksekusi bahasa pemrograman, mengecek error.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c2);"></div><div><h4>Source Code</h4><p>Teks lengkap yang tersusun dari syntax yang ditulis programmer.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c2);"></div><div><h4>Semantic</h4><p>Makna/tujuan dari program yang dibuat sesuai keinginan user.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c2);"></div><div><h4>Compiling</h4><p>Pengecekan program untuk menghindari kesalahan sebelum running.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c2);"></div><div><h4>Running</h4><p>Mengeksekusi program yang telah dikompilasi.</p></div></div>
+  </div>
+</div>
+
+<div id="ch6" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 2</span>
+    <h2 style="color:var(--c2);">Tipe Data Java</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c2);"></div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c2);">Tipe Data Primitif</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+      <span class="tag t2">byte (8-bit)</span>
+      <span class="tag t2">short (16-bit)</span>
+      <span class="tag t2">int (32-bit)</span>
+      <span class="tag t2">long (64-bit)</span>
+      <span class="tag t2">float (32-bit)</span>
+      <span class="tag t2">double (64-bit)</span>
+      <span class="tag t2">char (16-bit)</span>
+      <span class="tag t2">boolean</span>
+    </div>
+    <div style="padding:10px 14px;background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.2);border-radius:6px;font-size:12px;color:var(--muted);">
+      <strong style="color:var(--c2);">String</strong> bukan tipe primitif — String adalah rangkaian karakter (object).
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c2);">Deklarasi Variable</div>
+    <div class="code">
+<span class="kw">int</span> numberOfStudents;&nbsp;&nbsp;&nbsp;<span class="cm">// integer</span>
+<span class="cl">String</span> name;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// teks</span>
+<span class="kw">double</span> x, y;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// desimal presisi tinggi</span>
+<span class="kw">boolean</span> isFinished;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// true / false</span>
+<span class="kw">char</span> firstInitial;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// satu karakter</span></div>
+  </div>
+</div>
+
+<div id="ch7" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 2</span>
+    <h2 style="color:var(--c2);">Array 1 Dimensi</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c2);"></div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c2);">Konsep Array</div>
+    <p style="margin-bottom:12px;">Array menyimpan banyak nilai bertipe sama dalam satu variabel. Indeks dimulai dari 0 hingga length-1. Disimpan berurutan di memori (contiguous).</p>
+    <div class="arr">
+      <div class="ac"><div class="ai">[0]</div><div class="ab h">E0</div></div>
+      <div class="ac"><div class="ai">[1]</div><div class="ab">E1</div></div>
+      <div class="ac"><div class="ai">[2]</div><div class="ab">E2</div></div>
+      <div class="ac"><div class="ai">[3]</div><div class="ab">E3</div></div>
+      <div class="ac"><div class="ai">[4]</div><div class="ab">E4</div></div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;">A[0] s/d A[4] — total 5 elemen. A.length = 5.</p>
+  </div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c2);">Deklarasi &amp; Inisiasi</div>
+    <div class="code">
+<span class="cm">// Array kosong</span>
+<span class="kw">int</span>[] A = <span class="kw">new</span> <span class="kw">int</span>[<span class="nm">5</span>];
+
+<span class="cm">// Array langsung bernilai</span>
+<span class="cl">String</span>[] negara = {<span class="st">"Australia"</span>, <span class="st">"Ceko"</span>, <span class="st">"Jepang"</span>};
+
+<span class="cm">// Akses elemen</span>
+negara[<span class="nm">1</span>]; <span class="cm">// → "Ceko"</span>
+
+<span class="cm">// Iterasi</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; negara.length; i++) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(negara[i]);
+}</div>
+  </div>
+</div>
+
+<div id="ch8" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 2</span>
+    <h2 style="color:var(--c2);">ArrayList</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c2);"></div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c2);">Array vs ArrayList</div>
+    <div style="overflow-x:auto;"><table class="tbl">
+      <thead><tr><th>Aspek</th><th>Array</th><th>ArrayList</th></tr></thead>
+      <tbody>
+        <tr><td>Ukuran</td><td>Tetap</td><td>Dinamis</td></tr>
+        <tr><td>Tipe</td><td>Primitif + Object</td><td>Object saja</td></tr>
+        <tr><td>Akses</td><td>A[i]</td><td>A.get(i)</td></tr>
+        <tr><td>Panjang</td><td>A.length</td><td>A.size()</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c2);">Deklarasi</div>
+    <div class="code">
+<span class="cl">ArrayList</span>&lt;<span class="cl">String</span>&gt; namelist = <span class="kw">new</span> <span class="cl">ArrayList</span>&lt;<span class="cl">String</span>&gt;();
+
+<span class="cm">// Dengan tipe class sendiri</span>
+<span class="cl">ArrayList</span>&lt;<span class="cl">Player</span>&gt; playerList = <span class="kw">new</span> <span class="cl">ArrayList</span>&lt;<span class="cl">Player</span>&gt;();</div>
+  </div>
+</div>
+
+</div><!-- end ini2 -->
+
+<hr class="divider">
+
+<!-- ===== INISIASI 3 ===== -->
+<div class="chapter ch-section" id="ini3">
+
+<div id="ch9" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 3</span>
+    <h2 style="color:var(--c3);">Array 2 Dimensi</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c3);"></div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c3);">Konsep Matriks</div>
+    <p style="margin-bottom:12px;">Array 2D = matriks dengan baris dan kolom. <code style="color:var(--c3);">int[][] A = new int[3][4]</code> — 3 baris, 4 kolom = 12 elemen.</p>
+    <div style="overflow-x:auto;">
+      <div class="mx">
+        <div class="mr"><div class="mc h">↓\→</div><div class="mc h">[0]</div><div class="mc h">[1]</div><div class="mc h">[2]</div><div class="mc h">[3]</div></div>
+        <div class="mr"><div class="mc h">[0]</div><div class="mc hl">1</div><div class="mc">0</div><div class="mc">12</div><div class="mc">-1</div></div>
+        <div class="mr"><div class="mc h">[1]</div><div class="mc">7</div><div class="mc">-3</div><div class="mc hl">2</div><div class="mc">5</div></div>
+        <div class="mr"><div class="mc h">[2]</div><div class="mc">-5</div><div class="mc">-2</div><div class="mc">2</div><div class="mc hl">-9</div></div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;">A[1][2] = 2 &nbsp;·&nbsp; A[2][3] = -9 &nbsp;·&nbsp; Indeks: A[baris][kolom]</p>
+  </div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c3);">Deklarasi Java</div>
+    <div class="code">
+<span class="kw">int</span>[][] A = <span class="kw">new</span> <span class="kw">int</span>[<span class="nm">4</span>][<span class="nm">5</span>]; <span class="cm">// 4 baris × 5 kolom = 20 elemen</span>
+
+A[<span class="nm">0</span>][<span class="nm">0</span>] = <span class="nm">3</span>;
+A[<span class="nm">1</span>][<span class="nm">2</span>] = <span class="nm">9</span>; <span class="cm">// baris 1, kolom 2</span>
+
+<span class="cm">// Iterasi array 2D</span>
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="nm">0</span>; i&lt;<span class="nm">4</span>; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j=<span class="nm">0</span>; j&lt;<span class="nm">5</span>; j++) {
+        <span class="cl">System</span>.out.<span class="fn">print</span>(A[i][j] + <span class="st">" "</span>);
+    }
+}</div>
+  </div>
+</div>
+
+<div id="ch10" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 3</span>
+    <h2 style="color:var(--c3);">Singly Linked List</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c3);"></div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c3);">Struktur SLL</div>
+    <p style="margin-bottom:12px;">Rangkaian node yang saling terhubung via pointer. Setiap node punya: <strong>data</strong> (nilai) + <strong>next</strong> (pointer ke node berikutnya).</p>
+    <div class="ll-row">
+      <div class="ll-n"><div class="ll-box h"><div class="ll-d" style="color:var(--c3);">a</div><div class="ll-p">next→</div></div></div>
+      <div class="ll-a">›</div>
+      <div class="ll-n"><div class="ll-box"><div class="ll-d">b</div><div class="ll-p">next→</div></div></div>
+      <div class="ll-a">›</div>
+      <div class="ll-n"><div class="ll-box"><div class="ll-d">c</div><div class="ll-p">next→</div></div></div>
+      <div class="ll-a">›</div>
+      <div class="ll-n"><div class="ll-box t"><div class="ll-d" style="color:var(--c4);">d</div><div class="ll-p" style="color:var(--c4);">null</div></div></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+      <span class="tag t3">HEAD = node pertama</span>
+      <span class="tag t4">TAIL = node terakhir (next=null)</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c3);">Operasi SLL</div>
+    <div style="overflow-x:auto;"><table class="tbl">
+      <thead><tr><th>Operasi</th><th>Aksi</th><th>Kompleksitas</th></tr></thead>
+      <tbody>
+        <tr><td>add(x)</td><td>Tambah node di TAIL</td><td>O(1) jika ada tail ptr</td></tr>
+        <tr><td>remove()</td><td>Hapus node di HEAD</td><td>O(1)</td></tr>
+        <tr><td>push(x)</td><td>Tambah node di HEAD</td><td>O(1)</td></tr>
+        <tr><td>pop()</td><td>Ambil &amp; hapus HEAD</td><td>O(1)</td></tr>
+        <tr><td>get(i)</td><td>Akses node ke-i</td><td>O(n) traverse</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<div id="ch11" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 3</span>
+    <h2 style="color:var(--c3);">Doubly Linked List</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c3);"></div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c3);">Perbedaan DLL vs SLL</div>
+    <p style="margin-bottom:10px;">DLL punya dua pointer per node: <strong style="color:var(--c2);">prev</strong> (ke kiri) dan <strong style="color:var(--c1);">next</strong> (ke kanan). Traversal bisa dua arah.</p>
+    <div style="overflow-x:auto;"><table class="tbl">
+      <thead><tr><th>Aspek</th><th>SLL</th><th>DLL</th></tr></thead>
+      <tbody>
+        <tr><td>Pointer/node</td><td>1 (next)</td><td>2 (prev+next)</td></tr>
+        <tr><td>Traversal</td><td>→ satu arah</td><td>↔ dua arah</td></tr>
+        <tr><td>Delete node</td><td>Perlu prev node</td><td>Langsung O(1)</td></tr>
+        <tr><td>Memori</td><td>Lebih hemat</td><td>Lebih besar</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="callout callout-purple">
+    Space-Efficient Linked List: setiap node menyimpan beberapa elemen (array kecil). Lebih cache-friendly, overhead pointer lebih sedikit. Trade-off: implementasi lebih kompleks.
+  </div>
+</div>
+
+</div><!-- end ini3 -->
+
+<hr class="divider">
+
+<!-- ===== INISIASI 4 ===== -->
+<div class="chapter ch-section" id="ini4">
+
+<div id="ch12" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 4</span>
+    <h2 style="color:var(--c4);">Hello World — Struktur Program Java</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c4);"></div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c4);">Program Java Minimal</div>
+    <div class="code">
+<span class="kw">public</span> <span class="kw">class</span> <span class="cl">HelloWorld</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {
+        <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="st">"Hello World!"</span>);
+    }
+} <span class="cm">// nama class = nama file .java</span></div>
+    <div style="margin-top:10px;padding:8px 12px;background:rgba(0,0,0,.4);border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--c3);">OUTPUT: Hello World!</div>
+  </div>
+  <div class="grid-2">
+    <div class="info-row"><div class="info-dot" style="background:var(--c4);"></div><div><h4>public class</h4><p>Nama class = nama file .java. Wajib sama persis.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c4);"></div><div><h4>main(String[] args)</h4><p>Method utama — titik masuk program Java.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c4);"></div><div><h4>System.out.println()</h4><p>Cetak teks ke layar dan pindah baris.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c4);"></div><div><h4>System.out.print()</h4><p>Cetak teks ke layar tanpa pindah baris.</p></div></div>
+  </div>
+</div>
+
+<div id="ch13" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 4</span>
+    <h2 style="color:var(--c4);">Array — Deklarasi &amp; Cetak</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c4);"></div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c4);">Deklarasi Array 1D Bernilai</div>
+    <div class="code">
+<span class="kw">public</span> <span class="kw">class</span> <span class="cl">arraySatuDimensi</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {
+
+        <span class="cl">String</span>[] negara = {<span class="st">"Australia"</span>, <span class="st">"Ceko"</span>, <span class="st">"Jepang"</span>, <span class="st">"Indonesia"</span>, <span class="st">"Canada"</span>};
+        <span class="cm">//     ↑tipe  ↑[]tanda  ↑nama var    ↑isi elemen (koma = pemisah)</span>
+    }
+}</div>
+  </div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c4);">Cetak Array dengan For Loop</div>
+    <div class="code">
+<span class="cl">String</span>[] cetakA = <span class="kw">new</span> <span class="cl">String</span>[<span class="nm">5</span>];
+cetakA[<span class="nm">0</span>] = <span class="st">"Australia"</span>;
+cetakA[<span class="nm">1</span>] = <span class="st">"Ceko"</span>; <span class="cm">// ... dst</span>
+
+<span class="cm">// Cetak elemen ke-2 (indeks 1)</span>
+<span class="cl">System</span>.out.<span class="fn">println</span>(cetakA[<span class="nm">1</span>]); <span class="cm">// → "Ceko"</span>
+
+<span class="cm">// Cetak semua dengan for</span>
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="nm">0</span>; i&lt;<span class="nm">5</span>; i++) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(cetakA[i]);
+}</div>
+  </div>
+</div>
+
+<div id="ch14" class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">INISIASI 4</span>
+    <h2 style="color:var(--c4);">Input Array dari Keyboard</h2>
+  </div>
+  <div class="chapter-bar" style="background:var(--c4);"></div>
+  <div class="card">
+    <div class="card-label" style="color:var(--c4);">Scanner — Input Keyboard</div>
+    <div class="code">
+<span class="kw">import</span> java.util.Scanner;
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="cl">negaraA</span> {
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {
+
+        <span class="cl">Scanner</span> input = <span class="kw">new</span> <span class="cl">Scanner</span>(<span class="cl">System</span>.in); <span class="cm">// inisiasi Scanner</span>
+        <span class="cl">String</span>[] negara = <span class="kw">new</span> <span class="cl">String</span>[<span class="nm">5</span>];
+
+        <span class="kw">for</span> (<span class="kw">int</span> i=<span class="nm">0</span>; i&lt;<span class="nm">5</span>; i++) {
+            <span class="cl">System</span>.out.<span class="fn">print</span>(<span class="st">"Negara ke["</span>+(i+<span class="nm">1</span>)+<span class="st">"]:"</span>);
+            negara[i] = input.<span class="fn">nextLine</span>(); <span class="cm">// baca satu baris dari keyboard</span>
+        }
+    }
+}</div>
+  </div>
+  <div class="grid-2" style="margin-top:4px;">
+    <div class="info-row"><div class="info-dot" style="background:var(--c4);"></div><div><h4>import</h4><p>Mengaktifkan class Scanner dari library java.util.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c4);"></div><div><h4>nextLine()</h4><p>Membaca satu baris teks hingga user tekan Enter.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c4);"></div><div><h4>nextInt()</h4><p>Membaca input bertipe integer dari keyboard.</p></div></div>
+    <div class="info-row"><div class="info-dot" style="background:var(--c4);"></div><div><h4>System.in</h4><p>Sumber input standar = keyboard pengguna.</p></div></div>
+  </div>
+</div>
+
+</div><!-- end ini4 -->
+
+</div><!-- end content -->
+</div><!-- end layout -->
+
+<script>
+function setActive(el) {
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Mobile nav
+const sections = ['ini1','ini2','ini3','ini4'];
+function mNav(i) {
+  document.querySelectorAll('.ch-section').forEach((s,j) => {
+    s.style.display = (i === j || window.innerWidth > 700) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.mnav-tab').forEach((t,j) => t.classList.toggle('active', i === j));
+}
+
+// Init mobile
+function initMobile() {
+  if (window.innerWidth <= 700) {
+    document.querySelectorAll('.ch-section').forEach((s,j) => {
+      s.style.display = j === 0 ? 'block' : 'none';
+    });
+  } else {
+    document.querySelectorAll('.ch-section').forEach(s => s.style.display = 'block');
+  }
+}
+initMobile();
+window.addEventListener('resize', initMobile);
+</script>
+</body>
+</html>

@@ -1,49 +1,58 @@
 # TI-belajar
 
-This template should help get you started developing with Vue 3 in Vite.
+Platform belajar berbasis Vue + Vite untuk menampilkan daftar mata kuliah dan materi dari file HTML.
 
-## Recommended IDE Setup
+## Fitur Utama
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Halaman utama menampilkan daftar mata kuliah dalam bentuk tombol.
+- Daftar mata kuliah dan materi diambil otomatis dari struktur folder `src/materi`.
+- Klik materi akan membuka file HTML materi yang dipilih.
 
-## Recommended Browser Setup
+## Rule Program (Struktur Konten)
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+Konten materi wajib mengikuti format berikut:
 
-## Type Support for `.vue` Imports in TS
+`src/materi/[nama matkul]/[nama materi].html`
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+Contoh:
 
-## Customize configuration
+- `src/materi/Algoritma dan Pemrograman/Pengantar.html`
+- `src/materi/Basis Data/Entity Relationship Diagram.html`
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+Ketentuan:
 
-## Project Setup
+- Nama folder = nama mata kuliah.
+- Nama file `.html` = judul materi.
+- Jika folder atau file belum ada, item tidak akan muncul di daftar.
+
+## Cara Menjalankan Proyek
+
+Install dependency:
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+Jalankan mode development:
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Build production (termasuk type-check):
 
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+Jalankan unit test:
 
 ```sh
 npm run test:unit
 ```
-# Platform-Belajar
+
+## Aturan Penggunaan
+
+- Proyek ini digunakan untuk kebutuhan pembelajaran.
+- Dilarang menduplikasi, memperbanyak, atau mendistribusikan materi/kode untuk keperluan komersial tanpa izin tertulis dari pemilik.
+- Dilarang menghapus atribusi atau klaim kepemilikan asli dari materi yang tersedia.
