@@ -1,397 +1,272 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Praktikum Array — Java</title>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;
-  --border:#333;--accent:#00ff88;--accent2:#ff6b35;
-  --accent3:#60a5fa;--accent4:#fbbf24;
-  --text:#ddd;--muted:#777;--heading:#fff;
-  --mono:'Fira Code',monospace;--body:'Outfit',sans-serif;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Praktikum: Tipe Data Java</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Gochi+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-.hero{padding:56px 24px 44px;text-align:center;background:var(--bg);position:relative;}
-.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;max-width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent3),var(--accent2),transparent);}
-.hero-badge{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--accent);border:1px solid rgba(0,255,136,.3);padding:3px 12px;border-radius:3px;margin-bottom:16px;letter-spacing:.15em;}
-.hero h1{font-size:clamp(26px,5vw,50px);font-weight:700;color:var(--heading);margin-bottom:8px;}
-.hero h1 span{color:var(--accent);}
-.hero p{color:var(--muted);font-size:14px;}
+    <style>
+        :root {
+            --bg-color: #fdfbf7;
+            --ink-color: #2d3436;
+            --paper-line: #e1e1e1;
+        }
 
-nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;position:sticky;top:0;z-index:100;}
-.nav-tab{padding:12px 18px;font-size:12px;font-family:var(--mono);color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.2s;}
-.nav-tab:hover{color:var(--text);}
-.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Kalam', cursive;
+            color: var(--ink-color);
+            line-height: 1.6;
+        }
 
-main{max-width:880px;margin:0 auto;padding:28px 18px 80px;}
-section{display:none;}
-section.active{display:block;}
-.intro{font-size:13px;color:var(--muted);border-left:3px solid var(--accent);padding-left:14px;margin-bottom:22px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:16px;}
-.card-label{font-family:var(--mono);font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:.15em;margin-bottom:10px;}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:600px){.grid-2{grid-template-columns:1fr;}}
+        .journal-container {
+            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+            background-size: 100% 2rem;
+            min-height: 100vh;
+        }
 
-/* Code block */
-.code-wrap{background:#000;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.code-header{background:#111;border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
-.code-dots{display:flex;gap:6px;}
-.dot{width:12px;height:12px;border-radius:50%;}
-.dot-r{background:#ff5f57;}.dot-y{background:#ffbd2e;}.dot-g{background:#28ca41;}
-.code-title{font-family:var(--mono);font-size:11px;color:var(--muted);}
-.code-body{padding:20px;font-family:var(--mono);font-size:12px;line-height:1.9;overflow-x:auto;}
-.kw{color:#ff79c6;}.cl{color:#8be9fd;}.st{color:#f1fa8c;}.cm{color:#6272a4;font-style:italic;}.nm{color:#bd93f9;}.op{color:#ff6b35;}.fn{color:#50fa7b;}
+        .sketchy-card {
+            border: 3px solid var(--ink-color);
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            background: white;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
 
-/* Annotation */
-.annot-block{display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);margin:6px 0;}
-.annot-arrow{color:var(--accent);font-size:18px;flex-shrink:0;line-height:1.4;}
-.annot-text{font-size:13px;color:var(--muted);}
-.annot-text strong{color:var(--text);}
+        .sketchy-card:hover {
+            transform: rotate(-0.5deg);
+        }
 
-/* Run output */
-.output{background:#000;border:1px solid #1a3a1a;border-radius:8px;padding:16px;font-family:var(--mono);font-size:12px;color:var(--accent);line-height:1.9;margin-top:12px;}
-.output-label{font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:.1em;}
+        .btn-back {
+            font-family: 'Architects Daughter', cursive;
+            background: white;
+            border: 3px solid var(--ink-color);
+            box-shadow: 6px 6px 0px var(--ink-color);
+            transition: all 0.1s;
+        }
 
-/* Array visual */
-.arr-vis{display:flex;gap:0;overflow-x:auto;padding-bottom:4px;}
-.arr-c{display:flex;flex-direction:column;align-items:center;}
-.arr-idx{font-family:var(--mono);font-size:10px;color:var(--muted);padding:2px 4px;}
-.arr-b{min-width:60px;height:44px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;border:1.5px solid var(--border);}
-.arr-b.hl{border-color:var(--accent);color:var(--accent);background:rgba(0,255,136,.06);}
-.arr-b.hl2{border-color:var(--accent3);color:var(--accent3);background:rgba(96,165,250,.06);}
-.arr-c:first-child .arr-b{border-radius:6px 0 0 6px;}
-.arr-c:last-child .arr-b{border-radius:0 6px 6px 0;}
+        .btn-back:active {
+            box-shadow: 0px 0px 0px var(--ink-color);
+            transform: translate(6px, 6px);
+        }
 
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-family:var(--mono);}
-.b-green{background:rgba(0,255,136,.1);color:var(--accent);border:1px solid rgba(0,255,136,.2);}
-.b-blue{background:rgba(96,165,250,.1);color:var(--accent3);border:1px solid rgba(96,165,250,.2);}
-.b-orange{background:rgba(255,107,53,.1);color:var(--accent2);border:1px solid rgba(255,107,53,.2);}
-.b-yellow{background:rgba(251,191,36,.1);color:var(--accent4);border:1px solid rgba(251,191,36,.2);}
+        .highlighter {
+            cursor: pointer;
+            transition: background 0.3s;
+            display: inline;
+            padding: 0 4px;
+        }
 
-/* Step by step */
-.step{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px;}
-.step-num{font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:6px;letter-spacing:.1em;}
-.step-code{font-family:var(--mono);font-size:12px;color:var(--accent3);background:#000;padding:6px 10px;border-radius:6px;display:inline-block;margin-bottom:6px;}
-.step-desc{font-size:13px;color:var(--muted);}
-</style>
+        .highlight-yellow { background: rgba(255, 243, 77, 0.5); border-radius: 4px; }
+        .highlight-active { background: #fff34d !important; box-shadow: 0 0 10px #fff34d; }
+
+        .sticky-note {
+            background: #ffeaa7;
+            font-family: 'Gochi Hand', cursive;
+            transform: rotate(2deg);
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background: #f1f2f6;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .array-box {
+            width: 80px;
+            height: 60px;
+            border: 2px solid #2d3436;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            position: relative;
+        }
+
+        .index-label {
+            font-size: 0.7rem;
+            position: absolute;
+            top: -20px;
+            color: #d63031;
+        }
+    </style>
 </head>
-<body>
+<body class="p-4 md:p-8 journal-container">
 
-<div class="hero">
-  <div class="hero-badge">PRAKTIKUM · STRUKTUR DATA</div>
-  <h1>Praktikum<br><span>Array Java</span></h1>
-  <p>Zaenal Mustofa, M.Kom. — Teknologi Informasi UNY</p>
-</div>
+    <!-- Navigasi -->
+    <nav class="fixed top-4 right-4 z-50">
+        <button onclick="window.history.back()" class="btn-back px-6 py-2 font-bold text-lg">
+            ← Kembali ke Halaman Sebelumnya
+        </button>
+    </nav>
 
-<nav>
-  <div class="nav-tab active" onclick="showTab(0)">Hello World</div>
-  <div class="nav-tab" onclick="showTab(1)">Variables &amp; Types</div>
-  <div class="nav-tab" onclick="showTab(2)">Array 1D — Deklarasi</div>
-  <div class="nav-tab" onclick="showTab(3)">Array 1D — Print</div>
-  <div class="nav-tab" onclick="showTab(4)">Array 1D — Input</div>
-  <div class="nav-tab" onclick="showTab(5)">ArrayList</div>
-</nav>
+    <header class="max-w-4xl mx-auto mb-16 pt-10 text-center">
+        <h1 class="text-6xl md:text-7xl font-bold mb-4" style="font-family: 'Gochi Hand';">Praktikum Tipe Data</h1>
+        <p class="text-xl italic text-gray-600">Catatan Belajar Java - Zaenal Mustofa, M.Kom.</p>
+        <div class="mt-4 flex justify-center gap-4">
+            <span class="border-b-2 border-black px-4">Struktur Data</span>
+            <span class="border-b-2 border-black px-4">Java Basic</span>
+        </div>
+    </header>
 
-<main>
+    <main class="max-w-4xl mx-auto space-y-20 pb-20">
 
-<!-- TAB 0: Hello World -->
-<section class="active">
-  <p class="intro">Program Java pertama: menampilkan teks "Hello World!" saat dijalankan. Ini adalah fondasi struktur setiap program Java.</p>
+        <!-- Section 1: Basic Application -->
+        <section class="relative">
+            <div class="sticky-note absolute -right-10 -top-10 w-48 p-4 z-10 hidden md:block">
+                "Ingat! Nama file harus sama dengan nama class-nya."
+            </div>
+            <h2 class="text-4xl mb-6 underline decoration-wavy decoration-yellow-500">1. Basic Java App</h2>
+            <div class="sketchy-card p-8">
+                <p class="mb-4">Untuk memulai, kita perlu struktur dasar <span class="highlighter">public class</span> dan <span class="highlighter">main method</span>. Klik teks di bawah untuk melihat anatomi kodenya:</p>
+                
+                <div class="bg-gray-800 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto leading-loose">
+                    <span class="text-blue-400 cursor-pointer hover:underline" onclick="showTip('Ini adalah deklarasi Class utama')">public class HelloWorld</span> { <br>
+                    &nbsp;&nbsp;<span class="text-yellow-400 cursor-pointer hover:underline" onclick="showTip('Method yang pertama kali dijalankan oleh Java')">public static void main</span>(String[] args) { <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("<span class="text-white">Hello World!</span>"); <br>
+                    &nbsp;&nbsp;} <br>
+                    }
+                </div>
+                <div id="tip-display" class="mt-4 text-center italic text-blue-600 h-6"></div>
+            </div>
+        </section>
 
-  <div class="card">
-    <div class="card-label">Struktur Dasar Program Java</div>
-    <div class="code-wrap">
-      <div class="code-header"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><div class="code-title">BasicJava.java</div></div>
-      <div class="code-body">
-<span class="kw">public</span> <span class="kw">class</span> <span class="cl">&lt;program-name&gt;</span> {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Variable declarations (optional)</span><br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// statements...</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Subroutines (optional)</span><br>
-}<br>
-      </div>
-    </div>
-  </div>
+        <!-- Section 2: Variables -->
+        <section>
+            <h2 class="text-4xl mb-6 underline decoration-wavy decoration-green-500">2. Variables & Types</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="sketchy-card p-6">
+                    <h3 class="text-2xl font-bold mb-4">Cara Deklarasi:</h3>
+                    <p class="font-mono text-lg"><code>type-name</code> <code>variable-name;</code></p>
+                    <ul class="mt-4 space-y-2">
+                        <li><span class="highlighter">int</span> : Angka bulat (10, 20)</li>
+                        <li><span class="highlighter">double</span> : Angka pecahan (10.5)</li>
+                        <li><span class="highlighter">String</span> : Teks ("Halo")</li>
+                        <li><span class="highlighter">boolean</span> : True/False</li>
+                    </ul>
+                </div>
+                <div class="sticky-note p-6 flex flex-col justify-center">
+                    <p class="text-xl">"Klik salah satu tipe data di samping untuk menyorotnya sebagai materi penting!"</p>
+                </div>
+            </div>
+        </section>
 
-  <div class="card">
-    <div class="card-label">Program: Hello World!</div>
-    <div class="code-wrap">
-      <div class="code-header"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><div class="code-title">HelloWorld.java</div></div>
-      <div class="code-body">
-<span class="cm">/** A program to display "Hello World!" */</span><br>
-<span class="kw">public</span> <span class="kw">class</span> <span class="cl">HelloWorld</span> {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="fn">println</span>(<span class="st">"Hello World!"</span>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-} <span class="cm">// end of class HelloWorld</span><br>
-      </div>
-    </div>
-    <div class="output"><div class="output-label">OUTPUT:</div>Hello World!</div>
-  </div>
+        <!-- Section 3: Array 1D Visualizer -->
+        <section>
+            <h2 class="text-4xl mb-6 underline decoration-wavy decoration-red-500">3. Array 1D Interactive Lab</h2>
+            <div class="sketchy-card p-8 bg-blue-50">
+                <p class="mb-6">Array 1 Dimensi menyimpan banyak data dalam satu baris. Coba masukkan nama negara (pisahkan dengan koma) untuk memvisualisasikan Array-mu:</p>
+                
+                <div class="flex gap-4 mb-8">
+                    <input type="text" id="array-input" placeholder="Contoh: Indonesia, Jepang, Ceko" class="flex-1 p-2 border-2 border-black rounded shadow-inner">
+                    <button onclick="buildArray()" class="btn-back px-4 py-2 bg-yellow-300">Generate Array</button>
+                </div>
 
-  <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
-    <div class="annot-block"><div class="annot-arrow">▸</div><div class="annot-text"><strong>public class</strong> = nama class harus sama dengan nama file (.java)</div></div>
-    <div class="annot-block"><div class="annot-arrow">▸</div><div class="annot-text"><strong>main(String[] args)</strong> = method utama yang dieksekusi pertama kali</div></div>
-    <div class="annot-block"><div class="annot-arrow">▸</div><div class="annot-text"><strong>System.out.println()</strong> = mencetak teks ke layar + newline</div></div>
-  </div>
-</section>
+                <div id="array-visualizer" class="flex flex-wrap gap-4 justify-center pt-8 min-h-[100px]">
+                    <!-- Array boxes generated here -->
+                    <p class="text-gray-400 italic">Visualisasi Array akan muncul di sini...</p>
+                </div>
 
-<!-- TAB 1: Variables -->
-<section>
-  <p class="intro">Variable adalah nama yang menunjuk ke lokasi memori tempat data disimpan. Deklarasi: <code style="color:var(--accent)">&lt;type-name&gt; &lt;variable-name&gt;;</code></p>
+                <div class="mt-8 p-4 bg-white border-l-4 border-blue-500 italic">
+                    <p id="code-output">Kode Java akan muncul di sini...</p>
+                </div>
+            </div>
+        </section>
 
-  <div class="card">
-    <div class="card-label">Contoh Deklarasi Variable</div>
-    <div class="code-wrap">
-      <div class="code-header"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><div class="code-title">Variables.java</div></div>
-      <div class="code-body">
-<span class="kw">int</span> numberOfStudents; &nbsp;&nbsp;<span class="cm">// bilangan bulat</span><br>
-<span class="cl">String</span> name; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// teks</span><br>
-<span class="kw">double</span> x, y; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// desimal presisi tinggi</span><br>
-<span class="kw">boolean</span> isFinished; &nbsp;&nbsp;&nbsp;<span class="cm">// true atau false</span><br>
-<span class="kw">char</span> firstInitial, middleInitial, lastInitial; <span class="cm">// karakter</span><br>
-      </div>
-    </div>
-  </div>
+        <!-- Section 4: Scanner & Input -->
+        <section>
+            <h2 class="text-4xl mb-6 underline decoration-wavy decoration-purple-500">4. Input Keyboard (Scanner)</h2>
+            <div class="sketchy-card p-8">
+                <p class="mb-4">Untuk mengambil input, kita butuh class <span class="highlighter">Scanner</span> dari library <code>java.util</code>.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="border-2 border-dashed border-gray-400 p-4">
+                        <h4 class="font-bold mb-2">Langkah-langkah:</h4>
+                        <ol class="list-decimal ml-5">
+                            <li>Import Scanner</li>
+                            <li>Buat object Scanner</li>
+                            <li>Gunakan <code>nextLine()</code> atau <code>nextInt()</code></li>
+                        </ol>
+                    </div>
+                    <div class="bg-gray-100 p-4 font-mono text-xs">
+                        import java.util.Scanner;<br><br>
+                        Scanner input = new Scanner(System.in);<br>
+                        String nama = input.nextLine();
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <div class="card">
-    <div class="card-label">Tipe Data Primitif Java</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-        <div style="font-family:var(--mono);font-size:14px;color:var(--accent);margin-bottom:4px;">int</div>
-        <div style="font-size:11px;color:var(--muted);">32-bit integer</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-        <div style="font-family:var(--mono);font-size:14px;color:var(--accent3);margin-bottom:4px;">double</div>
-        <div style="font-size:11px;color:var(--muted);">64-bit decimal</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-        <div style="font-family:var(--mono);font-size:14px;color:var(--accent2);margin-bottom:4px;">boolean</div>
-        <div style="font-size:11px;color:var(--muted);">true / false</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-        <div style="font-family:var(--mono);font-size:14px;color:var(--accent4);margin-bottom:4px;">char</div>
-        <div style="font-size:11px;color:var(--muted);">single char</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-        <div style="font-family:var(--mono);font-size:14px;color:var(--muted);margin-bottom:4px;">String</div>
-        <div style="font-size:11px;color:var(--muted);">non-primitive</div>
-      </div>
-    </div>
-  </div>
-</section>
+        <!-- Penutup -->
+        <footer class="text-center pb-10">
+            <div class="inline-block sketchy-card p-6 rotate-1 bg-yellow-100">
+                <h3 class="text-2xl font-bold">Semoga Ilmunya Bermanfaat!</h3>
+                <p>Sampai jumpa di inisiasi 4: Struktur Data.</p>
+            </div>
+        </footer>
 
-<!-- TAB 2: Array 1D Deklarasi -->
-<section>
-  <p class="intro">Array 1 dimensi menyimpan beberapa nilai bertipe sama dalam satu variabel. Elemen diakses via indeks mulai dari 0.</p>
+    </main>
 
-  <div class="card">
-    <div class="card-label">Deklarasi Array 1D Bernilai</div>
-    <div class="code-wrap">
-      <div class="code-header"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><div class="code-title">arraySatuDimensi.java</div></div>
-      <div class="code-body">
-<span class="kw">public</span> <span class="kw">class</span> <span class="cl">arraySatuDimensi</span> {<br>
-&nbsp;&nbsp;<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">String</span>[] negara = {<span class="st">"Australia"</span>, <span class="st">"Ceko"</span>, <span class="st">"Jepang"</span>, <span class="st">"Indonesia"</span>, <span class="st">"Canada"</span>};<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// ↑ tipe   ↑ tanda array  ↑ nama var  ↑ isi elemen (dipisah koma)</span><br>
-<br>
-&nbsp;&nbsp;}<br>
-}<br>
-      </div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
-      <span class="badge b-green">String[] = tipe data array</span>
-      <span class="badge b-blue">negara = nama variabel</span>
-      <span class="badge b-orange">[] = tanda array</span>
-      <span class="badge b-yellow">, = pemisah indeks</span>
-    </div>
-  </div>
+    <script>
+        $(document).ready(function() {
+            // Interactive Highlighter
+            $('.highlighter').on('click', function() {
+                $(this).toggleClass('highlight-active');
+            });
 
-  <div class="card">
-    <div class="card-label">Visualisasi Array</div>
-    <div class="arr-vis">
-      <div class="arr-c"><div class="arr-idx">[0]</div><div class="arr-b hl">Australia</div></div>
-      <div class="arr-c"><div class="arr-idx">[1]</div><div class="arr-b hl2">Ceko</div></div>
-      <div class="arr-c"><div class="arr-idx">[2]</div><div class="arr-b">Jepang</div></div>
-      <div class="arr-c"><div class="arr-idx">[3]</div><div class="arr-b">Indonesia</div></div>
-      <div class="arr-c"><div class="arr-idx">[4]</div><div class="arr-b">Canada</div></div>
-    </div>
-    <div style="margin-top:10px;font-size:12px;color:var(--muted);font-family:var(--mono);">negara[0] = "Australia" &nbsp;·&nbsp; negara[1] = "Ceko" &nbsp;·&nbsp; ... &nbsp;·&nbsp; negara.length = 5</div>
-  </div>
-</section>
+            // Sticky Note Interaction
+            $('.sticky-note').on('click', function() {
+                $(this).css('transform', 'scale(1.05) rotate(0deg)');
+                setTimeout(() => {
+                    $(this).css('transform', 'rotate(2deg)');
+                }, 500);
+            });
+        });
 
-<!-- TAB 3: Array Print -->
-<section>
-  <p class="intro">Mencetak elemen array — bisa per indeks tertentu atau semua elemen dengan perulangan for loop.</p>
+        function showTip(text) {
+            $('#tip-display').text(text).hide().fadeIn();
+        }
 
-  <div class="card">
-    <div class="card-label">Program: Mencetak Array 1D</div>
-    <div class="code-wrap">
-      <div class="code-header"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><div class="code-title">arrayCetak1.java</div></div>
-      <div class="code-body">
-<span class="kw">public</span> <span class="kw">class</span> <span class="cl">arrayCetak1</span> {<br>
-&nbsp;&nbsp;<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">String</span>[] cetakA = <span class="kw">new</span> <span class="cl">String</span>[<span class="nm">5</span>];<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Isi nilai ke setiap indeks</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;cetakA[<span class="nm">0</span>] = <span class="st">"Australia"</span>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;cetakA[<span class="nm">1</span>] = <span class="st">"Ceko"</span>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;cetakA[<span class="nm">2</span>] = <span class="st">"Jepang"</span>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;cetakA[<span class="nm">3</span>] = <span class="st">"Indonesia"</span>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;cetakA[<span class="nm">4</span>] = <span class="st">"Kanada"</span>;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Cetak elemen ke-2 (indeks 1)</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="fn">println</span>(<span class="st">"Negara ke-2: "</span> + cetakA[<span class="nm">1</span>]);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Cetak semua elemen dengan for loop</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; <span class="nm">5</span>; i++) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="fn">println</span>(cetakA[i]);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;}<br>
-}<br>
-      </div>
-    </div>
-    <div class="output">
-      <div class="output-label">OUTPUT:</div>
-      Negara ke-2: Ceko<br>
-      Australia<br>
-      Ceko<br>
-      Jepang<br>
-      Indonesia<br>
-      Kanada
-    </div>
-  </div>
+        function buildArray() {
+            const input = $('#array-input').val();
+            if (!input) return;
 
-  <div style="display:flex;flex-direction:column;gap:8px;">
-    <div class="step"><div class="step-num">STEP 01 — INISIASI</div><div class="step-code">String[] cetakA = new String[5];</div><div class="step-desc">Buat array kosong berkapasitas 5 elemen bertipe String.</div></div>
-    <div class="step"><div class="step-num">STEP 02 — ISI NILAI</div><div class="step-code">cetakA[0] = "Australia";</div><div class="step-desc">Isi setiap slot dengan nilai. Indeks dimulai dari 0, bukan 1.</div></div>
-    <div class="step"><div class="step-num">STEP 03 — AKSES SPESIFIK</div><div class="step-code">cetakA[1] → "Ceko"</div><div class="step-desc">Akses langsung via indeks. Hasilnya nilai pada posisi tersebut.</div></div>
-    <div class="step"><div class="step-num">STEP 04 — FOR LOOP</div><div class="step-code">for (int i=0; i&lt;5; i++)</div><div class="step-desc">Perulangan dari indeks 0 sampai 4 (5 iterasi total) untuk mencetak semua elemen.</div></div>
-  </div>
-</section>
+            const items = input.split(',').map(s => s.trim());
+            const visualizer = $('#array-visualizer');
+            visualizer.empty();
 
-<!-- TAB 4: Input -->
-<section>
-  <p class="intro">Mengambil input dari keyboard menggunakan class Scanner. Diperlukan <code style="color:var(--accent)">import java.util.Scanner;</code> di awal file.</p>
+            items.forEach((item, index) => {
+                const box = $(`
+                    <div class="array-box shadow-lg opacity-0 transform translate-y-4">
+                        <span class="index-label">idx: ${index}</span>
+                        <span class="font-bold">${item}</span>
+                    </div>
+                `);
+                visualizer.append(box);
+                
+                // Animasi masuk satu-satu
+                setTimeout(() => {
+                    box.animate({ opacity: 1 }, 300).css('transform', 'translateY(0)');
+                }, index * 100);
+            });
 
-  <div class="card">
-    <div class="card-label">Input Array dari Keyboard — Latihan 1</div>
-    <div class="code-wrap">
-      <div class="code-header"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><div class="code-title">negaraA.java</div></div>
-      <div class="code-body">
-<span class="kw">import</span> java.util.Scanner; <span class="cm">// import class Scanner untuk input keyboard</span><br>
-<br>
-<span class="kw">public</span> <span class="kw">class</span> <span class="cl">negaraA</span> {<br>
-&nbsp;&nbsp;<span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> <span class="fn">main</span>(<span class="cl">String</span>[] args) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">Scanner</span> input = <span class="kw">new</span> <span class="cl">Scanner</span>(<span class="cl">System</span>.in); <span class="cm">// buat Scanner untuk input</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">String</span>[] negara = <span class="kw">new</span> <span class="cl">String</span>[<span class="nm">5</span>]; <span class="cm">// array 5 elemen String</span><br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="fn">println</span>(<span class="st">"Silahkan masukkan nama negara!"</span>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; <span class="nm">5</span>; i++) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.<span class="fn">print</span>(<span class="st">"Masukkan negara ke["</span> + (i+<span class="nm">1</span>) + <span class="st">"]:"</span>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;negara[i] = input.<span class="fn">nextLine</span>(); <span class="cm">// baca satu baris teks dari keyboard</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;}<br>
-}<br>
-      </div>
-    </div>
-    <div class="output">
-      <div class="output-label">SIMULASI I/O:</div>
-      Silahkan masukkan nama negara!<br>
-      Masukkan negara ke[1]:<span style="color:#fff;"> Australia</span><br>
-      Masukkan negara ke[2]:<span style="color:#fff;"> Ceko</span><br>
-      Masukkan negara ke[3]:<span style="color:#fff;"> Jepang</span><br>
-      Masukkan negara ke[4]:<span style="color:#fff;"> Indonesia</span><br>
-      Masukkan negara ke[5]:<span style="color:#fff;"> Kanada</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Penjelasan Scanner</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;">
-        <div style="font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:6px;">import</div>
-        <div style="font-size:12px;color:var(--muted);">Penanda untuk menggunakan class dari library Java. Scanner ada di java.util.</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;">
-        <div style="font-family:var(--mono);font-size:12px;color:var(--accent3);margin-bottom:6px;">Scanner input</div>
-        <div style="font-size:12px;color:var(--muted);">Membuat objek Scanner. System.in = keyboard sebagai sumber input.</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;">
-        <div style="font-family:var(--mono);font-size:12px;color:var(--accent2);margin-bottom:6px;">nextLine()</div>
-        <div style="font-size:12px;color:var(--muted);">Membaca satu baris teks dari keyboard sampai user tekan Enter.</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;">
-        <div style="font-family:var(--mono);font-size:12px;color:var(--accent4);margin-bottom:6px;">nextInt()</div>
-        <div style="font-size:12px;color:var(--muted);">Membaca input integer dari keyboard. Ada juga nextDouble(), nextFloat(), dll.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TAB 5: ArrayList -->
-<section>
-  <p class="intro">ArrayList adalah versi dinamis dari array — ukurannya bisa bertambah/berkurang saat runtime tanpa perlu redeklarasi.</p>
-
-  <div class="card">
-    <div class="card-label">Deklarasi ArrayList</div>
-    <div class="code-wrap">
-      <div class="code-header"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><div class="code-title">ArrayList.java</div></div>
-      <div class="code-body">
-<span class="cm">// Cara 1: deklarasi terpisah</span><br>
-<span class="cl">ArrayList</span>&lt;<span class="cl">String</span>&gt; namelist; <span class="cm">// tipe data String, nama variabel namelist</span><br>
-namelist = <span class="kw">new</span> <span class="cl">ArrayList</span>&lt;<span class="cl">String</span>&gt;(); <span class="cm">// inisiasi dengan operator new</span><br>
-<br>
-<span class="cm">// Cara 2: satu baris</span><br>
-<span class="cl">ArrayList</span>&lt;<span class="cl">String</span>&gt; namelist = <span class="kw">new</span> <span class="cl">ArrayList</span>&lt;<span class="cl">String</span>&gt;();<br>
-<br>
-<span class="cm">// Dengan tipe data custom class</span><br>
-<span class="cl">ArrayList</span>&lt;<span class="cl">Player</span>&gt; playerList = <span class="kw">new</span> <span class="cl">ArrayList</span>&lt;<span class="cl">Player</span>&gt;();<br>
-<span class="cm">// ↑ nama class    ↑ nama objek</span><br>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Operasi Umum ArrayList</div>
-    <div class="code-wrap">
-      <div class="code-header"><div class="code-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><div class="code-title">OperasiArrayList.java</div></div>
-      <div class="code-body">
-<span class="cl">ArrayList</span>&lt;<span class="cl">String</span>&gt; list = <span class="kw">new</span> <span class="cl">ArrayList</span>&lt;&gt;();<br>
-<br>
-list.<span class="fn">add</span>(<span class="st">"Satu"</span>); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// tambah di akhir</span><br>
-list.<span class="fn">add</span>(<span class="nm">0</span>, <span class="st">"Nol"</span>); &nbsp;&nbsp;&nbsp;<span class="cm">// tambah di indeks 0</span><br>
-list.<span class="fn">get</span>(<span class="nm">1</span>); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// ambil elemen indeks 1</span><br>
-list.<span class="fn">set</span>(<span class="nm">1</span>, <span class="st">"Dua"</span>); &nbsp;&nbsp;<span class="cm">// ubah elemen indeks 1</span><br>
-list.<span class="fn">remove</span>(<span class="nm">0</span>); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// hapus elemen indeks 0</span><br>
-list.<span class="fn">size</span>(); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// jumlah elemen</span><br>
-list.<span class="fn">contains</span>(<span class="st">"Satu"</span>); <span class="cm">// cek apakah ada</span><br>
-      </div>
-    </div>
-  </div>
-</section>
-
-</main>
-<script>
-const tabs=document.querySelectorAll('.nav-tab');
-const secs=document.querySelectorAll('section');
-function showTab(i){tabs.forEach((t,j)=>t.classList.toggle('active',i===j));secs.forEach((s,j)=>s.classList.toggle('active',i===j));}
-</script>
+            // Generate Java Code
+            const code = `String[] negara = {${items.map(i => '"' + i + '"').join(', ')}};`;
+            $('#code-output').html(`<strong>Java:</strong> <code>${code}</code>`);
+        }
+    </script>
 </body>
 </html>

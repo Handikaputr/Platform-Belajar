@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Komunikasi Efektif & Multimedia</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Gochi+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        :root {
+            --journal-bg: #fdfbf7;
+            --ink: #2d3436;
+            --paper-line: #e1e1e1;
+        }
+
+        body {
+            background-color: var(--journal-bg);
+            font-family: 'Kalam', cursive;
+            color: var(--ink);
+            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+            background-size: 100% 2.5rem;
+        }
+
+        h1, h2, h3 { font-family: 'Gochi Hand', cursive; }
+
+        .sketchy-card {
+            border: 3px solid var(--ink);
+            border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+            background: white;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .sketchy-card:hover {
+            transform: rotate(-0.5deg);
+        }
+
+        .btn-back {
+            background: white;
+            border: 3px solid var(--ink);
+            box-shadow: 6px 6px 0px var(--ink);
+            font-family: 'Architects Daughter', cursive;
+            transition: all 0.1s;
+        }
+
+        .btn-back:active {
+            box-shadow: 0px 0px 0px var(--ink);
+            transform: translate(6px, 6px);
+        }
+
+        .highlighter {
+            cursor: pointer;
+            padding: 0 4px;
+            display: inline;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .highlight-active {
+            background: #fff34d !important;
+            box-shadow: 0 0 12px #fff34d;
+        }
+
+        .sticky-note {
+            background: #fab1a0;
+            padding: 1rem;
+            transform: rotate(2deg);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            font-family: 'Gochi Hand', cursive;
+            cursor: pointer;
+            width: fit-content;
+            max-width: 200px;
+        }
+
+        /* Simulator: Model Komunikasi */
+        .comm-node {
+            border: 2px solid var(--ink);
+            padding: 10px;
+            background: #fff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .noise-wave {
+            position: absolute;
+            color: #ff7675;
+            font-weight: bold;
+            animation: flicker 0.5s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1) rotate(5deg); }
+        }
+
+        /* Dale's Cone Styles */
+        .cone-layer {
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            border: 2px solid var(--ink);
+            margin: 2px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cone-layer:hover {
+            background: #dfe6e9 !important;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+
+    <!-- Navigasi -->
+    <nav class="fixed top-5 right-5 z-50">
+        <button onclick="window.history.back()" class="btn-back px-6 py-2 font-bold text-lg">
+            ← Kembali ke Halaman Sebelumnya
+        </button>
+    </nav>
+
+    <!-- Header -->
+    <header class="max-w-4xl mx-auto text-center mb-16 pt-10">
+        <h1 class="text-6xl md:text-8xl mb-4 text-orange-600">Komunikasi Efektif</h1>
+        <p class="text-2xl font-bold border-b-4 border-black inline-block px-4 italic">Jurnal Belajar Media & Multimedia</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-16">
+
+        <!-- SECTION 1: DEFINISI & EFISIENSI -->
+        <section id="efektif">
+            <h2 class="text-4xl text-blue-700 mb-6 underline">Apa itu Komunikasi Efektif?</h2>
+            <div class="sketchy-card">
+                <p class="text-xl leading-relaxed mb-6">
+                    <span class="highlighter">Komunikasi dikatakan efektif</span> apabila pesan yang dikirim oleh komunikator <strong>sama</strong> dengan pesan yang diterima oleh komunikan. 
+                </p>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="sticky-note bg-yellow-200">
+                        "Reality vs Shared Space: Komunikasi butuh ruang pemahaman yang sama!"
+                    </div>
+                    <div class="p-4 border-2 border-dashed border-gray-400 italic">
+                        Klik teks di atas untuk menandai bagian penting!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: SIMULATOR MODEL KOMUNIKASI -->
+        <section id="model-sim">
+            <h2 class="text-4xl text-green-700 mb-6 underline">Mini Lab: Alur Pesan & Noise</h2>
+            <div class="sketchy-card bg-gray-50">
+                <p class="mb-8 text-sm italic">Coba klik tombol 'Kirim Pesan' untuk melihat bagaimana gangguan (Noise) mempengaruhi transmisi.</p>
+                
+                <div class="relative flex flex-col md:flex-row items-center justify-between gap-4 h-64 border-2 border-black p-4 bg-white">
+                    <div class="comm-node" id="sender">SENDER<br>(Encoder)</div>
+                    
+                    <div class="flex-1 flex items-center justify-center relative w-full h-full">
+                        <div id="message-packet" class="hidden absolute left-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">M</div>
+                        <div class="w-full border-t-2 border-dotted border-black"></div>
+                        <div class="noise-wave" style="top: 20%;">⚡ NOISE ⚡</div>
+                        <div class="noise-wave" style="bottom: 20%; right: 30%;">⚡ NOISE ⚡</div>
+                    </div>
+
+                    <div class="comm-node" id="receiver">RECEIVER<br>(Decoder)</div>
+                </div>
+
+                <div class="mt-6 flex justify-center">
+                    <button id="send-btn" class="btn-back px-8 py-2 bg-blue-100 font-bold">Kirim Pesan!</button>
+                </div>
+                <p id="comm-feedback" class="mt-4 text-center font-bold text-red-500 h-6"></p>
+            </div>
+        </section>
+
+        <!-- SECTION 3: PENYEBAB PESAN HILANG -->
+        <section id="funnel">
+            <h2 class="text-4xl text-red-600 mb-6 underline">Mengapa Pesan Berkurang (M1 - M4)?</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="sketchy-card">
+                    <h3 class="text-2xl mb-4">Urutan Transmisi:</h3>
+                    <ul class="space-y-4">
+                        <li>🔵 <span class="font-bold">M1:</span> Pesan dari Developer</li>
+                        <li>🟡 <span class="font-bold">M2:</span> Melalui Encoding & Lingkungan</li>
+                        <li>🟠 <span class="font-bold">M3:</span> Proses Decoding Audience</li>
+                        <li>🔴 <span class="font-bold">M4:</span> Pesan yang Diterima</li>
+                    </ul>
+                </div>
+                <div class="sticky-note bg-blue-200">
+                    💡 "Pesan yang hilang seringkali disebabkan oleh kurangnya keterampilan encoding pengembang atau decoding audiens!"
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: SIMULATOR DALE'S CONE OF LEARNING -->
+        <section id="cone">
+            <h2 class="text-4xl text-purple-700 mb-6 underline">Interactive: Dale's Cone of Learning</h2>
+            <div class="sketchy-card">
+                <p class="mb-6">Klik setiap tingkatan untuk melihat berapa banyak informasi yang kita ingat!</p>
+                
+                <div class="flex flex-col items-center">
+                    <div class="cone-layer bg-red-100 w-full md:w-32 py-2" data-info="Hanya 10% dari apa yang kita BACA">MEMBACA</div>
+                    <div class="cone-layer bg-red-200 w-full md:w-48 py-2" data-info="20% dari apa yang kita DENGAR">MENDENGAR</div>
+                    <div class="cone-layer bg-red-300 w-full md:w-64 py-2" data-info="30% dari apa yang kita LIHAT">MELIHAT</div>
+                    <div class="cone-layer bg-red-400 w-full md:w-80 py-4 text-white" data-info="50% dari apa yang kita LIHAT & DENGAR (MULTIMEDIA)">MENONTON VIDEO</div>
+                    <div class="cone-layer bg-red-500 w-full md:w-96 py-6 text-white font-bold" data-info="90% dari apa yang kita KATAKAN & LAKUKAN (Simulasi/Praktek)">MELAKUKAN LANGSUNG</div>
+                </div>
+
+                <div id="cone-display" class="mt-8 p-4 border-4 border-double border-black text-center text-2xl font-bold min-h-[4rem] flex items-center justify-center bg-yellow-50">
+                    Klik tingkatan piramida di atas...
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: MULTIMEDIA PRINCIPLES -->
+        <section id="multimedia">
+            <h2 class="text-4xl text-orange-700 mb-6 underline">Multimedia: Super Medium</h2>
+            <div class="sketchy-card">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="mb-4 highlighter">Multimedia adalah kombinasi teks, grafik, video, audio, dan animasi.</p>
+                        <h4 class="font-bold mb-2">5 Komponen Utama:</h4>
+                        <ul class="list-disc ml-5 space-y-1 text-sm">
+                            <li><strong>Teks:</strong> Narasi & Struktur</li>
+                            <li><strong>Grafis:</strong> Visualisasi Konsep</li>
+                            <li><strong>Video:</strong> Storytelling Berbasis Waktu</li>
+                            <li><strong>Audio:</strong> Memperkuat Emosi</li>
+                            <li><strong>Animasi:</strong> Gerakan & Dinamika</li>
+                        </ul>
+                    </div>
+                    <div class="border-l-4 border-black pl-4">
+                        <h4 class="font-bold mb-2">Manovich Principles:</h4>
+                        <div class="text-xs space-y-2 italic">
+                            1. Numerical Representation (Matematis)<br>
+                            2. Modularity (Elemen Independen)<br>
+                            3. Automation (Otomatisasi)<br>
+                            4. Variability (Banyak Versi)<br>
+                            5. Cultural Transcoding (Kaitan Budaya & Komputer)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PENUTUP -->
+        <footer class="text-center py-20">
+            <div class="inline-block sketchy-card bg-white rotate-1">
+                <h3 class="text-3xl">Pesan Terakhir</h3>
+                <p class="text-xl highlighter">"Multimedia mengoptimalkan kerja otak kiri (kata) dan otak kanan (gambar)."</p>
+                <p class="text-sm mt-4 opacity-50">Zaenal Mustofa, M.Kom. © 2026</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        $(document).ready(function() {
+            // 1. Interactive Highlighter
+            $('.highlighter').on('click', function() {
+                $(this).toggleClass('highlight-active');
+            });
+
+            // 2. Communication Simulator
+            $('#send-btn').on('click', function() {
+                const btn = $(this);
+                const packet = $('#message-packet');
+                const feedback = $('#comm-feedback');
+                
+                btn.prop('disabled', true);
+                feedback.text("");
+                packet.css('left', '0').show();
+
+                packet.animate({ left: '100%' }, {
+                    duration: 2000,
+                    step: function(now, fx) {
+                        // Simulate noise interference randomly
+                        if (Math.random() > 0.9) {
+                            $(this).css('top', (Math.random() * 40 - 20) + 'px');
+                        }
+                    },
+                    complete: function() {
+                        $(this).fadeOut();
+                        btn.prop('disabled', false);
+                        feedback.text("Pesan Diterima! (Telah di-Decode oleh Receiver)");
+                        setTimeout(() => feedback.text(""), 3000);
+                    }
+                });
+            });
+
+            // 3. Dale's Cone Interaction
+            $('.cone-layer').on('click', function() {
+                const info = $(this).data('info');
+                $('#cone-display').hide().text(info).fadeIn();
+                
+                // Visual feedback
+                $('.cone-layer').css('border-width', '2px');
+                $(this).css('border-width', '5px');
+            });
+
+            // 4. Sticky Note Wiggle
+            $('.sticky-note').on('click', function() {
+                $(this).animate({ left: "+=5px" }, 50).animate({ left: "-=5px" }, 50);
+            });
+        });
+    </script>
+</body>
+</html>

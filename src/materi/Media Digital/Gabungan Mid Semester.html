@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Studi: Media Digital & Komunikasi Visual</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Gochi+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        :root {
+            --paper: #fdfbf7;
+            --ink: #2d3436;
+            --highlight: #fff34d;
+        }
+
+        body {
+            background-color: var(--paper);
+            font-family: 'Kalam', cursive;
+            color: var(--ink);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3 { font-family: 'Gochi Hand', cursive; }
+
+        /* Estetika Sketchy */
+        .sketchy-card {
+            border: 3px solid var(--ink);
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            padding: 2rem;
+            background: white;
+            position: relative;
+            margin-bottom: 2rem;
+            transition: transform 0.2s;
+        }
+
+        .sketchy-card:hover { transform: rotate(-0.5deg); }
+
+        /* Navigasi Button */
+        .btn-back {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: white;
+            border: 3px solid var(--ink);
+            box-shadow: 6px 6px 0px var(--ink);
+            font-family: 'Architects Daughter', cursive;
+            padding: 10px 20px;
+            transition: all 0.1s;
+        }
+        .btn-back:active {
+            box-shadow: 0px 0px 0px var(--ink);
+            transform: translate(6px, 6px);
+        }
+
+        /* Highlighter */
+        .highlighter {
+            cursor: pointer;
+            padding: 0 4px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .highlighted {
+            background-color: var(--highlight);
+            box-shadow: 0 0 8px var(--highlight);
+        }
+
+        /* Sticky Notes */
+        .sticky-note {
+            background: #ff7675;
+            padding: 1rem;
+            width: 180px;
+            font-family: 'Gochi Hand', cursive;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            transform: rotate(2deg);
+            cursor: pointer;
+            position: absolute;
+            z-index: 10;
+        }
+
+        /* Lab Elements */
+        .canvas-sim {
+            border: 2px dashed #ccc;
+            background: #eee;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .scan-line {
+            position: absolute;
+            background: rgba(255, 0, 0, 0.3);
+            pointer-events: none;
+            display: none;
+        }
+
+        .paper-bg {
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 1.5rem;
+        }
+
+        .doodle {
+            position: absolute;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-12 paper-bg">
+
+    <button onclick="window.history.back()" class="btn-back">← Kembali ke Halaman Sebelumnya</button>
+
+    <header class="max-w-4xl mx-auto text-center mb-16">
+        <h1 class="text-6xl md:text-8xl mb-4">Media Digital</h1>
+        <p class="text-2xl font-bold border-b-4 border-black inline-block px-4">Summary Journal & Lab Interaktif</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-16">
+
+        <!-- SECTION 1: DASAR & KOMUNIKASI -->
+        <section id="basics">
+            <h2 class="text-4xl text-blue-600 mb-6 underline">1. Komunikasi & Multimedia</h2>
+            <div class="sketchy-card">
+                <div class="sticky-note -right-10 top-0 bg-yellow-200" style="transform: rotate(-3deg);">
+                    💡 Klik teks manapun untuk memberi stabilo!
+                </div>
+                <p class="mb-4 text-xl">
+                    <span class="highlighter">Komunikasi efektif</span> terjadi bila pesan yang dikirim sama dengan pesan yang diterima. Dalam Media Digital, kita berperan sebagai <span class="highlighter">Media Developer</span>.
+                </p>
+                <div class="grid md:grid-cols-2 gap-4 mt-8">
+                    <div class="p-4 border-2 border-black rounded-lg bg-blue-50">
+                        <h4 class="font-bold">Encoding</h4>
+                        <p class="text-sm">Keterampilan Developer mengekspresikan pesan ke bentuk digital.</p>
+                    </div>
+                    <div class="p-4 border-2 border-black rounded-lg bg-green-50">
+                        <h4 class="font-bold">Decoding</h4>
+                        <p class="text-sm">Keterampilan Audience memahami pesan digital tersebut.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ELEMEN & PRINSIP VISUAL -->
+        <section id="visual">
+            <h2 class="text-4xl text-red-600 mb-6 underline">2. Visual Design Building Blocks</h2>
+            <div class="sketchy-card">
+                <p class="mb-6">Ada <span class="font-bold">8 Elemen Dasar</span>: Ruang, Titik, Garis, Bentuk (2D), Form (3D), Tekstur, Pola, dan Warna.</p>
+                
+                <h3 class="text-2xl mb-4">Interactive Color Lab</h3>
+                <p class="text-sm mb-4">Klik kategori warna untuk melihat hubungan psikologinya:</p>
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <button class="btn-journal px-4 py-2 bg-red-400 text-white" onclick="showColor('warm')">Warna Hangat</button>
+                    <button class="btn-journal px-4 py-2 bg-blue-400 text-white" onclick="showColor('cool')">Warna Dingin</button>
+                    <button class="btn-journal px-4 py-2 bg-purple-400 text-white" onclick="showColor('complement')">Komplementer</button>
+                </div>
+                <div id="color-info" class="italic p-4 border-l-4 border-black bg-gray-50 h-16">Pilih salah satu lab warna di atas...</div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: STATIC MEDIA (RASTER VS VECTOR) -->
+        <section id="static">
+            <h2 class="text-4xl text-purple-600 mb-6 underline">3. Static Media Mechanics</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="sketchy-card h-full">
+                    <h3 class="text-2xl mb-4">Raster vs Vektor</h3>
+                    <div class="canvas-sim relative" id="zoom-lab">
+                        <div id="raster-img" class="w-20 h-20 bg-blue-800 flex items-center justify-center text-white text-[8px] overflow-hidden">RASTER (PIXEL)</div>
+                    </div>
+                    <input type="range" min="1" max="10" value="1" class="w-full mt-4" id="zoom-slider">
+                    <p class="text-xs mt-2 italic text-gray-500">*Geser slider: Raster akan pecah (pixelated), Vektor tetap tajam!</p>
+                </div>
+                <div class="flex flex-col justify-center space-y-4">
+                    <div class="sticky-note bg-green-200 relative transform-none w-full">
+                        <strong>RGB:</strong> Untuk Layar (Cahaya)<br>
+                        <strong>CMYK:</strong> Untuk Cetak (Tinta)
+                    </div>
+                    <div class="sticky-note bg-blue-200 relative transform-none w-full">
+                        <strong>Serif:</strong> Dekorasi kecil (Formal/Mewah)<br>
+                        <strong>Sans Serif:</strong> Tanpa dekorasi (Modern/Ramah)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: USER SCAN PATTERNS -->
+        <section id="ux">
+            <h2 class="text-4xl text-orange-600 mb-6 underline">4. Psychology: User Scan Pattern</h2>
+            <div class="sketchy-card bg-orange-50">
+                <p class="mb-4 text-lg">Orang tidak membaca online, mereka <span class="highlighter">memindai (scanning)</span>. Ada 3 pola utama:</p>
+                
+                <div class="grid grid-cols-3 gap-2 text-center mb-8">
+                    <div onclick="simulateScan('gutenberg')" class="p-2 border-2 border-black cursor-pointer hover:bg-orange-200">Gutenberg</div>
+                    <div onclick="simulateScan('f')" class="p-2 border-2 border-black cursor-pointer hover:bg-orange-200">F-Pattern</div>
+                    <div onclick="simulateScan('z')" class="p-2 border-2 border-black cursor-pointer hover:bg-orange-200">Z-Pattern</div>
+                </div>
+
+                <div class="relative w-full h-64 bg-white border-4 border-black p-4 overflow-hidden" id="scan-canvas">
+                    <div class="grid grid-cols-2 grid-rows-2 h-full gap-4 opacity-30">
+                        <div class="border border-dashed border-gray-400 p-2">LOGO / HEADLINE</div>
+                        <div class="border border-dashed border-gray-400 p-2 text-right">MENU</div>
+                        <div class="border border-dashed border-gray-400 p-2 flex items-end">CONTENT</div>
+                        <div class="border border-dashed border-gray-400 p-2 flex items-end justify-end bg-yellow-100 font-bold">CTA / BUTTON</div>
+                    </div>
+                    <!-- Scan lines generated by JS -->
+                    <div id="scan-path" class="absolute inset-0 pointer-events-none"></div>
+                </div>
+                <p id="scan-desc" class="mt-4 text-sm font-bold text-center">Klik tombol pola di atas untuk simulasi alur mata pengguna!</p>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-20">
+            <div class="inline-block sketchy-card bg-white rotate-1">
+                <h3 class="text-3xl">Pesan Terakhir</h3>
+                <p class="text-xl">"Konten tetaplah Raja, namun Desain adalah Singgasananya."</p>
+                <p class="text-sm mt-4 opacity-50">© 2026 Media Digital Study Journal</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        $(document).ready(function() {
+            // Highlighter Interactivity
+            $('.highlighter').on('click', function() {
+                $(this).toggleClass('highlighted');
+            });
+
+            // Sticky Note wiggles on click
+            $('.sticky-note').on('click', function() {
+                $(this).animate({ top: "-=10px" }, 100).animate({ top: "+=10px" }, 100);
+            });
+
+            // Zoom Simulator Logic
+            $('#zoom-slider').on('input', function() {
+                let val = $(this).val();
+                $('#raster-img').css('transform', `scale(${val})`);
+                if(val > 5) {
+                    $('#raster-img').css('image-rendering', 'pixelated');
+                } else {
+                    $('#raster-img').css('image-rendering', 'auto');
+                }
+            });
+        });
+
+        // Color Lab Logic
+        function showColor(type) {
+            let msg = "";
+            switch(type) {
+                case 'warm': msg = "🔴 Merah/Oranye: Menonjol ke depan, semangat, emosional."; break;
+                case 'cool': msg = "🔵 Biru/Hijau: Menjauh ke belakang, tenang, profesional."; break;
+                case 'complement': msg = "🔄 Berlawanan di roda warna: Menciptakan efek dinamis & kontras tinggi."; break;
+            }
+            $('#color-info').text(msg).hide().fadeIn();
+        }
+
+        // Scan Simulation Logic
+        function simulateScan(pattern) {
+            const path = $('#scan-path');
+            path.empty();
+            $('#scan-desc').hide().fadeIn();
+
+            if(pattern === 'gutenberg') {
+                $('#scan-desc').text("Gutenberg Diagram: Fokus pada area Top-Left (Awal) ke Bottom-Right (Terminal).");
+                path.append('<div class="absolute top-0 left-0 w-full h-full border-t-8 border-l-8 border-red-500 opacity-20" style="clip-path: polygon(0 0, 100% 100%, 0 100%)"></div>');
+                // Simple animation
+                $('<div class="w-4 h-4 bg-red-500 rounded-full absolute"></div>')
+                    .appendTo(path)
+                    .css({top: 0, left: 0})
+                    .animate({top: '100%', left: '100%'}, 1500);
+
+            } else if(pattern === 'f') {
+                $('#scan-desc').text("F-Pattern: Membaca baris atas, lalu baris kedua yang lebih pendek, lalu vertikal di kiri.");
+                $('<div class="absolute border-t-4 border-red-500" style="top:10%; left:5%; width:90%"></div>').appendTo(path).hide().fadeIn(500);
+                $('<div class="absolute border-t-4 border-red-500" style="top:40%; left:5%; width:50%"></div>').appendTo(path).delay(500).fadeIn(500);
+                $('<div class="absolute border-l-4 border-red-500" style="top:10%; left:5%; height:80%"></div>').appendTo(path).delay(1000).fadeIn(500);
+
+            } else if(pattern === 'z') {
+                $('#scan-desc').text("Z-Pattern: Cocok untuk landing page sederhana. Mata bergerak membentuk huruf Z.");
+                $('<div class="w-2 h-2 bg-red-500 absolute rounded-full"></div>')
+                    .appendTo(path)
+                    .css({top: '10%', left: '10%'})
+                    .animate({left: '90%'}, 500)
+                    .animate({top: '90%', left: '10%'}, 800)
+                    .animate({left: '90%'}, 500);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,302 +1,222 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tipe Data dan Array — Inisiasi 2</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#fafaf8;--surface:#ffffff;--surface2:#f4f3ef;
-  --border:#e2e1da;--accent:#2563eb;--accent2:#7c3aed;
-  --accent3:#059669;--text:#1a1a1a;--muted:#6b7280;
-  --heading:#111111;--mono:'JetBrains Mono',monospace;
-  --body:'Plus Jakarta Sans',sans-serif;
-  --warning:#d97706;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notebook Interaktif: Tipe Data & Array</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Gochi+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1e293b;
+            --marker: #fef08a;
+        }
 
-.hero{background:var(--heading);padding:56px 24px 44px;text-align:center;position:relative;overflow:hidden;}
-.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));}
-.hero-badge{display:inline-block;font-family:var(--mono);font-size:10px;color:#64748b;border:1px solid #334155;padding:3px 10px;border-radius:3px;margin-bottom:14px;letter-spacing:.12em;}
-.hero h1{font-size:clamp(26px,4.5vw,48px);font-weight:700;color:#fff;line-height:1.2;margin-bottom:10px;}
-.hero h1 em{color:#60a5fa;font-style:normal;}
-.hero p{color:#94a3b8;font-size:14px;}
+        body {
+            background-color: #f8fafc;
+            color: var(--ink);
+            font-family: 'Kalam', cursive;
+            padding-top: 80px;
+        }
 
-nav{background:var(--surface);border-bottom:2px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;display:flex;overflow-x:auto;gap:0;}
-.nav-tab{padding:13px 18px;font-size:12px;font-family:var(--mono);color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s;margin-bottom:-2px;}
-.nav-tab:hover{color:var(--text);}
-.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+        .handwritten { font-family: 'Architects Daughter', cursive; }
+        .doodle { font-family: 'Gochi Hand', cursive; }
 
-main{max-width:880px;margin:0 auto;padding:32px 20px 80px;}
-section{display:none;}
-section.active{display:block;}
+        /* Style Navigasi Atas */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(248, 250, 252, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            border-bottom: 1px dashed #cbd5e1;
+        }
 
-.intro{font-size:14px;color:var(--muted);border-left:3px solid var(--accent);padding-left:14px;margin-bottom:24px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:16px;}
-.card-label{font-family:var(--mono);font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;}
-.card h2{font-size:18px;font-weight:600;color:var(--heading);margin-bottom:8px;}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:580px){.grid-2{grid-template-columns:1fr;}}
+        .btn-back {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 4px 4px 0px 0px var(--ink);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-/* Glossary */
-.glossary{display:flex;flex-direction:column;gap:10px;}
-.gloss-item{display:flex;gap:14px;align-items:flex-start;padding:12px 16px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);}
-.gloss-num{font-family:var(--mono);font-size:13px;color:var(--accent);min-width:22px;font-weight:700;padding-top:1px;}
-.gloss-term{font-size:13px;font-weight:600;color:var(--heading);margin-bottom:2px;}
-.gloss-def{font-size:12px;color:var(--muted);}
+        .btn-back:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px var(--ink);
+        }
 
-/* Types */
-.type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;}
-.type-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;}
-.type-name{font-family:var(--mono);font-size:14px;color:var(--accent);font-weight:700;margin-bottom:4px;}
-.type-size{font-size:11px;color:var(--muted);}
-.type-range{font-size:11px;color:var(--warning);margin-top:4px;}
+        /* Sketchy Elements */
+        .sketch-card {
+            background: white;
+            border: 2px solid var(--ink);
+            border-radius: 15px 50px 30px 5px / 50px 20px 50px 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
 
-/* Array visual */
-.array-wrap{overflow-x:auto;padding-bottom:8px;}
-.array-row{display:flex;gap:0;min-width:max-content;}
-.arr-cell{display:flex;flex-direction:column;align-items:center;}
-.arr-idx{font-family:var(--mono);font-size:10px;color:var(--muted);padding:2px 0;}
-.arr-box{width:60px;height:44px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;color:var(--text);background:var(--surface2);}
-.arr-box:first-of-type{border-radius:6px 0 0 6px;}
-.arr-cell:last-child .arr-box{border-radius:0 6px 6px 0;}
-.arr-box.highlight{border-color:var(--accent);color:var(--accent);background:#eff6ff;}
-.arr-addr{font-family:var(--mono);font-size:9px;color:var(--accent3);padding:2px 0;}
+        .highlighter {
+            background-image: linear-gradient(var(--marker), var(--marker));
+            background-size: 0% 80%;
+            background-repeat: no-repeat;
+            background-position: 0 80%;
+            transition: background-size 0.4s ease;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        .highlighter.active { background-size: 100% 80%; }
 
-/* Code block */
-.code-block{background:var(--heading);border-radius:10px;padding:20px;font-family:var(--mono);font-size:13px;line-height:1.8;overflow-x:auto;position:relative;}
-.code-block .line{display:flex;gap:12px;}
-.ln{color:#475569;min-width:24px;text-align:right;user-select:none;}
-.kw{color:#93c5fd;}
-.cl{color:#86efac;}
-.st{color:#fca5a5;}
-.cm{color:#475569;font-style:italic;}
-.nm{color:#fde68a;}
-.op{color:#c4b5fd;}
-.code-label{font-family:var(--mono);font-size:10px;color:#475569;margin-bottom:10px;text-transform:uppercase;letter-spacing:.1em;}
+        .array-box {
+            border: 2px solid #64748b;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .array-box:hover { transform: rotate(-3deg) scale(1.1); border-color: #ef4444; }
 
-/* ArrayList */
-.al-schema{display:flex;flex-direction:column;gap:10px;}
-.al-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);}
-.al-code{font-family:var(--mono);font-size:12px;background:var(--heading);color:#93c5fd;padding:6px 12px;border-radius:6px;white-space:nowrap;}
-.al-desc{font-size:12px;color:var(--muted);}
-
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-family:var(--mono);}
-.badge-blue{background:#eff6ff;color:var(--accent);border:1px solid #bfdbfe;}
-.badge-green{background:#ecfdf5;color:var(--accent3);border:1px solid #6ee7b7;}
-.badge-purple{background:#f5f3ff;color:var(--accent2);border:1px solid #ddd6fe;}
-</style>
+        code { font-family: 'Courier New', Courier, monospace; background: #f1f5f9; padding: 2px 5px; border-radius: 4px; color: #e11d48; }
+    </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-badge">INISIASI 2 · STRUKTUR DATA</div>
-  <h1>Tipe Data<br><em>&amp; Array</em></h1>
-  <p>Zaenal Mustofa, M.Kom. — Teknologi Informasi UNY</p>
-</div>
-
-<nav>
-  <div class="nav-tab active" onclick="showTab(0)">Terminologi Java</div>
-  <div class="nav-tab" onclick="showTab(1)">Variables &amp; Types</div>
-  <div class="nav-tab" onclick="showTab(2)">Array 1D</div>
-  <div class="nav-tab" onclick="showTab(3)">Pengalamatan</div>
-  <div class="nav-tab" onclick="showTab(4)">ArrayList</div>
-</nav>
-
-<main>
-
-<!-- TAB 0: Terminologi -->
-<section class="active">
-  <p class="intro">Sebelum coding, kenali dulu istilah-istilah dasar dalam bahasa pemrograman Java yang akan sering kita temui.</p>
-  <div class="glossary">
-    <div class="gloss-item"><div class="gloss-num">1</div><div><div class="gloss-term">Bahasa Pemrograman</div><div class="gloss-def">Bahasa untuk memerintahkan komputer melakukan operasi sesuai algoritma. Contoh: Java — open source dari Amerika Serikat.</div></div></div>
-    <div class="gloss-item"><div class="gloss-num">2</div><div><div class="gloss-term">Syntax</div><div class="gloss-def">Teks dari bahasa pemrograman — aturan penulisan kode yang harus dipatuhi.</div></div></div>
-    <div class="gloss-item"><div class="gloss-num">3</div><div><div class="gloss-term">Source Code</div><div class="gloss-def">Teks yang telah tersusun dan memiliki isi sesuai dengan syntax yang ditulis programmer.</div></div></div>
-    <div class="gloss-item"><div class="gloss-num">4</div><div><div class="gloss-term">Coding</div><div class="gloss-def">Menuliskan syntax sesuai aturan bahasa pemrograman untuk membuat program.</div></div></div>
-    <div class="gloss-item"><div class="gloss-num">5</div><div><div class="gloss-term">Semantic</div><div class="gloss-def">Maksud/tujuan dari pembuatan program sesuai keinginan user.</div></div></div>
-    <div class="gloss-item"><div class="gloss-num">6</div><div><div class="gloss-term">Programmer</div><div class="gloss-def">User yang membuat aplikasi atau program menggunakan bahasa pemrograman.</div></div></div>
-    <div class="gloss-item"><div class="gloss-num">7</div><div><div class="gloss-term">Compiler</div><div class="gloss-def">Tools untuk melakukan eksekusi terhadap bahasa pemrograman yang telah ditulis.</div></div></div>
-    <div class="gloss-item"><div class="gloss-num">8</div><div><div class="gloss-term">Compiling</div><div class="gloss-def">Pengecekan terhadap program untuk menghindari kesalahan coding sebelum dijalankan.</div></div></div>
-    <div class="gloss-item"><div class="gloss-num">9</div><div><div class="gloss-term">Running</div><div class="gloss-def">Melakukan eksekusi terhadap program yang telah dibuat dan dikompilasi.</div></div></div>
-  </div>
-</section>
-
-<!-- TAB 1: Variables & Types -->
-<section>
-  <p class="intro">Dalam Java, identifiers terdiri dari classes, variables, dan subroutines. Variable adalah nama yang digunakan untuk menunjuk data di memori.</p>
-  
-  <div class="card">
-    <div class="card-label">Konsep Variable</div>
-    <div class="grid-2">
-      <div style="background:var(--surface2);border-radius:8px;padding:16px;border:1px solid var(--border);">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Dunia Nyata</div>
-        <div style="font-family:var(--mono);font-size:13px;color:var(--text);line-height:1.8;">variabel = bilangan<br>tipe data = ganjil</div>
-      </div>
-      <div style="background:var(--surface2);border-radius:8px;padding:16px;border:1px solid var(--border);">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Di Komputer (Java)</div>
-        <div style="font-family:var(--mono);font-size:13px;color:var(--accent);line-height:1.8;">int bil = 7;<br>// bil = variabel</div>
-      </div>
+    <!-- Navigasi Kanan Atas -->
+    <div class="top-nav">
+        <button onclick="window.history.back()" class="btn-back doodle text-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Kembali ke Halaman Sebelumnya
+        </button>
     </div>
-    <p style="font-size:13px;color:var(--muted);margin-top:12px;">Programmer hanya perlu mengingat nama variable — tidak perlu mengingat alamat memori fisik tempat data disimpan.</p>
-  </div>
 
-  <div class="card">
-    <div class="card-label">Tipe Data Primitif Java</div>
-    <div class="type-grid">
-      <div class="type-card"><div class="type-name">byte</div><div class="type-size">8 bit</div><div class="type-range">-128 ~ 127</div></div>
-      <div class="type-card"><div class="type-name">short</div><div class="type-size">16 bit</div><div class="type-range">-32K ~ 32K</div></div>
-      <div class="type-card"><div class="type-name">int</div><div class="type-size">32 bit</div><div class="type-range">-2B ~ 2B</div></div>
-      <div class="type-card"><div class="type-name">long</div><div class="type-size">64 bit</div><div class="type-range">sangat besar</div></div>
-      <div class="type-card"><div class="type-name">float</div><div class="type-size">32 bit</div><div class="type-range">desimal ~7 digit</div></div>
-      <div class="type-card"><div class="type-name">double</div><div class="type-size">64 bit</div><div class="type-range">desimal ~15 digit</div></div>
-      <div class="type-card"><div class="type-name">char</div><div class="type-size">16 bit</div><div class="type-range">1 karakter</div></div>
-      <div class="type-card"><div class="type-name">boolean</div><div class="type-size">1 bit</div><div class="type-range">true / false</div></div>
+    <div class="max-w-3xl mx-auto px-6 pb-20">
+        
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-bold doodle mb-2">Tipe Data & Array</h1>
+            <p class="text-gray-400 italic">Dibuat oleh: Zaenal Mustofa, M.Kom.</p>
+            <div class="h-1 bg-gray-200 w-1/2 mx-auto mt-4 rounded-full"></div>
+        </header>
+
+        <!-- Bagian 1: Glosarium Interaktif -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6"># Istilah Penting Java</h2>
+            <div class="sketch-card">
+                <p class="text-xl mb-4 leading-relaxed">
+                    Belajar coding itu kayak nulis buku. Ada <span class="highlighter" onclick="$(this).toggleClass('active')">Syntax</span> (tata bahasa), 
+                    <span class="highlighter" onclick="$(this).toggleClass('active')">Source Code</span> (naskah), dan 
+                    <span class="highlighter" onclick="$(this).toggleClass('active')">Compiler</span> (editor yang nerjemahin ke komputer).
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <div class="p-3 border-2 border-dashed border-gray-300 rounded cursor-help" onclick="alert('Compiling: Proses ngecek error sebelum program jalan!')">
+                        <span class="doodle text-xl">❓ Apa itu Compiling?</span>
+                    </div>
+                    <div class="p-3 border-2 border-dashed border-gray-300 rounded cursor-help" onclick="alert('Running: Saat program beneran jalan di komputer!')">
+                        <span class="doodle text-xl">❓ Apa itu Running?</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian 2: Tipe Data -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6 underline decoration-pink-300"># Tipe Data</h2>
+            <div class="sketch-card border-pink-400">
+                <p class="mb-4">Klik pada kotak untuk cek klasifikasinya:</p>
+                <div class="flex flex-wrap gap-3">
+                    <button class="px-4 py-2 border-2 border-gray-800 rounded hover:bg-yellow-100" onclick="$(this).text('✓ Primitif').addClass('bg-yellow-200')">int</button>
+                    <button class="px-4 py-2 border-2 border-gray-800 rounded hover:bg-pink-100" onclick="$(this).text('✓ Reference').addClass('bg-pink-200')">String</button>
+                    <button class="px-4 py-2 border-2 border-gray-800 rounded hover:bg-yellow-100" onclick="$(this).text('✓ Primitif').addClass('bg-yellow-200')">boolean</button>
+                    <button class="px-4 py-2 border-2 border-gray-800 rounded hover:bg-pink-100" onclick="$(this).text('✓ Reference').addClass('bg-pink-200')">ArrayList</button>
+                </div>
+                <div class="mt-6 handwritten text-red-500 italic">
+                    Note: String itu kumpulan karakter, makanya dia bukan tipe primitif!
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian 3: Array Simulator -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6"># Simulasi Array A[5]</h2>
+            <div class="sketch-card border-green-500">
+                <p class="mb-6 doodle text-2xl italic">"Coba isi angka ke dalam laci memori ini!"</p>
+                <div class="flex flex-wrap gap-2 justify-center mb-6" id="array-container">
+                    <!-- Dinamis via JS -->
+                </div>
+                <div class="text-center bg-gray-50 p-4 rounded-lg">
+                    <p id="array-msg" class="handwritten text-blue-600">Klik salah satu kotak...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian 4: ArrayList -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6"># ArrayList (Dinamis)</h2>
+            <div class="sketch-card border-purple-500 bg-purple-50/30">
+                <p class="mb-6">Berbeda dengan Array, ArrayList bisa nambah terus ukurannya.</p>
+                <button id="btn-add" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-bold shadow-[4px_4px_0px_0px_#1e293b] active:translate-y-1">
+                    list.add("Data Baru")
+                </button>
+                <div id="list-items" class="mt-8 flex flex-wrap gap-3">
+                    <!-- Objek muncul di sini -->
+                </div>
+            </div>
+        </section>
+
+        <footer class="mt-20 border-t-2 border-dashed border-gray-200 pt-10 text-center pb-20">
+            <p class="doodle text-3xl text-gray-500">Selesai Belajar Inisiasi 2! ✨</p>
+        </footer>
+
     </div>
-    <div style="margin-top:14px;padding:12px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;">
-      <span style="font-size:12px;color:var(--warning);font-weight:500;">⚠ String</span>
-      <span style="font-size:12px;color:var(--muted);margin-left:6px;">bukan tipe data primitif — String adalah rangkaian (array) dari karakter.</span>
-    </div>
-  </div>
-</section>
 
-<!-- TAB 2: Array 1D -->
-<section>
-  <p class="intro">Array adalah kumpulan elemen bertipe sama yang tersimpan berurutan di memori, diakses via indeks mulai dari 0.</p>
+    <script>
+        $(document).ready(function() {
+            // Inisialisasi Array Simulator
+            for(let i=0; i<5; i++) {
+                $('#array-container').append(`
+                    <div class="flex flex-col items-center">
+                        <div class="array-box doodle bg-white" onclick="fillArray(this, ${i})">?</div>
+                        <span class="text-xs mt-2 text-gray-400">Idx: ${i}</span>
+                    </div>
+                `);
+            }
 
-  <div class="card">
-    <div class="card-label">Ilustrasi Array 1 Dimensi — A = new int[5]</div>
-    <div class="array-wrap">
-      <div class="array-row">
-        <div class="arr-cell"><div class="arr-idx">0</div><div class="arr-box">A[0]</div></div>
-        <div class="arr-cell"><div class="arr-idx">1</div><div class="arr-box">A[1]</div></div>
-        <div class="arr-cell"><div class="arr-idx">2</div><div class="arr-box highlight">A[2]</div></div>
-        <div class="arr-cell"><div class="arr-idx">3</div><div class="arr-box">A[3]</div></div>
-        <div class="arr-cell"><div class="arr-idx">4</div><div class="arr-box">A[4]</div></div>
-      </div>
-    </div>
-    <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;">
-      <span class="badge badge-blue">A = nama array</span>
-      <span class="badge badge-green">5 = length (A.length)</span>
-      <span class="badge badge-purple">int[] = tipe elemen</span>
-    </div>
-  </div>
+            window.fillArray = function(el, idx) {
+                let val = prompt("Masukkan angka untuk indeks " + idx);
+                if(val) {
+                    $(el).text(val).addClass('bg-yellow-50 border-blue-500');
+                    $('#array-msg').text('Data berhasil disimpan di memori indeks ke-' + idx);
+                }
+            };
 
-  <div class="card">
-    <div class="card-label">Deklarasi di Java</div>
-    <div class="code-block">
-      <div class="code-label">// Deklarasi array kosong</div>
-      <div class="line"><span class="ln">1</span><span><span class="kw">int</span>[] A = <span class="kw">new</span> <span class="kw">int</span>[5]; <span class="cm">// 5 elemen, nilai default 0</span></span></div>
-      <div class="line"><span class="ln">2</span><span>&nbsp;</span></div>
-      <div class="code-label" style="margin-top:12px;">// Deklarasi array berisi nilai</div>
-      <div class="line"><span class="ln">3</span><span><span class="cl">String</span>[] negara = {<span class="st">"Australia"</span>, <span class="st">"Ceko"</span>, <span class="st">"Jepang"</span>};</span></div>
-      <div class="line"><span class="ln">4</span><span>&nbsp;</span></div>
-      <div class="code-label" style="margin-top:12px;">// Akses elemen</div>
-      <div class="line"><span class="ln">5</span><span><span class="cl">System</span>.out.println(negara[<span class="nm">1</span>]); <span class="cm">// output: Ceko</span></span></div>
-      <div class="line"><span class="ln">6</span><span>&nbsp;</span></div>
-      <div class="code-label" style="margin-top:12px;">// Iterasi dengan for loop</div>
-      <div class="line"><span class="ln">7</span><span><span class="kw">for</span> (<span class="kw">int</span> i=<span class="nm">0</span>; i&lt;A.length; i++) {</span></div>
-      <div class="line"><span class="ln">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">System</span>.out.println(A[i]);</span></div>
-      <div class="line"><span class="ln">9</span><span>}</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- TAB 3: Pengalamatan -->
-<section>
-  <p class="intro">Setiap elemen array tersimpan di alamat memori yang berurutan (contiguous). Penomoran alamat bergantung pada komputer yang digunakan.</p>
-
-  <div class="card">
-    <div class="card-label">Pengalamatan Array 1 Dimensi</div>
-    <div class="array-wrap">
-      <div class="array-row">
-        <div class="arr-cell"><div class="arr-addr">43F2</div><div class="arr-box" style="border-color:var(--accent3);">5</div></div>
-        <div class="arr-cell"><div class="arr-addr">43F4</div><div class="arr-box" style="border-color:var(--accent3);">7</div></div>
-        <div class="arr-cell"><div class="arr-addr">43FA</div><div class="arr-box" style="border-color:var(--accent3);">9</div></div>
-        <div class="arr-cell"><div class="arr-addr">43FC</div><div class="arr-box" style="border-color:var(--accent3);">11</div></div>
-        <div class="arr-cell"><div class="arr-addr">43FE</div><div class="arr-box" style="border-color:var(--accent3);">13</div></div>
-      </div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;">
-      <div style="flex:1;min-width:200px;padding:12px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);font-size:13px;color:var(--muted);">Alamat array <strong style="color:var(--text)">bersebelahan</strong> dengan indeks array — setiap elemen menempati blok memori yang berdekatan.</div>
-      <div style="flex:1;min-width:200px;padding:12px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);font-size:13px;color:var(--muted);">Penomoran alamat <strong style="color:var(--text)">bergantung komputer</strong>. Komputer berbeda bisa memiliki alamat berbeda untuk nama variable yang sama.</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Pengalamatan Array 2 Dimensi — A = new int[4][5]</div>
-    <div style="overflow-x:auto;">
-      <table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;min-width:400px;">
-        <thead>
-          <tr>
-            <th style="padding:6px 10px;color:var(--muted);border-bottom:1px solid var(--border);">Baris\Kolom</th>
-            <th style="padding:6px 10px;color:var(--accent3);border-bottom:1px solid var(--border);">0</th>
-            <th style="padding:6px 10px;color:var(--accent3);border-bottom:1px solid var(--border);">1</th>
-            <th style="padding:6px 10px;color:var(--accent3);border-bottom:1px solid var(--border);">2</th>
-            <th style="padding:6px 10px;color:var(--accent3);border-bottom:1px solid var(--border);">3</th>
-            <th style="padding:6px 10px;color:var(--accent3);border-bottom:1px solid var(--border);">4</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td style="padding:6px 10px;color:var(--accent3);border-bottom:1px solid var(--border);">0</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">43F2/5</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">43F4/7</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">43FA/9</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">43FC/11</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">43FE/13</td></tr>
-          <tr><td style="padding:6px 10px;color:var(--accent3);border-bottom:1px solid var(--border);">1</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">44F2/4</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">44F4/6</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">44FA/6</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">44FC/10</td><td style="padding:6px 10px;border-bottom:1px solid var(--border);color:var(--muted);">44FE/4</td></tr>
-          <tr><td style="padding:6px 10px;color:var(--accent3);">2</td><td style="padding:6px 10px;color:var(--muted);">45F2/5</td><td style="padding:6px 10px;color:var(--muted);">45F4/3</td><td style="padding:6px 10px;color:var(--muted);">45FA/4</td><td style="padding:6px 10px;color:var(--muted);">45FC/5</td><td style="padding:6px 10px;color:var(--muted);">45FE/2</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p style="font-size:12px;color:var(--muted);margin-top:10px;">Format: alamat/nilai. Array 2D tersimpan row-major: baris 0 dulu, baru baris 1, dst.</p>
-  </div>
-</section>
-
-<!-- TAB 4: ArrayList -->
-<section>
-  <p class="intro">ArrayList adalah array dinamis di Java — ukurannya bisa berubah saat runtime, berbeda dengan array biasa yang ukurannya tetap.</p>
-
-  <div class="card">
-    <div class="card-label">Deklarasi ArrayList</div>
-    <div class="al-schema">
-      <div class="al-row">
-        <div class="al-code">ArrayList&lt;String&gt; namelist;</div>
-        <div class="al-desc">Deklarasi variabel ArrayList bertipe String</div>
-      </div>
-      <div class="al-row">
-        <div class="al-code">namelist = new ArrayList&lt;String&gt;();</div>
-        <div class="al-desc">Inisiasi objek ArrayList dengan operator <code>new</code></div>
-      </div>
-      <div class="al-row">
-        <div class="al-code">ArrayList&lt;Player&gt; playerList = new ArrayList&lt;Player&gt;();</div>
-        <div class="al-desc">Satu baris: deklarasi + inisiasi sekaligus</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Perbandingan Array vs ArrayList</div>
-    <div style="overflow-x:auto;">
-      <table style="width:100%;border-collapse:collapse;font-size:13px;">
-        <thead><tr>
-          <th style="padding:10px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted);font-size:11px;font-family:var(--mono);">Aspek</th>
-          <th style="padding:10px;text-align:left;border-bottom:1px solid var(--border);color:var(--accent);font-size:11px;font-family:var(--mono);">Array</th>
-          <th style="padding:10px;text-align:left;border-bottom:1px solid var(--border);color:var(--accent2);font-size:11px;font-family:var(--mono);">ArrayList</th>
-        </tr></thead>
-        <tbody>
-          <tr><td style="padding:10px;border-bottom:1px solid var(--border);color:var(--muted);">Ukuran</td><td style="padding:10px;border-bottom:1px solid var(--border);">Tetap (fixed)</td><td style="padding:10px;border-bottom:1px solid var(--border);">Dinamis (otomatis)</td></tr>
-          <tr><td style="padding:10px;border-bottom:1px solid var(--border);color:var(--muted);">Tipe data</td><td style="padding:10px;border-bottom:1px solid var(--border);">Primitif &amp; Object</td><td style="padding:10px;border-bottom:1px solid var(--border);">Object (wrapper class)</td></tr>
-          <tr><td style="padding:10px;border-bottom:1px solid var(--border);color:var(--muted);">Deklarasi</td><td style="padding:10px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:12px;">int[] A = new int[5]</td><td style="padding:10px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:12px;">ArrayList&lt;Integer&gt; A</td></tr>
-          <tr><td style="padding:10px;color:var(--muted);">Akses</td><td style="padding:10px;font-family:var(--mono);font-size:12px;">A[i]</td><td style="padding:10px;font-family:var(--mono);font-size:12px;">A.get(i)</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<script>
-const tabs=document.querySelectorAll('.nav-tab');
-const secs=document.querySelectorAll('section');
-function showTab(i){tabs.forEach((t,j)=>t.classList.toggle('active',i===j));secs.forEach((s,j)=>s.classList.toggle('active',i===j));}
-</script>
+            // ArrayList Logic
+            let count = 0;
+            $('#btn-add').click(function() {
+                count++;
+                const item = $(`
+                    <div class="p-3 bg-white border-2 border-indigo-500 rounded-lg shadow-sm doodle animate-bounce">
+                        Object_${count}
+                    </div>
+                `);
+                $('#list-items').append(item);
+                setTimeout(() => item.removeClass('animate-bounce'), 1000);
+            });
+        });
+    </script>
 </body>
 </html>

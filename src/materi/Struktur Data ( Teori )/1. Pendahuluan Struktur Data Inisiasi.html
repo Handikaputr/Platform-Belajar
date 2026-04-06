@@ -1,394 +1,243 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pendahuluan Struktur Data — Inisiasi 1</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0a0e1a;
-  --surface: #111827;
-  --surface2: #1a2235;
-  --border: #1e3a5f;
-  --accent: #00d4ff;
-  --accent2: #7c3aed;
-  --accent3: #10b981;
-  --text: #e2e8f0;
-  --muted: #64748b;
-  --heading: #f8fafc;
-  --mono: 'Space Mono', monospace;
-  --body: 'Sora', sans-serif;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;min-height:100vh;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Belajar: Pendahuluan Struktur Data</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Gochi+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS & jQuery -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-/* Header */
-.hero{background:linear-gradient(135deg,#0a0e1a 0%,#0f1f3d 50%,#0a0e1a 100%);padding:60px 24px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,212,255,.08) 0%,transparent 70%);}
-.hero-badge{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--accent);border:1px solid var(--accent);padding:4px 12px;border-radius:4px;margin-bottom:16px;letter-spacing:.1em;}
-.hero h1{font-size:clamp(28px,5vw,52px);font-weight:700;color:var(--heading);line-height:1.2;margin-bottom:12px;}
-.hero h1 span{color:var(--accent);}
-.hero p{color:var(--muted);font-size:15px;max-width:540px;margin:0 auto;}
+    <style>
+        body {
+            background-color: #fdfbf7;
+            font-family: 'Kalam', cursive;
+            color: #2d3436;
+            scroll-behavior: smooth;
+        }
 
-/* Nav */
-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;display:flex;gap:0;overflow-x:auto;}
-.nav-tab{padding:14px 20px;font-size:13px;font-family:var(--mono);color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;}
-.nav-tab:hover{color:var(--text);}
-.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+        .sketchy-border {
+            border: 3px solid #2d3436;
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            background: white;
+            transition: all 0.3s ease;
+        }
 
-/* Main */
-main{max-width:900px;margin:0 auto;padding:32px 20px 80px;}
-section{display:none;}
-section.active{display:block;}
+        .btn-journal {
+            background: white;
+            border: 2px solid #2d3436;
+            box-shadow: 4px 4px 0px #2d3436;
+            transition: all 0.1s ease;
+            font-family: 'Architects Daughter', cursive;
+        }
 
-/* Cards */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;}
-.card-title{font-family:var(--mono);font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;}
-.card h2{font-size:20px;font-weight:600;color:var(--heading);margin-bottom:10px;}
-.card p{color:var(--muted);font-size:14px;line-height:1.7;}
+        .btn-journal:active {
+            box-shadow: 0px 0px 0px #2d3436;
+            transform: translate(4px, 4px);
+        }
 
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:600px){.grid-2{grid-template-columns:1fr;}}
+        .highlighter {
+            cursor: pointer;
+            padding: 0 4px;
+            display: inline;
+        }
 
-/* Real world examples */
-.example-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px;}
-.example-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px;transition:border-color .2s;}
-.example-item:hover{border-color:var(--accent);}
-.example-icon{font-size:28px;margin-bottom:10px;}
-.example-item h3{font-size:14px;font-weight:600;color:var(--heading);margin-bottom:6px;}
-.example-item p{font-size:12px;color:var(--muted);}
+        .highlight-active {
+            background: #fff34d;
+            border-radius: 4px;
+            box-shadow: 0 0 10px #fff34d;
+        }
 
-/* Efficiency diagram */
-.efficiency-ring{display:flex;flex-direction:column;gap:12px;}
-.eff-item{display:flex;align-items:center;gap:16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;}
-.eff-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.eff-icon.blue{background:rgba(0,212,255,.12);color:var(--accent);}
-.eff-icon.purple{background:rgba(124,58,237,.12);color:var(--accent2);}
-.eff-icon.green{background:rgba(16,185,129,.12);color:var(--accent3);}
-.eff-item h4{font-size:13px;font-weight:600;color:var(--heading);margin-bottom:2px;}
-.eff-item p{font-size:12px;color:var(--muted);}
+        .sticky-note {
+            background: #fab1a0;
+            padding: 15px;
+            transform: rotate(-1deg);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            font-family: 'Gochi Hand', cursive;
+        }
 
-/* Interface cards */
-.interface-demo{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;margin:12px 0;}
-.iface-label{font-family:var(--mono);font-size:11px;color:var(--accent3);margin-bottom:8px;}
-.queue-vis{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
-.queue-box{width:38px;height:38px;border:2px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--text);background:var(--surface);}
-.queue-box.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06);}
-.queue-arrow{color:var(--muted);font-size:14px;}
-.arrow-label{font-size:11px;color:var(--muted);margin-top:6px;font-family:var(--mono);}
+        /* Simulator Styles */
+        .node-box {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #2d3436;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            animation: popIn 0.3s ease-out;
+        }
 
-/* Stack vis */
-.stack-vis{display:flex;flex-direction:column-reverse;gap:4px;align-items:center;width:120px;}
-.stack-box{width:100%;padding:8px;border:2px solid var(--border);border-radius:6px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text);}
-.stack-box.top{border-color:var(--accent2);color:var(--accent2);background:rgba(124,58,237,.08);}
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
-/* Math section */
-.math-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
-.math-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center;}
-.math-card h3{font-size:13px;font-weight:600;color:var(--heading);margin-bottom:8px;}
-.math-formula{font-family:var(--mono);font-size:15px;color:var(--accent);margin:8px 0;}
-.math-card p{font-size:12px;color:var(--muted);}
-
-/* Performance table */
-.perf-table{width:100%;border-collapse:collapse;font-size:13px;}
-.perf-table th{background:var(--surface2);color:var(--accent);font-family:var(--mono);font-size:11px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
-.perf-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--muted);}
-.perf-table tr:hover td{background:var(--surface2);color:var(--text);}
-.perf-table td:first-child{font-family:var(--mono);color:var(--accent3);}
-
-/* Big-O chart */
-.bigo-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.bigo-label{font-family:var(--mono);font-size:12px;color:var(--accent);min-width:80px;}
-.bigo-bar-wrap{flex:1;background:var(--surface2);border-radius:4px;height:20px;overflow:hidden;}
-.bigo-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-family:var(--mono);}
-.bigo-desc{font-size:12px;color:var(--muted);min-width:100px;}
-
-/* Tags */
-.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-family:var(--mono);margin:2px;}
-.tag-blue{background:rgba(0,212,255,.1);color:var(--accent);border:1px solid rgba(0,212,255,.2);}
-.tag-purple{background:rgba(124,58,237,.1);color:#a78bfa;border:1px solid rgba(124,58,237,.2);}
-.tag-green{background:rgba(16,185,129,.1);color:var(--accent3);border:1px solid rgba(16,185,129,.2);}
-
-.section-intro{color:var(--muted);font-size:14px;margin-bottom:24px;padding-left:16px;border-left:3px solid var(--accent);}
-</style>
+        .paper-line {
+            background-image: linear-gradient(#e1e1e1 1px, transparent 1px);
+            background-size: 100% 2.5rem;
+        }
+    </style>
 </head>
-<body>
+<body class="p-4 md:p-10">
 
-<div class="hero">
-  <div class="hero-badge">INISIASI 1 · DPTEI FT UNY</div>
-  <h1>Pendahuluan<br><span>Struktur Data</span></h1>
-  <p>Zaenal Mustofa, S.Kom., M.Kom. — Teknologi Informasi</p>
-</div>
+    <!-- Navigasi -->
+    <nav class="fixed top-5 right-5 z-50">
+        <button onclick="window.history.back()" class="btn-journal px-6 py-2 font-bold text-lg">
+            ← Kembali ke Halaman Sebelumnya
+        </button>
+    </nav>
 
-<nav>
-  <div class="nav-tab active" onclick="showTab(0)">Dunia Nyata</div>
-  <div class="nav-tab" onclick="showTab(1)">Kebutuhan Efisiensi</div>
-  <div class="nav-tab" onclick="showTab(2)">Interface & ADT</div>
-  <div class="nav-tab" onclick="showTab(3)">Matematika SD</div>
-  <div class="nav-tab" onclick="showTab(4)">Performa SD</div>
-  <div class="nav-tab" onclick="showTab(5)">List of DS</div>
-</nav>
+    <!-- Header -->
+    <header class="max-w-4xl mx-auto text-center mb-16 pt-10">
+        <h1 class="text-6xl md:text-8xl font-bold mb-4" style="font-family: 'Gochi Hand';">Struktur Data</h1>
+        <p class="text-2xl italic border-b-2 border-black inline-block px-4">Inisiasi 1: Pendahuluan & Efisiensi</p>
+        <p class="mt-4 opacity-70">Oleh: Zaenal Mustofa, M.Kom.</p>
+    </header>
 
-<main>
+    <main class="max-w-4xl mx-auto space-y-20 pb-24">
 
-<!-- TAB 0: Dunia Nyata -->
-<section class="active">
-  <p class="section-intro">Struktur data hadir di mana-mana dalam kehidupan sehari-hari. Setiap kali komputer mencari data dengan cepat — di situlah struktur data bekerja.</p>
-  <div class="example-grid">
-    <div class="example-item">
-      <div class="example-icon">💻</div>
-      <h3>Membuka File</h3>
-      <p>Komputer menyimpan jutaan file dalam struktur data sehingga pencarian bisa dilakukan dengan cepat dan akurat.</p>
-    </div>
-    <div class="example-item">
-      <div class="example-icon">📱</div>
-      <h3>Cari Kontak HP</h3>
-      <p>HP menampilkan kontak yang dicari beserta daftar mirip dalam hitungan milidetik menggunakan algoritma pencarian.</p>
-    </div>
-    <div class="example-item">
-      <div class="example-icon">🔐</div>
-      <h3>Login Sosmed</h3>
-      <p>Sistem memverifikasi nama & password terhadap jutaan pengguna dengan struktur data yang efisien.</p>
-    </div>
-    <div class="example-item">
-      <div class="example-icon">🔍</div>
-      <h3>Search Engine</h3>
-      <p>Kata kunci diproses menggunakan struktur data untuk menampilkan hasil paling relevan dari miliaran halaman.</p>
-    </div>
-    <div class="example-item">
-      <div class="example-icon">🚨</div>
-      <h3>Layanan Darurat</h3>
-      <p>Saat menelepon 112, sistem langsung menemukan lokasi via struktur data dan mengirim bantuan ke posisi Anda.</p>
-    </div>
-  </div>
-  <div class="card" style="margin-top:20px;border-color:#1e3a5f;">
-    <div class="card-title">Kesimpulan</div>
-    <p>Memahami struktur data = mampu membuat program yang mencari dan memproses data <strong style="color:var(--accent)">lebih cepat dan lebih efisien</strong>. Ini adalah fondasi dari semua aplikasi modern.</p>
-  </div>
-</section>
+        <!-- Section 1: Intro -->
+        <section class="sketchy-border p-8 paper-line">
+            <h2 class="text-4xl mb-6 underline decoration-wavy decoration-red-500">Apa itu Struktur Data?</h2>
+            <p class="text-xl leading-relaxed">
+                <span class="highlighter">Struktur data adalah cara kita mengorganisasikan data digital</span> agar proses pencarian dan pemrosesan menjadi cepat dan akurat. 
+                Tanpa struktur data, komputer tidak akan sanggup mencari 1 file di antara jutaan data lainnya dalam sekejap.
+            </p>
+            <div class="mt-6 grid md:grid-cols-3 gap-4">
+                <div class="p-4 border-2 border-dashed border-black text-center text-sm">
+                    📂 Buka File di Komputer
+                </div>
+                <div class="p-4 border-2 border-dashed border-black text-center text-sm">
+                    📱 Cari Kontak HP
+                </div>
+                <div class="p-4 border-2 border-dashed border-black text-center text-sm">
+                    🔐 Log In Media Sosial
+                </div>
+            </div>
+        </section>
 
-<!-- TAB 1: Efisiensi -->
-<section>
-  <p class="section-intro">Semakin besar data, semakin penting efisiensi. Struktur data adalah solusi untuk mengelola dataset yang berkembang.</p>
-  <div class="efficiency-ring">
-    <div class="eff-item">
-      <div class="eff-icon blue">📦</div>
-      <div>
-        <h4>Data Set yang Berkembang</h4>
-        <p>Semakin besar jumlah data, semakin meningkat kebutuhan jumlah operasi dan kecepatan proses. Solusi: organisasi data yang tepat.</p>
-      </div>
-    </div>
-    <div class="eff-item">
-      <div class="eff-icon purple">⚡</div>
-      <div>
-        <h4>Kecepatan Proses</h4>
-        <p>Meningkatkan kecepatan proses akan meningkatkan jumlah operasi yang dapat diselesaikan dalam waktu yang sama.</p>
-      </div>
-    </div>
-    <div class="eff-item">
-      <div class="eff-icon green">🔄</div>
-      <div>
-        <h4>Jumlah Operasi</h4>
-        <p>Jutaan operasi dalam satu komputer membutuhkan efisiensi yang tepat. Struktur data memastikan setiap operasi selesai secepat dan seakurat mungkin.</p>
-      </div>
-    </div>
-  </div>
-  <div class="card" style="margin-top:20px;">
-    <div class="card-title">Dua Komponen Struktur Data</div>
-    <div class="grid-2">
-      <div style="padding:16px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);">
-        <h3 style="font-size:14px;color:var(--accent);margin-bottom:8px;">1. Interface (ADT)</h3>
-        <p style="font-size:13px;color:var(--muted);">Abstract Data Type — mendefinisikan sekumpulan operasi yang didukung beserta makna semantiknya. Contoh: Queue, Stack, List.</p>
-      </div>
-      <div style="padding:16px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);">
-        <h3 style="font-size:14px;color:var(--accent2);margin-bottom:8px;">2. Implementasi</h3>
-        <p style="font-size:13px;color:var(--muted);">Implementasi interface menggunakan bahasa pemrograman (Java). Contoh: algoritma sorting diimplementasikan via interface Java.</p>
-      </div>
-    </div>
-  </div>
-</section>
+        <!-- Section 2: Kebutuhan Efisiensi -->
+        <section class="grid md:grid-cols-2 gap-8 items-center">
+            <div class="sketchy-border p-6 bg-blue-50">
+                <h3 class="text-3xl font-bold mb-4">Kebutuhan Efisiensi (1.1)</h3>
+                <p>Semakin besar <span class="highlighter">Data Set</span>, semakin besar pula kebutuhan untuk:</p>
+                <ul class="list-disc ml-5 mt-4 space-y-2">
+                    <li>Meningkatkan <strong>Jumlah Operasi</strong>.</li>
+                    <li>Meningkatkan <strong>Kecepatan Proses</strong>.</li>
+                </ul>
+            </div>
+            <div class="sticky-note">
+                "Efisiensi yang tepat memastikan jutaan operasi selesai dalam waktu secepat dan seakurat mungkin."
+            </div>
+        </section>
 
-<!-- TAB 2: Interface -->
-<section>
-  <p class="section-intro">Interface adalah kontrak operasi yang bisa dilakukan pada struktur data. Tiga interface utama: Queue, Stack, dan Linear Sequence.</p>
+        <!-- Section 3: Simulator Queue vs Stack -->
+        <section>
+            <h2 class="text-4xl mb-8 text-center" style="font-family: 'Gochi Hand';">Mini Lab: Antrean (Queue) vs Tumpukan (Stack)</h2>
+            <div class="grid md:grid-cols-2 gap-10">
+                
+                <!-- Queue Lab -->
+                <div class="sketchy-border p-6">
+                    <h4 class="text-2xl font-bold mb-2">Queue (FIFO)</h4>
+                    <p class="text-xs italic mb-4">First In First Out (Masuk pertama, keluar pertama)</p>
+                    <div id="queue-container" class="flex gap-2 h-16 items-center border-b-4 border-black mb-4 overflow-x-auto">
+                        <!-- Queue items -->
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="addToQueue()" class="btn-journal px-4 py-1 text-sm bg-green-100">EnQueue</button>
+                        <button onclick="removeFromQueue()" class="btn-journal px-4 py-1 text-sm bg-red-100">DeQueue</button>
+                    </div>
+                </div>
 
-  <div class="card">
-    <div class="card-title">Queue — FIFO (First In, First Out)</div>
-    <div class="interface-demo">
-      <div class="iface-label">add(x) / enqueue(x) → masuk dari kiri</div>
-      <div class="queue-vis">
-        <span class="queue-arrow">←</span>
-        <div class="queue-box active">x</div>
-        <div class="queue-box">□</div>
-        <div class="queue-box">□</div>
-        <div class="queue-box">□</div>
-        <div class="queue-box">□</div>
-        <span class="queue-arrow">→</span>
-      </div>
-      <div class="arrow-label">remove() / dequeue() → keluar dari kanan</div>
-    </div>
-    <p style="font-size:13px;color:var(--muted);">Yang pertama masuk adalah yang pertama keluar. Contoh: antrian kasir, print queue.</p>
-  </div>
+                <!-- Stack Lab -->
+                <div class="sketchy-border p-6">
+                    <h4 class="text-2xl font-bold mb-2">Stack (LIFO)</h4>
+                    <p class="text-xs italic mb-4">Last In First Out (Masuk terakhir, keluar pertama)</p>
+                    <div id="stack-container" class="flex flex-col-reverse gap-2 h-40 items-center border-l-4 border-r-4 border-b-4 border-black mb-4 w-24 mx-auto">
+                        <!-- Stack items -->
+                    </div>
+                    <div class="flex gap-2 justify-center">
+                        <button onclick="pushToStack()" class="btn-journal px-4 py-1 text-sm bg-green-100">Push</button>
+                        <button onclick="popFromStack()" class="btn-journal px-4 py-1 text-sm bg-red-100">Pop</button>
+                    </div>
+                </div>
 
-  <div class="card">
-    <div class="card-title">Stack — LIFO (Last In, First Out)</div>
-    <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
-      <div class="interface-demo" style="flex:1;min-width:180px;">
-        <div class="iface-label">push(x) / add(x)</div>
-        <div class="stack-vis">
-          <div class="stack-box">□</div>
-          <div class="stack-box">□</div>
-          <div class="stack-box">□</div>
-          <div class="stack-box top">x ← TOP</div>
-        </div>
-        <div class="arrow-label" style="text-align:center;margin-top:6px;">pop() / remove() → hapus dari TOP</div>
-      </div>
-      <div style="flex:2;min-width:200px;">
-        <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Yang terakhir masuk adalah yang pertama keluar. Seperti tumpukan piring — piring terakhir yang ditaruh, pertama diambil.</p>
-        <div style="margin-top:8px;">
-          <span class="tag tag-blue">push(x)</span>
-          <span class="tag tag-purple">pop()</span>
-          <span class="tag tag-green">peek()</span>
-        </div>
-      </div>
-    </div>
-  </div>
+            </div>
+        </section>
 
-  <div class="card">
-    <div class="card-title">Linear Sequence (List Interface)</div>
-    <div class="interface-demo">
-      <div class="iface-label">Index: 0, 1, 2, ..., n-1</div>
-      <div class="queue-vis">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">0</div>
-          <div class="queue-box">a</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">1</div>
-          <div class="queue-box">b</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">2</div>
-          <div class="queue-box active">c</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">3</div>
-          <div class="queue-box">d</div>
-        </div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--muted);padding:0 4px;">···</div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">n-1</div>
-          <div class="queue-box">c</div>
-        </div>
-      </div>
-      <div class="arrow-label">get(2) → mengembalikan nilai 'c'</div>
-    </div>
-    <p style="font-size:13px;color:var(--muted);">Operasi: <code style="color:var(--accent)">get(i)</code>, <code style="color:var(--accent)">set(i,x)</code>, <code style="color:var(--accent)">add(i,x)</code>, <code style="color:var(--accent)">remove(i)</code></p>
-  </div>
-</section>
+        <!-- Section 4: Matematika & Performa -->
+        <section class="sketchy-border p-8 bg-yellow-50">
+            <h2 class="text-4xl mb-6 underline decoration-wavy decoration-purple-500">Matematika & Performa (1.4 & 1.5)</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="font-bold text-xl mb-4">Topik Matematika DS:</h4>
+                    <ul class="space-y-2">
+                        <li>🔢 <span class="highlighter">Eksponensial & Logaritma</span></li>
+                        <li>❗ <span class="highlighter">Faktorial (n!)</span></li>
+                        <li>📉 <span class="highlighter">Notasi Big-Oh (Kompleksitas)</span></li>
+                    </ul>
+                </div>
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h4 class="font-bold text-xl mb-4">3 Pilar Performa:</h4>
+                    <ol class="list-decimal ml-5 space-y-2">
+                        <li><strong>Correctness:</strong> Pemilihan interface yang tepat.</li>
+                        <li><strong>Time Complexity:</strong> Running times sekecil mungkin.</li>
+                        <li><strong>Space Complexity:</strong> Penggunaan memori sekecil mungkin.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
 
-<!-- TAB 3: Matematika -->
-<section>
-  <p class="section-intro">Matematika dalam struktur data mencakup 4 topik utama yang digunakan untuk analisis algoritma.</p>
-  <div class="math-grid">
-    <div class="math-card">
-      <h3>Eksponensial</h3>
-      <div class="math-formula">b<sup>x</sup></div>
-      <p>x positif: b×b×...×b sebanyak x kali<br>x negatif: b<sup>x</sup> = 1<br>x = 0: b<sup>x</sup> = 1/b<sup>-x</sup></p>
-    </div>
-    <div class="math-card">
-      <h3>Logaritma</h3>
-      <div class="math-formula">log<sub>b</sub>k</div>
-      <p>Kebalikan eksponensial.<br>b<sup>log<sub>b</sub>k</sup> = k<br>log<sub>b</sub>k = log<sub>a</sub>k / log<sub>a</sub>b</p>
-    </div>
-    <div class="math-card">
-      <h3>Faktorial</h3>
-      <div class="math-formula">n!</div>
-      <p>n! = 1 · 2 · 3 · ... · n<br>Kombinasi: C(n,k) = n! / k!(n-k)!</p>
-    </div>
-    <div class="math-card">
-      <h3>Probabilitas</h3>
-      <div class="math-formula">E[X]</div>
-      <p>E[X] = Σ x · Pr{X=x}<br>Nilai ekspektasi random variabel X pada semesta U.</p>
-    </div>
-  </div>
+        <!-- Footer -->
+        <footer class="text-center pb-10">
+            <div class="inline-block p-6 border-4 border-black rotate-1 bg-white">
+                <h3 class="text-3xl font-bold">Semoga Ilmunya Bermanfaat!</h3>
+                <p>Sampai jumpa di Inisiasi 2 Struktur Data.</p>
+            </div>
+        </footer>
 
-  <div class="card" style="margin-top:20px;">
-    <div class="card-title">Notasi Big-Oh — O(f(n))</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Mengukur batas atas kompleksitas waktu/ruang algoritma. g(n) ≤ c·f(n) untuk semua n ≥ n₀.</p>
-    <div class="bigo-row"><div class="bigo-label">O(1)</div><div class="bigo-bar-wrap"><div class="bigo-bar" style="width:8%;background:#10b981;color:#fff;">─</div></div><div class="bigo-desc">Konstan</div></div>
-    <div class="bigo-row"><div class="bigo-label">O(log n)</div><div class="bigo-bar-wrap"><div class="bigo-bar" style="width:22%;background:#06b6d4;color:#fff;">──</div></div><div class="bigo-desc">Logaritmik</div></div>
-    <div class="bigo-row"><div class="bigo-label">O(n)</div><div class="bigo-bar-wrap"><div class="bigo-bar" style="width:45%;background:#7c3aed;color:#fff;">──────</div></div><div class="bigo-desc">Linear</div></div>
-    <div class="bigo-row"><div class="bigo-label">O(n log n)</div><div class="bigo-bar-wrap"><div class="bigo-bar" style="width:65%;background:#d97706;color:#fff;">──────────</div></div><div class="bigo-desc">Linearitmik</div></div>
-    <div class="bigo-row"><div class="bigo-label">O(n²)</div><div class="bigo-bar-wrap"><div class="bigo-bar" style="width:88%;background:#dc2626;color:#fff;">────────────────</div></div><div class="bigo-desc">Kuadratik</div></div>
-  </div>
-</section>
+    </main>
 
-<!-- TAB 4: Performa -->
-<section>
-  <p class="section-intro">Tiga dimensi performa yang harus dipertimbangkan dalam memilih dan mengimplementasikan struktur data.</p>
-  <div class="grid-2">
-    <div class="card"><div class="card-title">Correctness</div><h2 style="font-size:16px;">Ketepatan</h2><p>Pemilihan interface yang tepat harus diperhatikan dalam implementasi struktur data agar hasil sesuai ekspektasi.</p></div>
-    <div class="card"><div class="card-title">Time Complexity</div><h2 style="font-size:16px;">Kompleksitas Waktu</h2><p>Running times diusahakan sekecil mungkin. Gunakan notasi Big-Oh untuk menganalisis.</p></div>
-    <div class="card"><div class="card-title">Space Complexity</div><h2 style="font-size:16px;">Kompleksitas Ruang</h2><p>Penggunaan memori diusahakan sekecil mungkin dalam implementasi struktur data.</p></div>
-    <div class="card"><div class="card-title">Running Time Types</div>
-      <div style="font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:8px;">
-        <div><span style="color:var(--accent);">Worst-case:</span> Keadaan terburuk, tidak akan melebihi f(n)</div>
-        <div><span style="color:var(--accent2);">Amortized:</span> Hampir worst-case, rangkaian m operasi ≈ mf(n)</div>
-        <div><span style="color:var(--accent3);">Expected:</span> Sudah diperkirakan, tidak melebihi waktu maksimal</div>
-      </div>
-    </div>
-  </div>
-</section>
+    <script>
+        let counter = 1;
 
-<!-- TAB 5: List of DS -->
-<section>
-  <p class="section-intro">Ringkasan performa berbagai implementasi struktur data menggunakan interface List, USet, dan SSet.</p>
-  <div class="card">
-    <div class="card-title">List Implementations</div>
-    <div style="overflow-x:auto;">
-      <table class="perf-table">
-        <thead><tr><th>Struktur</th><th>get(i)/set(i,x)</th><th>add(i,x)/remove(i)</th></tr></thead>
-        <tbody>
-          <tr><td>ArrayStack</td><td>O(1)</td><td>O(1+n-i)ᴬ</td></tr>
-          <tr><td>ArrayDeque</td><td>O(1)</td><td>O(1+min{i,n-i})ᴬ</td></tr>
-          <tr><td>DualArrayDeque</td><td>O(1)</td><td>O(1+min{i,n-i})ᴬ</td></tr>
-          <tr><td>RootishArrayStack</td><td>O(1)</td><td>O(1+n-i)ᴬ</td></tr>
-          <tr><td>DLList</td><td>O(1+min{i,n-i})</td><td>O(1+min{i,n-i})</td></tr>
-          <tr><td>SEList</td><td>O(1+min{i,n-i}/b)</td><td>O(b+min{i,n-i}/b)ᴬ</td></tr>
-          <tr><td>SkiplistList</td><td>O(log n)ᴱ</td><td>O(log n)ᴱ</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">USet & SSet Implementations</div>
-    <div style="overflow-x:auto;">
-      <table class="perf-table">
-        <thead><tr><th>Struktur</th><th>find(x)</th><th>add(x)/remove(x)</th></tr></thead>
-        <tbody>
-          <tr><td>ChainedHashTable</td><td>O(1)ᴱ</td><td>O(1)ᴬ·ᴱ</td></tr>
-          <tr><td>LinearHashTable</td><td>O(1)ᴱ</td><td>O(1)ᴬ·ᴱ</td></tr>
-          <tr><td>SkiplistSSet</td><td>O(log n)ᴱ</td><td>O(log n)ᴱ</td></tr>
-          <tr><td>RedBlackTree</td><td>O(log n)</td><td>O(log n)</td></tr>
-          <tr><td>BinaryHeap</td><td>O(1) findMin</td><td>O(log n)ᴬ</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:10px;">ᴬ = amortized running time &nbsp;·&nbsp; ᴱ = expected running time</p>
-  </div>
-</section>
+        // Interactive Highlighter
+        $(document).on('click', '.highlighter', function() {
+            $(this).toggleClass('highlight-active');
+        });
 
-</main>
+        // Queue Logic
+        function addToQueue() {
+            if (counter > 20) return;
+            $('#queue-container').append(`<div class="node-box">${counter++}</div>`);
+        }
+        function removeFromQueue() {
+            $('#queue-container div:first-child').remove();
+        }
 
-<script>
-const tabs = document.querySelectorAll('.nav-tab');
-const sections = document.querySelectorAll('section');
-function showTab(i) {
-  tabs.forEach((t,j)=>t.classList.toggle('active',i===j));
-  sections.forEach((s,j)=>s.classList.toggle('active',i===j));
-}
-</script>
+        // Stack Logic
+        function pushToStack() {
+            if ($('#stack-container div').length >= 5) return;
+            $('#stack-container').append(`<div class="node-box w-16">${counter++}</div>`);
+        }
+        function popFromStack() {
+            $('#stack-container div:last-child').remove();
+        }
+
+        // Add some random doodle decorations
+        $(document).ready(function() {
+            const doodles = ['★', '✎', '📓', '✓'];
+            for(let i=0; i<8; i++) {
+                let d = doodles[Math.floor(Math.random()*doodles.length)];
+                $('body').append(`<div style="position:fixed; top:${Math.random()*100}%; left:${Math.random()*100}%; opacity:0.1; font-size:2rem; z-index:-1;">${d}</div>`);
+            }
+        });
+    </script>
 </body>
 </html>

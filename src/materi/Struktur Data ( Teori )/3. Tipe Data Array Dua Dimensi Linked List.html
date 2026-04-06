@@ -1,431 +1,278 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Array 2D &amp; Linked List — Inisiasi 3</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0d1117;--surface:#161b22;--surface2:#21262d;
-  --border:#30363d;--accent:#58a6ff;--accent2:#f78166;
-  --accent3:#3fb950;--accent4:#d2a8ff;
-  --text:#c9d1d9;--muted:#8b949e;--heading:#f0f6fc;
-  --mono:'IBM Plex Mono',monospace;--body:'DM Sans',sans-serif;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Tipe Data: Interactive Journal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Gochi+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-.hero{background:var(--surface);border-bottom:1px solid var(--border);padding:52px 24px 40px;text-align:center;}
-.hero-badge{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--accent3);border:1px solid #238636;padding:3px 10px;border-radius:20px;margin-bottom:14px;letter-spacing:.1em;}
-.hero h1{font-size:clamp(24px,4.5vw,46px);font-weight:600;color:var(--heading);line-height:1.2;margin-bottom:8px;}
-.hero h1 em{color:var(--accent2);font-style:normal;}
-.hero p{color:var(--muted);font-size:14px;}
+    <style>
+        body { background-color: #fdfbf7; font-family: 'Kalam', cursive; color: #2d3436; }
+        .journal-title { font-family: 'Gochi Hand', cursive; }
+        
+        /* Sketchy Elements */
+        .sketchy-card {
+            border: 3px solid #2d3436;
+            border-radius: 15px 225px 15px 255px/225px 15px 255px 15px;
+            background: white;
+            padding: 2rem;
+            position: relative;
+        }
 
-nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;position:sticky;top:0;z-index:100;}
-.nav-tab{padding:12px 18px;font-size:12px;font-family:var(--mono);color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.2s;}
-.nav-tab:hover{color:var(--text);}
-.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+        .btn-journal {
+            background: white; border: 2px solid #2d3436;
+            box-shadow: 4px 4px 0px #2d3436; transition: all 0.1s;
+            font-family: 'Architects Daughter', cursive; padding: 0.5rem 1rem;
+        }
+        .btn-journal:active { box-shadow: 0px 0px 0px #2d3436; transform: translate(2px, 2px); }
+        .btn-journal:hover { background: #fff34d; }
 
-main{max-width:900px;margin:0 auto;padding:28px 18px 80px;}
-section{display:none;}
-section.active{display:block;}
+        .highlighter { cursor: pointer; padding: 0 4px; transition: background 0.3s; }
+        .highlight-active { background: #fff34d; border-radius: 4px; }
 
-.intro{font-size:13px;color:var(--muted);border-left:3px solid var(--accent);padding-left:14px;margin-bottom:22px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:16px;}
-.card-label{font-family:var(--mono);font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:600px){.grid-2{grid-template-columns:1fr;}}
+        /* Simulator Styles */
+        .node-box {
+            min-width: 80px; height: 60px; border: 2px solid #333;
+            display: flex; align-items: center; justify-content: center;
+            background: #fff; position: relative; margin-right: 30px;
+            border-radius: 8px; font-weight: bold;
+        }
+        .node-box::after {
+            content: '➔'; position: absolute; right: -25px; color: #333; font-size: 1.2rem;
+        }
+        .node-box:last-child::after { content: 'Ø'; right: -20px; }
 
-/* Matrix */
-.matrix{display:inline-block;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;}
-.matrix-row{display:flex;}
-.matrix-cell{width:50px;height:40px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
-.matrix-cell:last-child{border-right:none;}
-.matrix-row:last-child .matrix-cell{border-bottom:none;}
-.matrix-cell.hl{background:rgba(88,166,255,.1);color:var(--accent);}
-.matrix-cell.head-r{background:var(--surface2);color:var(--accent4);font-size:11px;}
-.matrix-cell.head-c{background:var(--surface2);color:var(--accent4);font-size:11px;}
+        .memory-cell { width: 50px; height: 50px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .memory-cell:hover { background: #f0f9ff; border: 2px solid #3b82f6; }
+        
+        .space-efficient-node {
+            border: 3px solid #2d3436; padding: 10px; display: flex; gap: 5px; background: #fff; border-radius: 5px;
+        }
+        .element-slot { width: 35px; height: 35px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        
+        .arrow-double { position: relative; width: 40px; text-align: center; font-weight: bold; }
 
-/* Linked list node */
-.ll-vis{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin:12px 0;}
-.ll-node-wrap{display:flex;align-items:center;}
-.ll-node{display:flex;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;}
-.ll-node.head-node{border-color:var(--accent3);}
-.ll-node.tail-node{border-color:var(--accent2);}
-.ll-data{padding:8px 12px;font-family:var(--mono);font-size:13px;background:var(--surface2);}
-.ll-ptr{padding:8px 8px;font-family:var(--mono);font-size:11px;color:var(--muted);border-left:1px solid var(--border);background:var(--surface);}
-.ll-ptr.null-ptr{color:var(--accent2);}
-.ll-arr{padding:0 4px;font-size:16px;color:var(--muted);}
-.ll-label{font-family:var(--mono);font-size:10px;text-align:center;margin-top:3px;}
-
-.node-wrap-v{display:flex;flex-direction:column;align-items:center;}
-
-/* DLL node */
-.dll-node{display:flex;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;}
-.dll-prev{padding:8px;font-family:var(--mono);font-size:10px;color:var(--accent4);border-right:1px solid var(--border);background:var(--surface);}
-.dll-data{padding:8px 12px;font-family:var(--mono);font-size:13px;background:var(--surface2);}
-.dll-next{padding:8px;font-family:var(--mono);font-size:10px;color:var(--accent);border-left:1px solid var(--border);background:var(--surface);}
-
-.op-list{display:flex;flex-direction:column;gap:10px;}
-.op-item{display:flex;align-items:flex-start;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;}
-.op-badge{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
-.op-badge.add{background:rgba(63,185,80,.12);color:var(--accent3);border:1px solid rgba(63,185,80,.3);}
-.op-badge.remove{background:rgba(247,129,102,.12);color:var(--accent2);border:1px solid rgba(247,129,102,.3);}
-.op-badge.push{background:rgba(88,166,255,.12);color:var(--accent);border:1px solid rgba(88,166,255,.3);}
-.op-badge.pop{background:rgba(210,168,255,.12);color:var(--accent4);border:1px solid rgba(210,168,255,.3);}
-.op-desc{font-size:13px;color:var(--muted);}
-
-.code-block{background:#010409;border:1px solid var(--border);border-radius:8px;padding:18px;font-family:var(--mono);font-size:12px;line-height:1.8;overflow-x:auto;}
-.kw{color:#ff7b72;}.cl{color:#79c0ff;}.st{color:#a5d6ff;}.cm{color:#6e7681;font-style:italic;}.nm{color:#79c0ff;}.op{color:#d2a8ff;}
-
-.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-family:var(--mono);margin:2px;}
-.tag-a{background:rgba(63,185,80,.1);color:var(--accent3);border:1px solid rgba(63,185,80,.2);}
-.tag-b{background:rgba(88,166,255,.1);color:var(--accent);border:1px solid rgba(88,166,255,.2);}
-.tag-c{background:rgba(247,129,102,.1);color:var(--accent2);border:1px solid rgba(247,129,102,.2);}
-.tag-d{background:rgba(210,168,255,.1);color:var(--accent4);border:1px solid rgba(210,168,255,.2);}
-
-.step-vis{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin:8px 0;}
-.step-label{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px;}
-</style>
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    </style>
 </head>
-<body>
+<body class="p-4 md:p-10">
 
-<div class="hero">
-  <div class="hero-badge">INISIASI 3 · STRUKTUR DATA</div>
-  <h1>Array 2D &amp;<br><em>Linked List</em></h1>
-  <p>Zaenal Mustofa, M.Kom. — Teknologi Informasi UNY</p>
-</div>
+    <nav class="fixed top-5 right-5 z-50">
+        <button onclick="window.history.back()" class="btn-journal">← Kembali</button>
+    </nav>
 
-<nav>
-  <div class="nav-tab active" onclick="showTab(0)">Array 2 Dimensi</div>
-  <div class="nav-tab" onclick="showTab(1)">Singly Linked List</div>
-  <div class="nav-tab" onclick="showTab(2)">Operasi SLL</div>
-  <div class="nav-tab" onclick="showTab(3)">Doubly Linked List</div>
-  <div class="nav-tab" onclick="showTab(4)">Space-Efficient LL</div>
-</nav>
+    <header class="max-w-5xl mx-auto text-center mb-20">
+        <h1 class="journal-title text-7xl text-blue-800">Struktur Data Lab</h1>
+        <p class="text-xl opacity-70">Interactive Learning: Array 2D & Linked List</p>
+    </header>
 
-<main>
+    <main class="max-w-5xl mx-auto space-y-24">
 
-<!-- TAB 0: Array 2D -->
-<section class="active">
-  <p class="intro">Array 2 dimensi = matriks. Terdiri dari baris dan kolom. Deklarasi: <code style="color:var(--accent)">int[][] A = new int[baris][kolom]</code></p>
-
-  <div class="card">
-    <div class="card-label">Ilustrasi Array 2D — A = new int[3][4]</div>
-    <div style="overflow-x:auto;margin-bottom:14px;">
-      <div class="matrix">
-        <div class="matrix-row">
-          <div class="matrix-cell head-r" style="width:60px;">↓ baris</div>
-          <div class="matrix-cell head-c">[0]</div>
-          <div class="matrix-cell head-c">[1]</div>
-          <div class="matrix-cell head-c">[2]</div>
-          <div class="matrix-cell head-c">[3]</div>
-        </div>
-        <div class="matrix-row">
-          <div class="matrix-cell head-r">[0]</div>
-          <div class="matrix-cell hl">1</div>
-          <div class="matrix-cell">0</div>
-          <div class="matrix-cell">12</div>
-          <div class="matrix-cell">-1</div>
-        </div>
-        <div class="matrix-row">
-          <div class="matrix-cell head-r">[1]</div>
-          <div class="matrix-cell">7</div>
-          <div class="matrix-cell">-3</div>
-          <div class="matrix-cell hl">2</div>
-          <div class="matrix-cell">5</div>
-        </div>
-        <div class="matrix-row">
-          <div class="matrix-cell head-r">[2]</div>
-          <div class="matrix-cell">-5</div>
-          <div class="matrix-cell">-2</div>
-          <div class="matrix-cell">2</div>
-          <div class="matrix-cell hl">-9</div>
-        </div>
-      </div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-      <span class="tag tag-b">3 baris</span>
-      <span class="tag tag-a">4 kolom</span>
-      <span class="tag tag-c">12 total elemen</span>
-      <span class="tag tag-d">A[1][2] = 2</span>
-    </div>
-    <p style="font-size:13px;color:var(--muted);">A menyimpan referensi ke array berisi 3 item, di mana setiap item adalah referensi ke array berisi 4 int.</p>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Deklarasi &amp; Indeks Array 2D</div>
-    <div class="code-block">
-<span class="kw">public</span> <span class="kw">class</span> <span class="cl">arrayDuaDimensi</span> {
-  <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="cl">String</span>[] args) {
-    <span class="kw">int</span>[][] A = <span class="kw">new</span> <span class="kw">int</span>[<span class="nm">4</span>][<span class="nm">5</span>]; <span class="cm">// 4 baris, 5 kolom = 20 elemen</span>
-    
-    <span class="cm">// Indeks: A[baris][kolom]</span>
-    <span class="cm">// A[0][0], A[0][1], ..., A[0][4]</span>
-    <span class="cm">// A[1][0], A[1][1], ..., A[1][4]</span>
-    <span class="cm">// ... hingga A[3][4]</span>
-    
-    A[<span class="nm">0</span>][<span class="nm">0</span>] = <span class="nm">3</span>;
-    A[<span class="nm">0</span>][<span class="nm">1</span>] = <span class="nm">5</span>; <span class="cm">// dst.</span>
-  }
-}</div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Array 2D — 4 Baris × 5 Kolom</div>
-    <div style="overflow-x:auto;">
-      <div class="matrix">
-        <div class="matrix-row">
-          <div class="matrix-cell head-r" style="width:40px;font-size:10px;"></div>
-          <div class="matrix-cell head-c">[0]</div><div class="matrix-cell head-c">[1]</div><div class="matrix-cell head-c">[2]</div><div class="matrix-cell head-c">[3]</div><div class="matrix-cell head-c">[4]</div>
-        </div>
-        <div class="matrix-row"><div class="matrix-cell head-r" style="width:40px;font-size:10px;">[0]</div><div class="matrix-cell">E00</div><div class="matrix-cell">E01</div><div class="matrix-cell">E02</div><div class="matrix-cell">E03</div><div class="matrix-cell">E04</div></div>
-        <div class="matrix-row"><div class="matrix-cell head-r" style="width:40px;font-size:10px;">[1]</div><div class="matrix-cell">E10</div><div class="matrix-cell">E11</div><div class="matrix-cell">E12</div><div class="matrix-cell">E13</div><div class="matrix-cell">E14</div></div>
-        <div class="matrix-row"><div class="matrix-cell head-r" style="width:40px;font-size:10px;">[2]</div><div class="matrix-cell">E20</div><div class="matrix-cell">E21</div><div class="matrix-cell">E22</div><div class="matrix-cell">E23</div><div class="matrix-cell">E24</div></div>
-        <div class="matrix-row"><div class="matrix-cell head-r" style="width:40px;font-size:10px;">[3]</div><div class="matrix-cell">E30</div><div class="matrix-cell">E31</div><div class="matrix-cell">E32</div><div class="matrix-cell">E33</div><div class="matrix-cell">E34</div></div>
-      </div>
-    </div>
-    <p style="font-size:12px;color:var(--muted);margin-top:10px;">Total elemen = 4 × 5 = 20. Format E[baris][kolom].</p>
-  </div>
-</section>
-
-<!-- TAB 1: SLL -->
-<section>
-  <p class="intro">Singly Linked List adalah rangkaian node yang setiap node-nya memiliki dua bagian: data elemen dan pointer next ke node berikutnya.</p>
-
-  <div class="card">
-    <div class="card-label">Anatomi Node SLL</div>
-    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-      <div>
-        <div class="ll-vis">
-          <div class="node-wrap-v">
-            <div class="ll-node head-node">
-              <div class="ll-data" style="color:var(--accent3);">a</div>
-              <div class="ll-ptr">next→</div>
+        <!-- SECTION 1: ARRAY 2D -->
+        <section>
+            <h2 class="text-4xl journal-title text-green-700 mb-6">#01 Array Dua Dimensi</h2>
+            <div class="sketchy-card bg-green-50">
+                <p class="mb-6">Klik sel untuk melihat bagaimana komputer menghitung <strong>Alamat Memori</strong> dari sebuah Array 2D (Row-Major Order).</p>
+                
+                <div class="flex flex-col md:flex-row gap-10 items-center">
+                    <div id="array-grid" class="grid grid-cols-5 gap-1 bg-white p-4 border-2 border-black">
+                        <!-- Generated by JS -->
+                    </div>
+                    
+                    <div class="flex-1 space-y-4 bg-white p-6 rounded-xl border-2 border-dashed border-green-400">
+                        <h4 class="font-bold underline text-lg">Memory Calculator:</h4>
+                        <div class="text-2xl font-mono text-blue-600" id="addr-formula">
+                            Klik Sel...
+                        </div>
+                        <p class="text-sm text-gray-500 italic">Rumus: BaseAddr + (Baris * TotalKolom + Kolom) * SizeOf(Int)</p>
+                    </div>
+                </div>
             </div>
-            <div class="ll-label" style="color:var(--accent3);">HEAD</div>
-          </div>
-          <div class="ll-arr">›</div>
-          <div class="node-wrap-v">
-            <div class="ll-node">
-              <div class="ll-data">b</div>
-              <div class="ll-ptr">next→</div>
+        </section>
+
+        <!-- SECTION 2: LINKED LIST MECHANICS -->
+        <section>
+            <h2 class="text-4xl journal-title text-red-700 mb-6">#02 Singly Linked List Logic</h2>
+            <div class="sketchy-card">
+                <div class="mb-6 flex gap-2 flex-wrap">
+                    <button onclick="addNodeHead()" class="btn-journal bg-blue-100">Push (Head)</button>
+                    <button onclick="addNodeTail()" class="btn-journal bg-green-100">Add (Tail)</button>
+                    <button onclick="removeHead()" class="btn-journal bg-red-100">Pop (Head)</button>
+                    <button onclick="clearList()" class="btn-journal">Reset</button>
+                </div>
+
+                <div class="overflow-x-auto py-10 px-5 bg-gray-50 rounded-xl border-2 border-black min-h-[150px]">
+                    <div id="ll-container" class="flex items-center">
+                        <!-- Nodes will appear here -->
+                        <span class="text-gray-400 italic">List Kosong (NULL)</span>
+                    </div>
+                </div>
+                <div class="mt-4 text-sm text-gray-600">
+                    <span class="font-bold">Info:</span> Push menambahkan ke depan (LIFO), Add menambahkan ke belakang (FIFO).
+                </div>
             </div>
-            <div class="ll-label" style="color:var(--muted);">Node</div>
-          </div>
-          <div class="ll-arr">›</div>
-          <div class="node-wrap-v">
-            <div class="ll-node">
-              <div class="ll-data">c</div>
-              <div class="ll-ptr">next→</div>
+        </section>
+
+        <!-- SECTION 3: SPACE EFFICIENT SHIFTER -->
+        <section>
+            <h2 class="text-4xl journal-title text-purple-700 mb-6">#03 Space-Efficient "Shifting" Simulation</h2>
+            <div class="sketchy-card bg-purple-50">
+                <p class="mb-6"><span class="highlighter">Materi Tersulit:</span> Apa yang terjadi jika kita menyisipkan data ke dalam node yang sudah penuh? Elemen terakhir akan <strong>tergeser (shift)</strong> ke node berikutnya.</p>
+                
+                <div class="flex flex-col gap-8">
+                    <!-- The Visualizer -->
+                    <div class="flex items-center gap-4 overflow-x-auto p-4 bg-white border-2 border-black rounded-lg">
+                        <div class="flex flex-col items-center">
+                            <span class="text-xs font-bold">Node 1</span>
+                            <div class="space-efficient-node" id="se-node-1"></div>
+                        </div>
+                        <div class="arrow-double">⇄</div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-xs font-bold">Node 2</span>
+                            <div class="space-efficient-node" id="se-node-2"></div>
+                        </div>
+                        <div class="arrow-double">⇄</div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-xs font-bold">Node 3</span>
+                            <div class="space-efficient-node" id="se-node-3"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-4">
+                        <input type="text" id="shift-input" maxlength="1" placeholder="Huruf" class="border-2 border-black p-2 w-20 text-center rounded">
+                        <button onclick="shiftInsert()" class="btn-journal bg-yellow-300">Sisipkan ke Node 1</button>
+                    </div>
+                </div>
             </div>
-            <div class="ll-label" style="color:var(--muted);">Node</div>
-          </div>
-          <div class="ll-arr">›</div>
-          <div class="node-wrap-v">
-            <div class="ll-node tail-node">
-              <div class="ll-data" style="color:var(--accent2);">d</div>
-              <div class="ll-ptr null-ptr">null</div>
+        </section>
+
+        <footer class="py-20 text-center">
+            <div class="inline-block p-10 bg-white border-4 border-black rotate-1">
+                <h3 class="text-3xl journal-title">Sudah paham logikanya?</h3>
+                <p>Klik teks mana saja untuk menandai sebagai "Selesai Dipelajari"!</p>
             </div>
-            <div class="ll-label" style="color:var(--accent2);">TAIL</div>
-          </div>
-        </div>
-      </div>
-      <div style="flex:1;min-width:200px;">
-        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
-          <div style="display:flex;gap:8px;align-items:center;"><div style="width:10px;height:10px;border-radius:50%;background:var(--accent3);"></div><div><strong>Node</strong> = unit data terkecil</div></div>
-          <div style="display:flex;gap:8px;align-items:center;"><div style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></div><div><strong>Elemen</strong> = nilai data yang disimpan</div></div>
-          <div style="display:flex;gap:8px;align-items:center;"><div style="width:10px;height:10px;border-radius:50%;background:var(--accent4);"></div><div><strong>Pointer next</strong> = alamat node berikutnya</div></div>
-          <div style="display:flex;gap:8px;align-items:center;"><div style="width:10px;height:10px;border-radius:50%;background:var(--accent3);"></div><div><strong>Head</strong> = node pertama (pintu masuk)</div></div>
-          <div style="display:flex;gap:8px;align-items:center;"><div style="width:10px;height:10px;border-radius:50%;background:var(--accent2);"></div><div><strong>Tail</strong> = node terakhir (next=null)</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
+        </footer>
+    </main>
 
-  <div class="card">
-    <div class="card-label">Perbandingan Array vs Linked List</div>
-    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">
-      <thead><tr>
-        <th style="padding:10px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted);font-size:11px;">Aspek</th>
-        <th style="padding:10px;text-align:left;border-bottom:1px solid var(--border);color:var(--accent);font-size:11px;">Array</th>
-        <th style="padding:10px;text-align:left;border-bottom:1px solid var(--border);color:var(--accent2);font-size:11px;">Linked List</th>
-      </tr></thead>
-      <tbody>
-        <tr><td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--muted);">Memori</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">Berurutan (contiguous)</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">Tersebar (dynamic)</td></tr>
-        <tr><td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--muted);">Akses elemen</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">O(1) via indeks</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">O(n) harus traverse</td></tr>
-        <tr><td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--muted);">Insert/delete head</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">O(n) geser elemen</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">O(1) ubah pointer</td></tr>
-        <tr><td style="padding:9px 10px;color:var(--muted);">Ukuran</td><td style="padding:9px 10px;">Tetap (fixed)</td><td style="padding:9px 10px;">Dinamis (fleksibel)</td></tr>
-      </tbody>
-    </table></div>
-  </div>
-</section>
+    <script>
+        // --- 1. ARRAY 2D LOGIC ---
+        const rows = 4, cols = 5, baseAddr = 0x43F2;
+        function initArray() {
+            let html = '';
+            for(let r=0; r<rows; r++) {
+                for(let c=0; c<cols; c++) {
+                    html += `<div class="memory-cell" onclick="calcAddr(${r}, ${c})">${r},${c}</div>`;
+                }
+            }
+            $('#array-grid').html(html);
+        }
 
-<!-- TAB 2: Operasi SLL -->
-<section>
-  <p class="intro">Operasi dasar pada Singly Linked List: add, remove, push, dan pop. Perhatikan bagaimana HEAD dan TAIL berubah setiap operasi.</p>
+        function calcAddr(r, c) {
+            const offset = (r * cols + c) * 2; // Assume each element 2 bytes
+            const currentAddr = (baseAddr + offset).toString(16).toUpperCase();
+            $('#addr-formula').hide().html(`
+                Idx [${r}][${c}] → <span class="text-red-500">0x${currentAddr}</span><br>
+                <span class="text-sm text-black">Step: ${baseAddr.toString(16).toUpperCase()} + (${r} * ${cols} + ${c}) * 2</span>
+            `).fadeIn();
+        }
 
-  <div class="card">
-    <div class="card-label">State Awal — (a, b, c, d, e)</div>
-    <div class="step-vis">
-      <div class="step-label">Initial state</div>
-      <div class="ll-vis">
-        <div class="node-wrap-v"><div class="ll-node head-node"><div class="ll-data" style="color:var(--accent3);">a</div><div class="ll-ptr">next</div></div><div class="ll-label" style="color:var(--accent3);">HEAD</div></div>
-        <div class="ll-arr">›</div>
-        <div class="node-wrap-v"><div class="ll-node"><div class="ll-data">b</div><div class="ll-ptr">next</div></div></div>
-        <div class="ll-arr">›</div>
-        <div class="node-wrap-v"><div class="ll-node"><div class="ll-data">c</div><div class="ll-ptr">next</div></div></div>
-        <div class="ll-arr">›</div>
-        <div class="node-wrap-v"><div class="ll-node"><div class="ll-data">d</div><div class="ll-ptr">next</div></div></div>
-        <div class="ll-arr">›</div>
-        <div class="node-wrap-v"><div class="ll-node tail-node"><div class="ll-data" style="color:var(--accent2);">e</div><div class="ll-ptr null-ptr">null</div></div><div class="ll-label" style="color:var(--accent2);">TAIL</div></div>
-      </div>
-    </div>
-  </div>
+        // --- 2. LINKED LIST LOGIC ---
+        let listData = ['A', 'B', 'C'];
+        function renderLL() {
+            const container = $('#ll-container');
+            if(listData.length === 0) {
+                container.html('<span class="text-gray-400 italic">List Kosong (NULL)</span>');
+                return;
+            }
+            let html = '<div class="node-box bg-yellow-200">HEAD</div>';
+            listData.forEach(val => {
+                html += `<div class="node-box animate-pop">${val}</div>`;
+            });
+            container.html(html);
+        }
 
-  <div class="op-list">
-    <div class="op-item">
-      <div class="op-badge add">add(x)</div>
-      <div>
-        <div class="op-desc" style="margin-bottom:8px;">Menambahkan node "x" pada tail. Node x menjadi TAIL baru, next-nya = null.</div>
-        <div class="ll-vis" style="margin:0;">
-          <div class="node-wrap-v"><div class="ll-node head-node"><div class="ll-data" style="color:var(--accent3);">a</div><div class="ll-ptr">next</div></div><div class="ll-label" style="color:var(--accent3);">HEAD</div></div>
-          <div class="ll-arr">›</div><div class="node-wrap-v"><div class="ll-node"><div class="ll-data">b</div><div class="ll-ptr">next</div></div></div>
-          <div class="ll-arr">···</div>
-          <div class="node-wrap-v"><div class="ll-node"><div class="ll-data">e</div><div class="ll-ptr">next</div></div></div>
-          <div class="ll-arr">›</div>
-          <div class="node-wrap-v"><div class="ll-node tail-node"><div class="ll-data" style="color:var(--accent3);">x</div><div class="ll-ptr null-ptr">null</div></div><div class="ll-label" style="color:var(--accent2);">TAIL baru</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="op-item">
-      <div class="op-badge remove">remove()</div>
-      <div class="op-desc">Menghapus node "a" pada HEAD. HEAD berpindah ke node "b". Node "a" dilepas dari list.</div>
-    </div>
-    <div class="op-item">
-      <div class="op-badge pop">pop()</div>
-      <div class="op-desc">Mengeluarkan (dan mengembalikan nilai) node HEAD dengan elemen apapun. HEAD berpindah ke node berikutnya.</div>
-    </div>
-    <div class="op-item">
-      <div class="op-badge push">push(y)</div>
-      <div class="op-desc">Memasukkan node "y" pada HEAD. Node y menjadi HEAD baru, next-nya menunjuk ke HEAD lama.</div>
-    </div>
-  </div>
-</section>
+        function addNodeHead() {
+            const val = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+            listData.unshift(val);
+            renderLL();
+        }
 
-<!-- TAB 3: DLL -->
-<section>
-  <p class="intro">Doubly Linked List (DLL) memiliki dua pointer per node: next ke node berikutnya dan prev ke node sebelumnya. Traversal bisa dua arah.</p>
+        function addNodeTail() {
+            const val = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+            listData.push(val);
+            renderLL();
+        }
 
-  <div class="card">
-    <div class="card-label">Anatomi Node DLL</div>
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;">
-      <div class="node-wrap-v">
-        <div style="display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px;">←prev &nbsp;&nbsp; data &nbsp;&nbsp; next→</div>
-        <div class="dll-node">
-          <div class="dll-prev">←prev</div>
-          <div class="dll-data">M</div>
-          <div class="dll-next">next→</div>
-        </div>
-      </div>
-      <div style="flex:1;min-width:180px;font-size:13px;color:var(--muted);">
-        Setiap node punya 3 bagian: pointer <strong style="color:var(--accent4)">prev</strong> (ke kiri), nilai <strong style="color:var(--text)">data</strong> (elemen), dan pointer <strong style="color:var(--accent)">next</strong> (ke kanan).
-      </div>
-    </div>
+        function removeHead() {
+            listData.shift();
+            renderLL();
+        }
 
-    <div class="card-label" style="margin-top:16px;">Rangkaian DLL — (a, b, c, d, e)</div>
-    <div style="overflow-x:auto;padding-bottom:4px;">
-      <div style="display:flex;align-items:center;gap:0;min-width:max-content;">
-        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-right:4px;">null←</div>
-        <div class="dll-node" style="border-color:var(--accent3);">
-          <div class="dll-prev" style="color:var(--accent3);">◀</div><div class="dll-data" style="color:var(--accent3);">a</div><div class="dll-next">▶</div>
-        </div>
-        <div style="font-family:var(--mono);font-size:13px;color:var(--muted);padding:0 3px;">⟺</div>
-        <div class="dll-node"><div class="dll-prev">◀</div><div class="dll-data">b</div><div class="dll-next">▶</div></div>
-        <div style="font-family:var(--mono);font-size:13px;color:var(--muted);padding:0 3px;">⟺</div>
-        <div class="dll-node"><div class="dll-prev">◀</div><div class="dll-data">c</div><div class="dll-next">▶</div></div>
-        <div style="font-family:var(--mono);font-size:13px;color:var(--muted);padding:0 3px;">⟺</div>
-        <div class="dll-node"><div class="dll-prev">◀</div><div class="dll-data">d</div><div class="dll-next">▶</div></div>
-        <div style="font-family:var(--mono);font-size:13px;color:var(--muted);padding:0 3px;">⟺</div>
-        <div class="dll-node" style="border-color:var(--accent2);">
-          <div class="dll-prev">◀</div><div class="dll-data" style="color:var(--accent2);">e</div><div class="dll-next" style="color:var(--accent2);">▶</div>
-        </div>
-        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:4px;">→null</div>
-      </div>
-    </div>
-  </div>
+        function clearList() {
+            listData = [];
+            renderLL();
+        }
 
-  <div class="card">
-    <div class="card-label">Perbandingan SLL vs DLL</div>
-    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">
-      <thead><tr>
-        <th style="padding:10px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted);font-size:11px;">Aspek</th>
-        <th style="padding:10px;text-align:left;border-bottom:1px solid var(--border);color:var(--accent3);font-size:11px;">SLL</th>
-        <th style="padding:10px;text-align:left;border-bottom:1px solid var(--border);color:var(--accent4);font-size:11px;">DLL</th>
-      </tr></thead>
-      <tbody>
-        <tr><td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--muted);">Pointer/node</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">1 (next)</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">2 (prev + next)</td></tr>
-        <tr><td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--muted);">Traversal</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">Satu arah →</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">Dua arah ↔</td></tr>
-        <tr><td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--muted);">Memori per node</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">Lebih hemat</td><td style="padding:9px 10px;border-bottom:1px solid var(--border);">Lebih besar</td></tr>
-        <tr><td style="padding:9px 10px;color:var(--muted);">Delete sembarang</td><td style="padding:9px 10px;">Perlu node sebelumnya</td><td style="padding:9px 10px;">Bisa langsung O(1)</td></tr>
-      </tbody>
-    </table></div>
-  </div>
-</section>
+        // --- 3. SPACE EFFICIENT SHIFTER LOGIC ---
+        let seData = [
+            ['a', 'b', 'c'], // Node 1
+            ['d', 'e', 'f'], // Node 2
+            ['g', 'h', ' ']  // Node 3 (1 slot empty)
+        ];
 
-<!-- TAB 4: Space-Efficient -->
-<section>
-  <p class="intro">Space-Efficient Linked List menggabungkan keunggulan array (cache-friendly) dengan linked list (fleksibel). Setiap node menyimpan beberapa elemen sekaligus.</p>
+        function renderSE() {
+            for(let i=1; i<=3; i++) {
+                let html = '';
+                seData[i-1].forEach(char => {
+                    html += `<div class="element-slot bg-white border-2 border-black">${char}</div>`;
+                });
+                $(`#se-node-${i}`).html(html);
+            }
+        }
 
-  <div class="card">
-    <div class="card-label">Struktur Space-Efficient LL</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Terdiri dari node-node yang masing-masing menyimpan array kecil. Berguna untuk menghemat overhead pointer.</p>
-    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-      <div style="display:flex;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;">
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);background:var(--surface2);">a</div>
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);background:var(--surface2);">b</div>
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);background:var(--surface2);">c</div>
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;background:var(--surface2);">d</div>
-      </div>
-      <div style="font-family:var(--mono);font-size:14px;color:var(--muted);">⟺</div>
-      <div style="display:flex;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;">
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);background:var(--surface2);">e</div>
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);background:var(--surface2);">f</div>
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);background:var(--surface2);">g</div>
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;background:var(--surface2);">h</div>
-      </div>
-      <div style="font-family:var(--mono);font-size:14px;color:var(--muted);">⟺</div>
-      <div style="display:flex;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;">
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);background:var(--surface2);">i</div>
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);background:var(--surface2);">j</div>
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;border-right:1px solid var(--border);color:var(--muted);background:var(--surface);">_</div>
-        <div style="padding:8px 10px;font-family:var(--mono);font-size:12px;color:var(--muted);background:var(--surface);">_</div>
-      </div>
-    </div>
-    <p style="font-size:12px;color:var(--muted);">3 node, masing-masing berkapasitas 4 elemen. Node ke-3 hanya terisi 2 elemen, sisanya kosong.</p>
-  </div>
+        function shiftInsert() {
+            const newChar = $('#shift-input').val() || 'X';
+            
+            // Logika shifting manual sesuai slide:
+            // 1. Ambil elemen terakhir node 2, pindah ke node 3
+            seData[2][2] = seData[2][1];
+            seData[2][1] = seData[2][0];
+            seData[2][0] = seData[1][2];
 
-  <div class="card">
-    <div class="card-label">Keunggulan &amp; Trade-off</div>
-    <div class="grid-2">
-      <div style="padding:14px;background:rgba(63,185,80,.06);border:1px solid rgba(63,185,80,.2);border-radius:8px;">
-        <div style="font-size:12px;font-weight:600;color:var(--accent3);margin-bottom:8px;">Keunggulan</div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.7;">Lebih cache-friendly dari DLL biasa. Overhead pointer lebih sedikit. Akses elemen dalam node = O(1).</div>
-      </div>
-      <div style="padding:14px;background:rgba(247,129,102,.06);border:1px solid rgba(247,129,102,.2);border-radius:8px;">
-        <div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:8px;">Trade-off</div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.7;">Insert/delete memerlukan pergeseran elemen dalam node. Implementasi lebih kompleks dari SLL/DLL biasa.</div>
-      </div>
-    </div>
-  </div>
-</section>
+            // 2. Ambil elemen terakhir node 1, pindah ke node 2
+            seData[1][2] = seData[1][1];
+            seData[1][1] = seData[1][0];
+            seData[1][0] = seData[0][2];
 
-</main>
-<script>
-const tabs=document.querySelectorAll('.nav-tab');
-const secs=document.querySelectorAll('section');
-function showTab(i){tabs.forEach((t,j)=>t.classList.toggle('active',i===j));secs.forEach((s,j)=>s.classList.toggle('active',i===j));}
-</script>
+            // 3. Geser node 1, masukkan elemen baru
+            seData[0][2] = seData[0][1];
+            seData[0][1] = seData[0][0];
+            seData[0][0] = newChar;
+
+            renderSE();
+            
+            // Visual feedback
+            $('.element-slot').addClass('bg-yellow-100');
+            setTimeout(() => $('.element-slot').removeClass('bg-yellow-100'), 500);
+        }
+
+        // --- INITIALIZATION ---
+        $(document).ready(function() {
+            initArray();
+            renderLL();
+            renderSE();
+
+            $('.highlighter').click(function() {
+                $(this).toggleClass('highlight-active');
+            });
+        });
+    </script>
 </body>
 </html>
