@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS Study Journal — Catatan Sistem Operasi</title>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Gochi+Hand&family=Architects+Daughter&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --cream: #faf7f2;
+    --ink: #2c2416;
+    --ink-light: #5a4e3a;
+    --accent-yellow: #f5e642;
+    --accent-pink: #ff6b9d;
+    --accent-blue: #4a90d9;
+    --accent-green: #5cb85c;
+    --accent-orange: #f0a500;
+    --accent-purple: #8b5cf6;
+    --paper: #fffdf7;
+    --shadow-sharp: 4px 4px 0px #2c2416;
+    --shadow-sharp-sm: 2px 2px 0px #2c2416;
+    --font-hand: 'Kalam', cursive;
+    --font-doodle: 'Architects Daughter', cursive;
+    --font-note: 'Gochi Hand', cursive;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: var(--font-hand);
+    color: var(--ink);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(245, 230, 66, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(74, 144, 217, 0.05) 0%, transparent 50%);
+  }
+
+  /* Ruled lines background on main content */
+  .ruled-bg {
+    background-image: repeating-linear-gradient(
+      transparent, transparent 31px,
+      rgba(44, 36, 22, 0.08) 31px, rgba(44, 36, 22, 0.08) 32px
+    );
+    background-size: 100% 32px;
+    line-height: 2rem;
+  }
+
+  /* Sticky nav */
+  .top-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(250, 247, 242, 0.95);
+    border-bottom: 2px solid var(--ink);
+    backdrop-filter: blur(8px);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nav-title {
+    font-family: var(--font-doodle);
+    font-size: 1.1rem;
+    color: var(--ink);
+  }
+
+  .btn-back {
+    font-family: var(--font-hand);
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: var(--accent-yellow);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-sharp-sm);
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.1s;
+    white-space: nowrap;
+  }
+  .btn-back:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0px var(--ink); }
+  .btn-back:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--ink); }
+
+  /* Chapter tabs */
+  .chapter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.25rem 0;
+    scrollbar-width: none;
+  }
+  .chapter-tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    font-family: var(--font-note);
+    font-size: 0.8rem;
+    padding: 0.3rem 0.8rem;
+    border: 2px solid var(--ink);
+    background: white;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    box-shadow: var(--shadow-sharp-sm);
+  }
+  .tab-btn.active { background: var(--ink); color: white; }
+  .tab-btn:hover:not(.active) { background: var(--accent-yellow); }
+
+  /* Main layout */
+  .main-content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 130px 1.5rem 3rem;
+  }
+
+  /* Section headers */
+  .chapter-section { display: none; }
+  .chapter-section.active { display: block; }
+
+  .chapter-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px dashed var(--ink-light);
+  }
+
+  .chapter-badge {
+    font-family: var(--font-doodle);
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--accent-orange);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .chapter-title {
+    font-family: var(--font-doodle);
+    font-size: 1.5rem;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .chapter-subtitle {
+    font-family: var(--font-hand);
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    margin-top: 0.25rem;
+  }
+
+  /* Sketchy card */
+  .sketchy-card {
+    background: var(--paper);
+    border: 2.5px solid var(--ink);
+    border-radius: 2px 8px 4px 6px / 6px 2px 8px 4px;
+    box-shadow: var(--shadow-sharp);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .card-title {
+    font-family: var(--font-doodle);
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .card-icon {
+    font-size: 1.2rem;
+  }
+
+  /* Highlightable text */
+  .highlight-text {
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+    padding: 0 2px;
+  }
+  .highlight-text.highlighted {
+    background: var(--accent-yellow);
+    border-bottom: 2px solid #d4c200;
+  }
+  .highlight-text:hover:not(.highlighted) { background: rgba(245, 230, 66, 0.3); }
+
+  /* Body text in cards */
+  .card-text {
+    font-family: var(--font-hand);
+    font-size: 1rem;
+    color: var(--ink);
+    line-height: 1.8;
+  }
+
+  .card-text ul {
+    list-style: none;
+    padding-left: 0.5rem;
+  }
+
+  .card-text ul li::before {
+    content: "→ ";
+    color: var(--accent-orange);
+    font-weight: bold;
+  }
+
+  /* Sticky note */
+  .sticky-note-trigger {
+    display: inline-block;
+    background: var(--accent-pink);
+    color: white;
+    font-family: var(--font-note);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+    cursor: pointer;
+    box-shadow: var(--shadow-sharp-sm);
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    transition: transform 0.1s;
+  }
+  .sticky-note-trigger:hover { transform: rotate(-2deg) scale(1.05); }
+
+  .sticky-note-popup {
+    display: none;
+    position: relative;
+    background: #ffffc5;
+    border: 2px solid var(--ink);
+    border-radius: 2px 8px 6px 4px;
+    box-shadow: 5px 5px 0 rgba(44,36,22,0.3);
+    padding: 1rem;
+    margin: 0.75rem 0;
+    font-family: var(--font-note);
+    font-size: 0.9rem;
+    color: var(--ink);
+    line-height: 1.6;
+    transform: rotate(-1deg);
+  }
+  .sticky-note-popup::before {
+    content: "📌";
+    position: absolute;
+    top: -12px; left: 12px;
+    font-size: 1rem;
+  }
+
+  /* Tag badges */
+  .tag {
+    display: inline-block;
+    font-family: var(--font-note);
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border: 1.5px solid currentColor;
+    border-radius: 2px;
+    margin: 0.15rem;
+    font-weight: 600;
+  }
+  .tag-blue { color: var(--accent-blue); background: rgba(74,144,217,0.1); }
+  .tag-green { color: #2d7d2d; background: rgba(92,184,92,0.1); }
+  .tag-orange { color: #b87000; background: rgba(240,165,0,0.1); }
+  .tag-pink { color: #c0005a; background: rgba(255,107,157,0.15); }
+  .tag-purple { color: #6d28d9; background: rgba(139,92,246,0.1); }
+
+  /* Divider doodle */
+  .doodle-divider {
+    text-align: center;
+    font-family: var(--font-doodle);
+    color: var(--ink-light);
+    font-size: 0.8rem;
+    margin: 1.5rem 0;
+    letter-spacing: 3px;
+    opacity: 0.5;
+  }
+
+  /* Comparison grid */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .compare-item {
+    background: white;
+    border: 2px solid var(--ink);
+    border-radius: 4px 8px 6px 4px / 6px 4px 8px 4px;
+    padding: 0.75rem;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: transform 0.15s;
+    cursor: pointer;
+  }
+  .compare-item:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
+
+  .compare-label {
+    font-family: var(--font-doodle);
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+  }
+
+  .compare-desc {
+    font-family: var(--font-hand);
+    font-size: 0.82rem;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+
+  /* Simulator / interactive zones */
+  .sim-container {
+    background: #f0f4ff;
+    border: 2.5px solid var(--ink);
+    border-radius: 4px 10px 6px 8px;
+    box-shadow: var(--shadow-sharp);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .sim-title {
+    font-family: var(--font-doodle);
+    font-size: 0.95rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .sim-label { font-family: var(--font-note); font-size: 0.82rem; color: var(--ink-light); }
+
+  /* Memory block visualizer */
+  .memory-block {
+    display: flex;
+    height: 40px;
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+    font-family: var(--font-note);
+    font-size: 0.7rem;
+    cursor: pointer;
+  }
+
+  .mem-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-right: 1.5px solid var(--ink);
+    transition: opacity 0.2s;
+    text-align: center;
+    line-height: 1.2;
+    padding: 2px;
+  }
+  .mem-segment:last-child { border-right: none; }
+
+  /* Page table sim */
+  .page-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-note);
+    font-size: 0.82rem;
+    margin-top: 0.5rem;
+  }
+  .page-table th {
+    background: var(--ink);
+    color: white;
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    border: 1px solid var(--ink);
+  }
+  .page-table td {
+    padding: 0.35rem 0.6rem;
+    border: 1px solid rgba(44,36,22,0.3);
+    background: white;
+  }
+  .page-table tr:hover td { background: rgba(245,230,66,0.2); }
+  .page-table .valid { color: #2d7d2d; font-weight: bold; }
+  .page-table .invalid { color: #c0392b; }
+
+  /* FIFO Queue viz */
+  .queue-container {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0.5rem 0;
+  }
+
+  .queue-frame {
+    width: 48px;
+    height: 48px;
+    border: 2.5px solid var(--ink);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-doodle);
+    font-size: 1rem;
+    font-weight: bold;
+    background: white;
+    transition: all 0.3s;
+  }
+  .queue-frame.fault { background: #ffe0e0; border-color: #c0392b; color: #c0392b; }
+  .queue-frame.hit { background: #e0ffe0; border-color: #2d7d2d; color: #2d7d2d; }
+  .queue-frame.empty { background: #f5f5f5; color: #aaa; }
+
+  /* Input controls */
+  .sim-input {
+    font-family: var(--font-hand);
+    font-size: 0.9rem;
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    padding: 0.35rem 0.6rem;
+    background: white;
+    width: 100%;
+    box-shadow: var(--shadow-sharp-sm);
+    margin: 0.35rem 0;
+  }
+  .sim-input:focus { outline: none; box-shadow: 3px 3px 0 var(--accent-blue); }
+
+  .sim-btn {
+    font-family: var(--font-hand);
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: 2px solid var(--ink);
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-sharp-sm);
+    transition: transform 0.1s, box-shadow 0.1s;
+    margin-top: 0.35rem;
+  }
+  .sim-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--ink); }
+  .sim-btn:active { transform: translate(2px,2px); box-shadow: none; }
+  .sim-btn-yellow { background: var(--accent-yellow); color: var(--ink); }
+  .sim-btn-blue { background: var(--accent-blue); color: white; }
+  .sim-btn-green { background: #5cb85c; color: white; }
+
+  /* Thread viz */
+  .thread-lane {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 0.3rem 0;
+    font-family: var(--font-note);
+    font-size: 0.75rem;
+  }
+
+  .thread-label {
+    width: 70px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .thread-block {
+    height: 24px;
+    border: 1.5px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    min-width: 30px;
+    transition: all 0.3s;
+  }
+
+  /* Semaphore viz */
+  .sem-circle {
+    width: 56px;
+    height: 56px;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-doodle);
+    font-size: 1.4rem;
+    font-weight: bold;
+    transition: all 0.3s;
+    cursor: pointer;
+    box-shadow: var(--shadow-sharp-sm);
+  }
+
+  /* Critical section viz */
+  .cs-zone {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+    margin: 0.5rem 0;
+    flex-wrap: wrap;
+  }
+
+  .cs-proc {
+    flex: 1;
+    min-width: 100px;
+    padding: 0.5rem;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    font-family: var(--font-note);
+    font-size: 0.78rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  /* Thrashing graph */
+  .thrash-graph {
+    position: relative;
+    height: 120px;
+    margin: 0.5rem 0;
+  }
+
+  /* Output/log area */
+  .sim-output {
+    font-family: var(--font-note);
+    font-size: 0.8rem;
+    background: white;
+    border: 1.5px solid rgba(44,36,22,0.3);
+    border-radius: 3px;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    min-height: 40px;
+    line-height: 1.7;
+    color: var(--ink-light);
+  }
+
+  /* OS Structure layers */
+  .os-layer {
+    display: flex;
+    align-items: center;
+    margin: 3px 0;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .os-layer:hover { transform: translateX(4px); }
+  .layer-bar {
+    height: 36px;
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    font-family: var(--font-note);
+    font-size: 0.8rem;
+    font-weight: bold;
+    flex: 1;
+    box-shadow: 2px 2px 0 rgba(44,36,22,0.4);
+    position: relative;
+  }
+  .layer-num {
+    margin-left: auto;
+    opacity: 0.6;
+    font-size: 0.7rem;
+  }
+
+  /* Timeline / process scheduler */
+  .scheduler-grid {
+    display: grid;
+    gap: 2px;
+    margin: 0.5rem 0;
+  }
+
+  /* Dining philosophers */
+  .philo-table {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0.5rem auto;
+    flex-shrink: 0;
+  }
+  .philo-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    background: #f5e6c8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-family: var(--font-note);
+    font-weight: bold;
+    text-align: center;
+  }
+  .philo-item {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sharp-sm);
+  }
+  .philo-item.eating { background: #d4edda; box-shadow: 0 0 8px rgba(92,184,92,0.5); }
+  .philo-item.waiting { background: #fff3cd; }
+  .philo-item.deadlock { background: #f8d7da; animation: shake 0.5s infinite; }
+  .chopstick {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid var(--ink);
+    border-radius: 3px;
+    background: white;
+    font-family: var(--font-note);
+    font-size: 0.65rem;
+    font-weight: bold;
+  }
+  .chopstick.taken { background: var(--accent-orange); }
+
+  @keyframes shake {
+    0%,100% { transform: translate(0,0); }
+    25% { transform: translate(-2px,1px); }
+    75% { transform: translate(2px,-1px); }
+  }
+
+  /* Address translation viz */
+  .addr-flow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.5rem 0;
+    font-family: var(--font-note);
+    font-size: 0.8rem;
+  }
+  .addr-box {
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    padding: 0.4rem 0.7rem;
+    background: white;
+    text-align: center;
+    box-shadow: var(--shadow-sharp-sm);
+    min-width: 70px;
+  }
+  .addr-arrow {
+    font-size: 1.2rem;
+    color: var(--accent-orange);
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .addr-val {
+    font-size: 1.1rem;
+    font-weight: bold;
+    font-family: var(--font-doodle);
+  }
+  .addr-sub {
+    font-size: 0.65rem;
+    color: var(--ink-light);
+  }
+
+  /* Working set display */
+  .ws-frame {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    font-family: var(--font-doodle);
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin: 2px;
+    background: white;
+    transition: all 0.3s;
+  }
+  .ws-frame.active { background: #d4edda; color: #155724; }
+  .ws-frame.recent { background: #fff3cd; color: #856404; }
+
+  /* Section intro text */
+  .section-intro {
+    font-family: var(--font-hand);
+    font-size: 0.95rem;
+    color: var(--ink-light);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--accent-orange);
+    line-height: 1.7;
+  }
+
+  /* Accordion */
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    border-bottom: 1.5px dashed rgba(44,36,22,0.3);
+    font-family: var(--font-doodle);
+    font-size: 0.9rem;
+    user-select: none;
+  }
+  .accordion-header:hover { color: var(--accent-orange); }
+  .accordion-arrow { transition: transform 0.2s; font-size: 0.8rem; }
+  .accordion-arrow.open { transform: rotate(90deg); }
+  .accordion-body {
+    display: none;
+    padding: 0.75rem 0;
+    font-family: var(--font-hand);
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    line-height: 1.8;
+  }
+
+  /* Grid 2-col */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  @media(max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* Confetti / highlight burst */
+  @keyframes pop-in { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .pop-in { animation: pop-in 0.2s ease-out; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-thumb { background: rgba(44,36,22,0.3); border-radius: 3px; }
+
+  /* Print-like footer doodle */
+  .page-number {
+    font-family: var(--font-note);
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    text-align: center;
+    margin: 2rem 0 0.5rem;
+    opacity: 0.5;
+  }
+
+  /* Tooltip */
+  .tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  .tooltip-text {
+    display: none;
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: white;
+    font-family: var(--font-note);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  .tooltip:hover .tooltip-text { display: block; }
+
+  /* Responsivitas mobile */
+  @media(max-width: 480px) {
+    .chapter-title { font-size: 1.2rem; }
+    .chapter-badge { font-size: 2rem; }
+    .main-content { padding: 120px 1rem 2rem; }
+    .philo-table { width: 160px; height: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div>
+    <div class="nav-title">📓 OS Study Journal</div>
+    <div class="chapter-tabs" id="chapterTabs">
+      <button class="tab-btn active" onclick="showChapter('ch2', this)">Bab 2 — Layanan OS</button>
+      <button class="tab-btn" onclick="showChapter('ch4', this)">Bab 4 — Thread</button>
+      <button class="tab-btn" onclick="showChapter('ch6', this)">Bab 6 — Sinkronisasi</button>
+      <button class="tab-btn" onclick="showChapter('ch7', this)">Bab 7 — Memori</button>
+      <button class="tab-btn" onclick="showChapter('ch8', this)">Bab 8 — Virtual Mem</button>
+    </div>
+  </div>
+  <button class="btn-back" onclick="window.history.back()">← Kembali</button>
+</nav>
+
+<div class="main-content">
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- BAB 2: LAYANAN OS -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="chapter-section active" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-badge">02</div>
+    <div>
+      <div class="chapter-title">Layanan Sistem Operasi</div>
+      <div class="chapter-subtitle">Operating-System Services — Silberschatz 10th Ed.</div>
+    </div>
+  </div>
+
+  <p class="section-intro">OS itu kayak "pelayan hotel" yang mengurus semua kebutuhan program dan pengguna. Ada layanan yang langsung kelihatan, ada yang bekerja di belakang layar. ✍️</p>
+
+  <!-- Layanan untuk User -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">👤</span> Layanan untuk Pengguna</div>
+    <div class="card-text">
+      <ul>
+        <li><span class="highlight-text" onclick="toggleHighlight(this)">Eksekusi Program</span> — memuat & menjalankan program ke memori</li>
+        <li><span class="highlight-text" onclick="toggleHighlight(this)">Operasi I/O</span> — akses file, keyboard, display (user tak bisa akses langsung hardware)</li>
+        <li><span class="highlight-text" onclick="toggleHighlight(this)">Manipulasi Sistem Berkas</span> — buat, hapus, baca, tulis, cari file & direktori</li>
+        <li><span class="highlight-text" onclick="toggleHighlight(this)">Komunikasi Antar-Proses</span> — via shared memory atau message passing</li>
+        <li><span class="highlight-text" onclick="toggleHighlight(this)">Deteksi Kesalahan</span> — OS terus memantau error CPU, memori, I/O, program</li>
+      </ul>
+    </div>
+    <div class="doodle-divider">~ ~ ~ ~ ~</div>
+    <div class="card-text">
+      <strong style="font-family: var(--font-doodle);">Layanan untuk Efisiensi Sistem:</strong>
+      <ul>
+        <li>Alokasi Sumber Daya (CPU, memori, disk)</li>
+        <li>Akuntansi — mencatat siapa pakai apa & berapa lama</li>
+        <li>Proteksi & Keamanan — kontrol akses ke sumber daya</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- System Calls -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">📞</span> System Calls
+      <span class="sticky-note-trigger" onclick="toggleSticky('sticky-syscall')">💡 Catatan</span>
+    </div>
+    <div class="sticky-note-popup" id="sticky-syscall">
+      System Call itu seperti "menu pesanan" ke OS. Program bilang: "Hei OS, tolong bukakan file ini buat saya!" dan OS yang bertugas menjalankannya dengan aman. Programmer jarang pakai system call langsung — biasanya lewat API seperti <strong>POSIX</strong> (Linux/Mac) atau <strong>Win32 API</strong> (Windows).
+    </div>
+    <div class="card-text">
+      System Call = antarmuka pemrograman untuk layanan OS.
+      <br><br>
+      <strong>Cara kirim parameter:</strong>
+      <div class="compare-grid" style="margin-top:0.5rem;">
+        <div class="compare-item">
+          <div class="compare-label" style="color: var(--accent-blue);">📦 Register</div>
+          <div class="compare-desc">Parameter dimasukkan ke register CPU. Paling cepat, tapi terbatas jumlahnya.</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-label" style="color: var(--accent-green);">🗃️ Blok Memori</div>
+          <div class="compare-desc">Alamat blok memori dimasukkan ke register. Cocok untuk parameter banyak.</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-label" style="color: var(--accent-pink);">📚 Stack</div>
+          <div class="compare-desc">Parameter di-push ke stack, OS yang pop. Fleksibel untuk berbagai jumlah parameter.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OS Structure Simulator -->
+  <div class="sim-container">
+    <div class="sim-title">🏗️ Mini Lab — Struktur OS (Klik lapisan untuk info!)</div>
+    <div class="sim-label">Klik tiap lapisan untuk melihat penjelasan:</div>
+    <div style="margin: 0.75rem 0;" id="osLayerViz">
+      <!-- Rendered by JS -->
+    </div>
+    <div class="sim-output" id="osLayerInfo">👆 Klik salah satu lapisan di atas!</div>
+  </div>
+
+  <!-- Interface Types -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">🖥️</span> Antarmuka Pengguna</div>
+    <div class="grid-2">
+      <div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span>CLI (Command Line)</span><span class="accordion-arrow">▶</span>
+        </div>
+        <div class="accordion-body">
+          Antarmuka berbasis teks. Perintah diketik langsung. Contoh: bash, PowerShell. <span class="tag tag-blue">Efisien</span> <span class="tag tag-orange">Perlu hafal perintah</span>
+        </div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span>GUI (Graphical)</span><span class="accordion-arrow">▶</span>
+        </div>
+        <div class="accordion-body">
+          Antarmuka grafis dengan ikon, menu, dan mouse. Ramah pengguna. Contoh: Windows Explorer, macOS Finder. <span class="tag tag-green">Mudah</span> <span class="tag tag-orange">Lebih boros memori</span>
+        </div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span>Layar Sentuh</span><span class="accordion-arrow">▶</span>
+        </div>
+        <div class="accordion-body">
+          Antarmuka berbasis sentuhan/gesture. Banyak dipakai di smartphone. Contoh: Android, iOS. <span class="tag tag-pink">Mobile-first</span>
+        </div>
+      </div>
+      <div style="padding: 0.5rem;">
+        <div style="font-family: var(--font-doodle); font-size: 0.85rem; margin-bottom: 0.5rem;">Arsitektur Android Stack:</div>
+        <div style="font-family: var(--font-note); font-size: 0.78rem; line-height: 2;">
+          <div style="background:#e8f5e9; border:1.5px solid #2d7d2d; border-radius:3px; padding:2px 8px; margin:2px 0;">📱 Applications</div>
+          <div style="background:#e3f2fd; border:1.5px solid var(--accent-blue); border-radius:3px; padding:2px 8px; margin:2px 0;">🧩 Application Framework</div>
+          <div style="background:#fff3e0; border:1.5px solid var(--accent-orange); border-radius:3px; padding:2px 8px; margin:2px 0;">⚙️ Native Libraries + ART</div>
+          <div style="background:#fce4ec; border:1.5px solid var(--accent-pink); border-radius:3px; padding:2px 8px; margin:2px 0;">🔌 HAL</div>
+          <div style="background:#ede7f6; border:1.5px solid var(--accent-purple); border-radius:3px; padding:2px 8px; margin:2px 0;">🐧 Linux Kernel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-number">— Bab 2 / 5 —</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- BAB 4: THREAD -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="chapter-section" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-badge">04</div>
+    <div>
+      <div class="chapter-title">Thread & Concurrency</div>
+      <div class="chapter-subtitle">Threads, Multicore, Implicit Threading</div>
+    </div>
+  </div>
+
+  <p class="section-intro">Thread itu seperti "pekerja dalam satu toko." Satu proses bisa punya banyak thread yang bekerja bersamaan, berbagi toko (memori) tapi punya tugas masing-masing. 🧵</p>
+
+  <!-- Konsep Thread -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">🧵</span> Konsep Thread</div>
+    <div class="card-text">
+      Thread = unit terkecil utilisasi CPU. Dalam satu proses, thread berbagi:
+      <br>
+      <span class="tag tag-green">Code</span>
+      <span class="tag tag-green">Data</span>
+      <span class="tag tag-green">Files</span>
+      — tetapi memiliki sendiri:
+      <span class="tag tag-orange">Stack</span>
+      <span class="tag tag-orange">Register</span>
+      <span class="tag tag-orange">Program Counter</span>
+    </div>
+    <div class="doodle-divider">≋ ≋ ≋</div>
+    <div class="card-text">
+      <span class="highlight-text" onclick="toggleHighlight(this)">Paralelisme</span> = menjalankan >1 tugas <em>betul-betul</em> bersamaan (butuh multi-core).<br>
+      <span class="highlight-text" onclick="toggleHighlight(this)">Konkurensi</span> = mendukung >1 tugas "membuat progres" — bisa dengan 1 core lewat penjadwalan.
+    </div>
+  </div>
+
+  <!-- Thread Simulator -->
+  <div class="sim-container">
+    <div class="sim-title">🔬 Mini Lab — Thread Scheduler Simulator</div>
+    <div class="sim-label">Pilih model dan klik "Jalankan" untuk melihat eksekusi thread:</div>
+
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin:0.5rem 0;">
+      <select class="sim-input" id="threadModel" style="width:auto;">
+        <option value="single">Single-Threaded</option>
+        <option value="multi">Multi-Threaded (4 Thread)</option>
+        <option value="concurrent">Concurrent (1 Core, Bergantian)</option>
+      </select>
+      <button class="sim-btn sim-btn-yellow" onclick="runThreadSim()">▶ Jalankan</button>
+    </div>
+
+    <div id="threadViz" style="margin:0.5rem 0; min-height: 80px;">
+      <div class="sim-label" style="text-align:center; padding:1rem;">Klik "Jalankan" untuk mulai</div>
+    </div>
+    <div class="sim-output" id="threadOutput">Model thread akan dijelaskan di sini...</div>
+  </div>
+
+  <!-- Model Multithreading -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">🗂️</span> Model Multithreading</div>
+    <div class="compare-grid">
+      <div class="compare-item" onclick="showThreadModel('mto')">
+        <div class="compare-label" style="color: var(--accent-orange);">Many-to-One</div>
+        <div class="compare-desc">Banyak user thread → 1 kernel thread. Jika 1 thread blocking, semua block.</div>
+      </div>
+      <div class="compare-item" onclick="showThreadModel('oto')">
+        <div class="compare-label" style="color: var(--accent-blue);">One-to-One ⭐</div>
+        <div class="compare-desc">1 user thread → 1 kernel thread. Paling umum! (Linux, Windows). Lebih paralel.</div>
+      </div>
+      <div class="compare-item" onclick="showThreadModel('mtm')">
+        <div class="compare-label" style="color: var(--accent-purple);">Many-to-Many</div>
+        <div class="compare-desc">Banyak user thread → banyak (≤) kernel thread. Fleksibel, rumit diimplementasi.</div>
+      </div>
+    </div>
+    <div class="sim-output" id="threadModelInfo">👆 Klik model untuk penjelasan visual!</div>
+  </div>
+
+  <!-- Implicit Threading -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">🤖</span> Implicit Threading</div>
+    <div class="card-text">
+      Thread dibuat & dikelola oleh <span class="highlight-text" onclick="toggleHighlight(this)">compiler atau runtime library</span>, bukan programmer secara manual.
+    </div>
+    <div class="grid-2" style="margin-top:0.75rem;">
+      <div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span>Thread Pools</span><span class="accordion-arrow">▶</span>
+        </div>
+        <div class="accordion-body">Sekumpulan thread siap pakai. Tugas baru langsung diambil thread idle. Hemat overhead pembuatan thread.</div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span>Fork-Join</span><span class="accordion-arrow">▶</span>
+        </div>
+        <div class="accordion-body">Tugas besar di-fork jadi sub-tugas paralel, lalu di-join untuk hasil akhir. Seperti divide-and-conquer.</div>
+      </div>
+      <div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span>OpenMP</span><span class="accordion-arrow">▶</span>
+        </div>
+        <div class="accordion-body">Direktif compiler untuk C/C++/Fortran. Cukup tambah <code>#pragma omp parallel</code> dan OpenMP urus threading-nya.</div>
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span>Grand Central Dispatch</span><span class="accordion-arrow">▶</span>
+        </div>
+        <div class="accordion-body">Apple's framework untuk macOS/iOS. Tugas dimasukkan ke dispatch queue, sistem atur thread-nya otomatis.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-number">— Bab 4 / 5 —</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- BAB 6: SINKRONISASI -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="chapter-section" id="ch6">
+  <div class="chapter-header">
+    <div class="chapter-badge">06</div>
+    <div>
+      <div class="chapter-title">Sinkronisasi Proses</div>
+      <div class="chapter-subtitle">Race Condition, Mutex, Semaphore, Masalah Klasik</div>
+    </div>
+  </div>
+
+  <p class="section-intro">Bayangkan 2 orang menulis di papan tulis yang sama secara bersamaan — hasilnya kacau! Sinkronisasi mencegah "tabrakan" ini pada proses yang berbagi data. 🚦</p>
+
+  <!-- Race Condition & Critical Section -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">🏁</span> Race Condition & Critical Section</div>
+    <div class="card-text">
+      <span class="highlight-text" onclick="toggleHighlight(this)">Race Condition</span> = beberapa proses akses & manipulasi data bersama secara bersamaan → hasil tergantung urutan eksekusi.
+      <br><br>
+      <span class="highlight-text" onclick="toggleHighlight(this)">Critical Section</span> = bagian kode yang mengakses data bersama. Hanya boleh 1 proses pada satu waktu!
+    </div>
+    <div class="doodle-divider">~ ~ ~</div>
+    <div class="card-text">
+      <strong style="font-family:var(--font-doodle);">Syarat Solusi Critical Section:</strong>
+      <ul>
+        <li><strong>Mutual Exclusion</strong> — hanya 1 proses dalam CS sekaligus</li>
+        <li><strong>Progress</strong> — kalau CS kosong, keputusan siapa masuk tidak boleh ditunda selamanya</li>
+        <li><strong>Bounded Waiting</strong> — ada batas berapa kali proses lain boleh masuk sebelum giliran saya</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Mutex & Semaphore Simulator -->
+  <div class="sim-container">
+    <div class="sim-title">🔒 Mini Lab — Mutex & Semaphore Simulator</div>
+    <div class="sim-label">Simulasi 2 proses berebut Critical Section:</div>
+
+    <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin:0.75rem 0;">
+      <div style="text-align:center;">
+        <div class="sem-circle" id="mutexCircle" style="background:#e8f5e9; border-color:#2d7d2d; color:#2d7d2d;">
+          🔓
+        </div>
+        <div style="font-family:var(--font-note); font-size:0.75rem; margin-top:4px;">Mutex Lock</div>
+      </div>
+      <div class="cs-zone" style="flex:1;">
+        <div class="cs-proc" id="proc1" style="background:#e3f2fd; border-color:var(--accent-blue);" onclick="tryEnterCS(1)">
+          <div style="font-family:var(--font-doodle); font-size:0.85rem; font-weight:bold; color:var(--accent-blue);">Proses 1</div>
+          <div style="font-family:var(--font-note); font-size:0.72rem; margin-top:4px;" id="p1status">⏸ Menunggu</div>
+          <button class="sim-btn sim-btn-blue" style="font-size:0.7rem; padding:0.2rem 0.5rem; margin-top:6px;" onclick="event.stopPropagation(); tryEnterCS(1)">Masuk CS</button>
+        </div>
+        <div style="text-align:center; font-family:var(--font-doodle); font-size:1.5rem; color:var(--accent-orange); align-self:center;">🚦</div>
+        <div class="cs-proc" id="proc2" style="background:#fce4ec; border-color:var(--accent-pink);" onclick="tryEnterCS(2)">
+          <div style="font-family:var(--font-doodle); font-size:0.85rem; font-weight:bold; color:var(--accent-pink);">Proses 2</div>
+          <div style="font-family:var(--font-note); font-size:0.72rem; margin-top:4px;" id="p2status">⏸ Menunggu</div>
+          <button class="sim-btn" style="font-size:0.7rem; padding:0.2rem 0.5rem; margin-top:6px; background:var(--accent-pink); color:white; border-color:var(--ink);" onclick="event.stopPropagation(); tryEnterCS(2)">Masuk CS</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:right; margin-top:0.25rem;">
+      <button class="sim-btn sim-btn-green" onclick="exitCS()" style="font-size:0.8rem;">Keluar CS (Unlock)</button>
+      <button class="sim-btn" style="background:white; font-size:0.8rem; margin-left:4px;" onclick="resetCS()">Reset</button>
+    </div>
+    <div class="sim-output" id="csOutput">Klik "Masuk CS" pada salah satu proses untuk memulai!</div>
+  </div>
+
+  <!-- Semaphore -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">🚦</span> Semaphore</div>
+    <div class="card-text">
+      Semaphore = variabel integer dengan dua operasi atomik:
+      <br><br>
+      <span class="tag tag-green">wait(S) / P(S)</span> — S--; kalau S &lt; 0, proses tidur/block<br>
+      <span class="tag tag-orange">signal(S) / V(S)</span> — S++; kalau ada proses tidur, bangunkan satu
+      <br><br>
+      <strong>Jenis:</strong>
+      <ul>
+        <li><span class="highlight-text" onclick="toggleHighlight(this)">Binary Semaphore</span> (0 atau 1) = mirip Mutex Lock</li>
+        <li><span class="highlight-text" onclick="toggleHighlight(this)">Counting Semaphore</span> = bisa dipakai untuk sumber daya dengan banyak instance</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Dining Philosophers -->
+  <div class="sim-container">
+    <div class="sim-title">🍽️ Mini Lab — Dining Philosophers</div>
+    <div class="sim-label">5 filsuf, 5 sumpit. Klik filsuf untuk coba makan! Awas deadlock! 😱</div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:1.5rem; flex-wrap:wrap; margin:0.75rem 0;">
+      <div class="philo-table" id="philoTable"></div>
+      <div>
+        <div class="sim-output" id="philoOutput" style="max-width:220px; min-height:80px;">Klik filsuf (🧑) untuk mulai makan. Filosofi: ambil sumpit kiri, lalu kanan...</div>
+        <button class="sim-btn" style="background:white; font-size:0.8rem; margin-top:0.5rem; width:100%;" onclick="resetPhilo()">🔄 Reset Meja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bounded Buffer -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">📦</span> Bounded-Buffer Problem</div>
+    <div class="card-text">
+      <strong>Produsen</strong> mengisi buffer, <strong>Konsumen</strong> mengambil dari buffer. Buffer berukuran terbatas (N slot).
+      <br><br>
+      <strong>Semaphore yang dibutuhkan:</strong>
+      <ul>
+        <li><code>mutex = 1</code> — untuk mutual exclusion akses buffer</li>
+        <li><code>empty = N</code> — slot kosong tersedia (produsen tunggu jika 0)</li>
+        <li><code>full = 0</code> — slot berisi (konsumen tunggu jika 0)</li>
+      </ul>
+    </div>
+    <div style="margin-top:0.75rem;" id="bbViz"><!-- rendered by JS --></div>
+    <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+      <button class="sim-btn sim-btn-blue" onclick="produce()" style="font-size:0.8rem; flex:1; min-width:100px;">➕ Produce</button>
+      <button class="sim-btn sim-btn-green" onclick="consume()" style="font-size:0.8rem; flex:1; min-width:100px;">➖ Consume</button>
+      <button class="sim-btn" style="background:white; font-size:0.8rem; flex:1; min-width:80px;" onclick="resetBB()">Reset</button>
+    </div>
+    <div class="sim-output" id="bbOutput">Buffer siap. Produsen mengisi, Konsumen mengambil.</div>
+  </div>
+
+  <div class="page-number">— Bab 6 / 5 —</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- BAB 7: MEMORI -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="chapter-section" id="ch7">
+  <div class="chapter-header">
+    <div class="chapter-badge">07</div>
+    <div>
+      <div class="chapter-title">Manajemen Memori</div>
+      <div class="chapter-subtitle">Address Binding, Paging, Segmentasi</div>
+    </div>
+  </div>
+
+  <p class="section-intro">Memori adalah "meja kerja" komputer. OS harus mengatur meja kerja ini agar semua program bisa bekerja tanpa saling mengganggu. 🗃️</p>
+
+  <!-- Address Binding -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">📍</span> Address Binding</div>
+    <div class="card-text">
+      Pengikatan instruksi & data ke alamat memori fisik. Bisa terjadi di 3 waktu:
+    </div>
+    <div class="compare-grid" style="margin-top:0.5rem;">
+      <div class="compare-item">
+        <div class="compare-label" style="color:var(--accent-blue);">Compile Time</div>
+        <div class="compare-desc">Alamat fisik ditentukan saat kompilasi. Jika alamat berubah, harus dikompilasi ulang.</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-label" style="color:var(--accent-green);">Load Time</div>
+        <div class="compare-desc">Alamat ditetapkan saat program dimuat ke memori. Bisa direlokasi tapi tidak saat berjalan.</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-label" style="color:var(--accent-orange);">Execution Time ⭐</div>
+        <div class="compare-desc">Binding dilakukan saat runtime. Butuh MMU. Proses bisa dipindah-pindah di memori!</div>
+      </div>
+    </div>
+    <div class="doodle-divider">~ ~ ~</div>
+    <div class="card-text">
+      <span class="highlight-text" onclick="toggleHighlight(this)">Logical Address</span> (Virtual) = dihasilkan CPU. Yang program "lihat".<br>
+      <span class="highlight-text" onclick="toggleHighlight(this)">Physical Address</span> = alamat sesungguhnya di hardware memori.<br>
+      <strong>MMU</strong> (Memory Management Unit) = hardware yang menerjemahkan keduanya.
+    </div>
+  </div>
+
+  <!-- MMU Simulator -->
+  <div class="sim-container">
+    <div class="sim-title">🔄 Mini Lab — Simulasi Translasi Alamat MMU</div>
+    <div class="sim-label">Masukkan alamat logis dan nilai relocation register:</div>
+
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:flex-end; margin:0.5rem 0;">
+      <div style="flex:1; min-width:120px;">
+        <div class="sim-label">Logical Address:</div>
+        <input class="sim-input" type="number" id="logicAddr" value="346" min="0" max="9999">
+      </div>
+      <div style="flex:1; min-width:120px;">
+        <div class="sim-label">Relocation Register:</div>
+        <input class="sim-input" type="number" id="relocReg" value="14000" min="0" max="99999">
+      </div>
+      <button class="sim-btn sim-btn-yellow" onclick="translateAddr()" style="flex-shrink:0;">Translate →</button>
+    </div>
+
+    <div class="addr-flow" id="addrFlowViz">
+      <div class="sim-label">Masukkan nilai dan klik Translate</div>
+    </div>
+    <div class="sim-output" id="addrOutput">MMU menambahkan Logical Address + Relocation Register untuk mendapatkan Physical Address.</div>
+  </div>
+
+  <!-- Paging Simulator -->
+  <div class="sim-container">
+    <div class="sim-title">📄 Mini Lab — Simulasi Paging & Page Table</div>
+    <div class="sim-label">Masukkan logical address (dalam decimal) dan lihat translasi via page table:</div>
+
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:flex-end; margin:0.5rem 0;">
+      <div style="flex:1; min-width:120px;">
+        <div class="sim-label">Logical Address (0–255):</div>
+        <input class="sim-input" type="number" id="pageLogicAddr" value="87" min="0" max="255">
+      </div>
+      <div style="flex:1; min-width:120px;">
+        <div class="sim-label">Page Size (bytes):</div>
+        <select class="sim-input" id="pageSize" style="width:auto;">
+          <option value="32">32 bytes</option>
+          <option value="64" selected>64 bytes</option>
+          <option value="128">128 bytes</option>
+        </select>
+      </div>
+      <button class="sim-btn sim-btn-blue" onclick="translatePage()" style="flex-shrink:0;">Translate →</button>
+    </div>
+
+    <div style="overflow-x:auto; margin:0.5rem 0;">
+      <table class="page-table" id="pageTableViz">
+        <thead>
+          <tr><th>Page #</th><th>Frame #</th><th>Valid</th></tr>
+        </thead>
+        <tbody id="pageTableBody"></tbody>
+      </table>
+    </div>
+    <div class="sim-output" id="pageOutput">Klik Translate untuk melihat proses translasi.</div>
+  </div>
+
+  <!-- Fragmentasi -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">🧩</span> Fragmentasi & Alokasi</div>
+    <div class="card-text">
+      <div class="grid-2">
+        <div>
+          <strong style="font-family:var(--font-doodle); color:var(--accent-orange);">Eksternal Fragmentasi</strong><br>
+          Cukup total memori kosong, tapi terfragmen — tidak kontigu. Terjadi pada alokasi variabel.
+        </div>
+        <div>
+          <strong style="font-family:var(--font-doodle); color:var(--accent-purple);">Internal Fragmentasi</strong><br>
+          Memori yang dialokasikan lebih besar dari yang dibutuhkan. Terjadi pada alokasi tetap / paging.
+        </div>
+      </div>
+      <div class="doodle-divider">~ ~ ~</div>
+      <div class="sim-label">Visualisasi Memori (klik blok untuk info):</div>
+      <div class="memory-block" id="memBlockViz" style="margin-top:0.5rem; height:50px;"></div>
+      <div class="sim-output" id="memBlockInfo" style="margin-top:0.25rem;">Klik blok memori untuk info</div>
+    </div>
+  </div>
+
+  <div class="page-number">— Bab 7 / 5 —</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- BAB 8: VIRTUAL MEMORY -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="chapter-section" id="ch8">
+  <div class="chapter-header">
+    <div class="chapter-badge">08</div>
+    <div>
+      <div class="chapter-title">Memori Virtual</div>
+      <div class="chapter-subtitle">Demand Paging, Page Replacement, Thrashing</div>
+    </div>
+  </div>
+
+  <p class="section-intro">Virtual Memory = ilusi bahwa RAM kita sangat besar. Program merasa punya banyak memori, padahal OS cerdik memindahkan data antara RAM dan disk. 🎭</p>
+
+  <!-- Demand Paging -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">📥</span> Demand Paging</div>
+    <div class="card-text">
+      Page hanya dibawa ke memori fisik <span class="highlight-text" onclick="toggleHighlight(this)">saat dibutuhkan</span> (lazy swapping). Hemat memori!
+      <br><br>
+      Saat mengakses page yang tidak ada di memori → terjadi <strong>Page Fault</strong>:
+    </div>
+    <div style="margin-top:0.75rem;">
+      <div style="font-family:var(--font-note); font-size:0.78rem; display:flex; flex-direction:column; gap:4px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:28px; height:28px; border:2px solid var(--ink); border-radius:50%; display:flex;align-items:center;justify-content:center;background:var(--accent-blue);color:white;font-weight:bold;flex-shrink:0;">1</div>
+          <div>Referensikan page → cek page table</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:28px; height:28px; border:2px solid var(--ink); border-radius:50%; display:flex;align-items:center;justify-content:center;background:var(--accent-orange);color:white;font-weight:bold;flex-shrink:0;">2</div>
+          <div>Valid bit = 0 → Page Fault! Trap ke OS</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:28px; height:28px; border:2px solid var(--ink); border-radius:50%; display:flex;align-items:center;justify-content:center;background:var(--accent-purple);color:white;font-weight:bold;flex-shrink:0;">3</div>
+          <div>OS cari page di backing store (disk)</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:28px; height:28px; border:2px solid var(--ink); border-radius:50%; display:flex;align-items:center;justify-content:center;background:var(--accent-pink);color:white;font-weight:bold;flex-shrink:0;">4</div>
+          <div>Masukkan page ke frame kosong di RAM</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:28px; height:28px; border:2px solid var(--ink); border-radius:50%; display:flex;align-items:center;justify-content:center;background:#5cb85c;color:white;font-weight:bold;flex-shrink:0;">5</div>
+          <div>Update page table (valid bit = 1)</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:28px; height:28px; border:2px solid var(--ink); border-radius:50%; display:flex;align-items:center;justify-content:center;background:var(--ink);color:white;font-weight:bold;flex-shrink:0;">6</div>
+          <div>Ulangi instruksi yang menyebabkan fault</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Replacement Simulator -->
+  <div class="sim-container">
+    <div class="sim-title">🔄 Mini Lab — Page Replacement Simulator</div>
+    <div class="sim-label">Masukkan urutan referensi page dan jumlah frame, lalu pilih algoritma:</div>
+
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin:0.5rem 0; align-items:flex-end;">
+      <div style="flex:2; min-width:160px;">
+        <div class="sim-label">Referensi page (pisah koma):</div>
+        <input class="sim-input" type="text" id="pageRef" value="7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1">
+      </div>
+      <div style="flex:1; min-width:100px;">
+        <div class="sim-label">Jumlah Frame:</div>
+        <input class="sim-input" type="number" id="frameCount" value="3" min="1" max="5">
+      </div>
+      <div style="flex:1; min-width:100px;">
+        <div class="sim-label">Algoritma:</div>
+        <select class="sim-input" id="pageAlgo">
+          <option value="fifo">FIFO</option>
+          <option value="lru">LRU</option>
+          <option value="optimal">Optimal</option>
+        </select>
+      </div>
+    </div>
+    <button class="sim-btn sim-btn-yellow" onclick="runPageReplacement()">▶ Jalankan Simulasi</button>
+
+    <div id="pageRepViz" style="margin-top:0.75rem; overflow-x:auto;"></div>
+    <div class="sim-output" id="pageRepOutput">Konfigurasi dan jalankan simulasi!</div>
+  </div>
+
+  <!-- Algoritma Penggantian -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">🔁</span> Algoritma Penggantian Page</div>
+    <div class="compare-grid">
+      <div class="compare-item">
+        <div class="compare-label" style="color:var(--accent-blue);">FIFO</div>
+        <div class="compare-desc">Ganti page yang <em>paling lama</em> ada di memori. Sederhana. Bisa kena <strong>Anomali Belady</strong> (frame ↑, fault ↑).</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-label" style="color:#2d7d2d;">Optimal ⭐</div>
+        <div class="compare-desc">Ganti page yang <em>tidak akan dipakai paling lama</em> di masa depan. Terbaik tapi tidak bisa diimplementasi (butuh tahu masa depan).</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-label" style="color:var(--accent-purple);">LRU</div>
+        <div class="compare-desc">Ganti page yang <em>paling lama tidak dipakai</em>. Approx Optimal. Bisa pakai stack atau counter untuk implementasi.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thrashing -->
+  <div class="sketchy-card">
+    <div class="card-title"><span class="card-icon">😵</span> Thrashing
+      <span class="sticky-note-trigger" onclick="toggleSticky('sticky-thrash')">⚠️ Penting!</span>
+    </div>
+    <div class="sticky-note-popup" id="sticky-thrash">
+      Thrashing terjadi saat proses tidak punya cukup frame. OS terus swap halaman masuk-keluar. Utilisasi CPU jatuh drastis! Solusi: Working-Set Model — hanya jalankan proses yang "working set"-nya muat di RAM.
+    </div>
+    <div class="card-text">
+      <span class="highlight-text" onclick="toggleHighlight(this)">Thrashing</span> = proses sibuk swap page keluar-masuk, tidak sempat kerja aslinya. CPU utilization anjlok!
+    </div>
+    <div style="margin-top:0.75rem;" id="thrashingGraph"></div>
+    <div class="card-text" style="margin-top:0.5rem;">
+      <strong>Working-Set Model:</strong> pantau △ (delta) page terakhir yang digunakan. Working set = kumpulan page aktif dalam jendela waktu tersebut. Jika total WS > frame tersedia → suspend salah satu proses!
+    </div>
+  </div>
+
+  <div class="page-number">— Bab 8 / 5 —</div>
+</section>
+
+</div><!-- end main-content -->
+
+<script>
+$(function() {
+  initOSLayers();
+  initPhilo();
+  initBB();
+  initMemBlock();
+  initPageTable();
+  renderThrashingGraph();
+});
+
+// ─── CHAPTER TABS ───
+function showChapter(id, btn) {
+  $('.chapter-section').removeClass('active');
+  $('#' + id).addClass('active');
+  $('.tab-btn').removeClass('active');
+  $(btn).addClass('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ─── HIGHLIGHT TEXT ───
+function toggleHighlight(el) {
+  $(el).toggleClass('highlighted');
+}
+
+// ─── STICKY NOTE ───
+function toggleSticky(id) {
+  var $el = $('#' + id);
+  if ($el.is(':visible')) {
+    $el.slideUp(200);
+  } else {
+    $el.slideDown(200).addClass('pop-in');
+  }
+}
+
+// ─── ACCORDION ───
+function toggleAccordion(header) {
+  var $arrow = $(header).find('.accordion-arrow');
+  var $body = $(header).next('.accordion-body');
+  $body.slideToggle(200);
+  $arrow.toggleClass('open');
+}
+
+// ─── OS LAYERS ───
+var osLayers = [
+  { name: 'User Applications', color: '#e8f5e9', border: '#2d7d2d', info: '📱 Layer ini adalah program yang kita gunakan: browser, game, office. Mereka meminta layanan OS melalui system call.', num: 'N (Teratas)' },
+  { name: 'Application Framework', color: '#e3f2fd', border: '#1565c0', info: '🧩 Library & API yang memudahkan pemrograman. Misalnya Win32 API, POSIX, Android Framework. Abstraksi atas system call.', num: 'N-1' },
+  { name: 'System Services & Daemons', color: '#fff3e0', border: '#e65100', info: '⚙️ Program yang berjalan di background: scheduler, printer spooler, network daemon. Mendukung layanan sistem.', num: 'N-2' },
+  { name: 'Kernel (OS Core)', color: '#fce4ec', border: '#880e4f', info: '💻 Inti OS! Mengelola proses, memori, file system, device drivers. Berjalan di mode privileged (ring 0).', num: '1' },
+  { name: 'Hardware', color: '#ede7f6', border: '#4a148c', info: '🖥️ CPU, RAM, Disk, I/O devices. Fondasi dari semua segalanya. OS berkomunikasi via instruksi mesin & interrupt.', num: '0 (Terbawah)' },
+];
+
+function initOSLayers() {
+  var html = '';
+  osLayers.forEach(function(l, i) {
+    var margin = i * 8;
+    html += '<div class="os-layer" onclick="showLayerInfo(' + i + ')">';
+    html += '<div class="layer-bar" style="background:' + l.color + '; border-color:' + l.border + '; margin:0 ' + margin + 'px;">';
+    html += l.name;
+    html += '<span class="layer-num">Layer ' + l.num + '</span>';
+    html += '</div></div>';
+  });
+  $('#osLayerViz').html(html);
+}
+
+function showLayerInfo(i) {
+  $('#osLayerInfo').html(osLayers[i].info).addClass('pop-in');
+  setTimeout(function(){ $('#osLayerInfo').removeClass('pop-in'); }, 300);
+}
+
+// ─── THREAD SIMULATOR ───
+function runThreadSim() {
+  var model = $('#threadModel').val();
+  var html = '';
+  var info = '';
+  var colors = ['#e3f2fd','#fce4ec','#e8f5e9','#fff3e0'];
+  var borders = ['var(--accent-blue)','var(--accent-pink)','#2d7d2d','var(--accent-orange)'];
+
+  if (model === 'single') {
+    html = '<div style="font-family:var(--font-note); font-size:0.78rem; margin-bottom:4px; color:var(--ink-light);">Timeline Eksekusi CPU:</div>';
+    html += '<div class="thread-lane"><div class="thread-label">Thread 1:</div>';
+    ['Tugas A','Tugas B','Tugas C','Tugas D','Tugas E','Tugas F'].forEach(function(t,i){
+      html += '<div class="thread-block" style="width:60px;background:#e3f2fd;border-color:var(--accent-blue);">' + t + '</div>';
+    });
+    html += '</div>';
+    info = '📋 <strong>Single-Threaded:</strong> Satu thread mengerjakan semua tugas secara berurutan. Jika satu tugas lambat (I/O), seluruh program menunggu!';
+  } else if (model === 'multi') {
+    html = '<div style="font-family:var(--font-note); font-size:0.78rem; margin-bottom:4px; color:var(--ink-light);">4 Thread berjalan PARALEL di 4 Core:</div>';
+    for (var t = 1; t <= 4; t++) {
+      html += '<div class="thread-lane"><div class="thread-label">Thread ' + t + ':</div>';
+      html += '<div class="thread-block" style="width:' + (40+Math.random()*80).toFixed(0) + 'px;background:' + colors[t-1] + ';border-color:' + borders[t-1] + ';">Tugas ' + t + '</div>';
+      html += '</div>';
+    }
+    info = '🚀 <strong>Multi-Threaded (Paralel):</strong> 4 thread berjalan BENAR-BENAR bersamaan di 4 core berbeda. Total waktu ≈ waktu thread terlama!';
+  } else {
+    html = '<div style="font-family:var(--font-note); font-size:0.78rem; margin-bottom:4px; color:var(--ink-light);">3 Thread bergantian di 1 Core (Context Switch):</div>';
+    for (var t2 = 1; t2 <= 3; t2++) {
+      html += '<div class="thread-lane"><div class="thread-label">Thread ' + t2 + ':</div>';
+      for (var s = 0; s < 6; s++) {
+        if (s % 3 === (t2-1)) {
+          html += '<div class="thread-block" style="width:40px;background:' + colors[t2-1] + ';border-color:' + borders[t2-1] + ';">▶</div>';
+        } else {
+          html += '<div class="thread-block" style="width:40px;background:#f5f5f5;border-color:#ccc;">⏸</div>';
+        }
+      }
+      html += '</div>';
+    }
+    info = '⏱️ <strong>Concurrent (1 Core):</strong> Thread bergantian pakai CPU (context switch). Terasa seolah bersamaan, padahal bergantian sangat cepat!';
+  }
+
+  $('#threadViz').html(html);
+  $('#threadOutput').html(info);
+}
+
+function showThreadModel(m) {
+  var infos = {
+    mto: '🔴 <strong>Many-to-One:</strong> Banyak user-level thread dipetakan ke 1 kernel thread. Jika 1 thread blocking, semua block! Concurrency terbatas. Contoh: Green Threads (Java awal).',
+    oto: '🟢 <strong>One-to-One:</strong> Setiap user thread → 1 kernel thread. True parallelism! Overhead lebih tinggi (tiap thread perlu kernel thread). <strong>Paling umum: Linux, Windows.</strong>',
+    mtm: '🟣 <strong>Many-to-Many:</strong> N user thread → M kernel thread (M ≤ N). Fleksibel: bisa blocking di 1 thread tanpa block semua. Implementasi sangat kompleks. Contoh: Solaris (dulu).',
+  };
+  $('#threadModelInfo').html(infos[m]);
+}
+
+// ─── MUTEX & CRITICAL SECTION ───
+var csOwner = null; // 1, 2, or null
+
+function tryEnterCS(proc) {
+  if (csOwner === null) {
+    csOwner = proc;
+    $('#mutexCircle').css({'background':'#ffebee','border-color':'#c0392b','color':'#c0392b'}).html('🔒');
+    if (proc === 1) {
+      $('#proc1').css({'background':'#c8e6c9','border-color':'#2d7d2d'});
+      $('#p1status').html('✅ Dalam CS');
+      $('#proc2').css({'background':'#fce4ec','border-color':''});
+      $('#p2status').html('🚫 Blocked');
+    } else {
+      $('#proc2').css({'background':'#c8e6c9','border-color':'#2d7d2d'});
+      $('#p2status').html('✅ Dalam CS');
+      $('#proc1').css({'background':'#fce4ec','border-color':''});
+      $('#p1status').html('🚫 Blocked');
+    }
+    $('#csOutput').html('🔒 Proses ' + proc + ' berhasil masuk Critical Section! Mutex LOCKED. Proses lain harus menunggu...');
+  } else if (csOwner === proc) {
+    $('#csOutput').html('⚠️ Proses ' + proc + ' sudah berada dalam CS! Tidak perlu masuk lagi.');
+  } else {
+    var other = proc === 1 ? 2 : 1;
+    $('#csOutput').html('🚫 Proses ' + proc + ' BLOCKED! Proses ' + other + ' sedang dalam CS. Mutex terkunci — harus menunggu signal dari OS.');
+  }
+}
+
+function exitCS() {
+  if (csOwner === null) {
+    $('#csOutput').html('ℹ️ Tidak ada proses dalam CS saat ini.');
+    return;
+  }
+  var exiting = csOwner;
+  csOwner = null;
+  $('#mutexCircle').css({'background':'#e8f5e9','border-color':'#2d7d2d','color':'#2d7d2d'}).html('🔓');
+  $('#proc1, #proc2').css({'background':'','border-color':''});
+  $('#proc1').css({'background':'#e3f2fd'}); $('#proc2').css({'background':'#fce4ec'});
+  $('#p1status, #p2status').html('⏸ Menunggu');
+  $('#csOutput').html('🔓 Proses ' + exiting + ' KELUAR dari CS! Mutex UNLOCKED. Proses lain sekarang bisa masuk CS.');
+}
+
+function resetCS() {
+  csOwner = null;
+  $('#mutexCircle').css({'background':'#e8f5e9','border-color':'#2d7d2d','color':'#2d7d2d'}).html('🔓');
+  $('#proc1').css({'background':'#e3f2fd','border-color':'var(--accent-blue)'});
+  $('#proc2').css({'background':'#fce4ec','border-color':'var(--accent-pink)'});
+  $('#p1status').html('⏸ Menunggu');
+  $('#p2status').html('⏸ Menunggu');
+  $('#csOutput').html('Reset! Silakan mulai simulasi lagi.');
+}
+
+// ─── DINING PHILOSOPHERS ───
+var philoState = [0,0,0,0,0]; // 0=idle, 1=waiting, 2=eating
+var chopstickState = [0,0,0,0,0]; // 0=free, 1=taken
+
+var philoAngles = [270, 342, 54, 126, 198];
+var chopAngles = [306, 18, 90, 162, 234];
+var radius = 68;
+
+function initPhilo() {
+  var html = '<div class="philo-center">🍽️<br>Meja Makan</div>';
+  philoAngles.forEach(function(angle, i) {
+    var rad = angle * Math.PI / 180;
+    var x = 100 + radius * Math.cos(rad) - 18;
+    var y = 100 + radius * Math.sin(rad) - 18;
+    html += '<div class="philo-item" id="philo' + i + '" style="left:' + x + 'px;top:' + y + 'px;" onclick="philoClick(' + i + ')">🧑</div>';
+  });
+  var cr = 40;
+  chopAngles.forEach(function(angle, i) {
+    var rad = angle * Math.PI / 180;
+    var x = 100 + cr * Math.cos(rad) - 10;
+    var y = 100 + cr * Math.sin(rad) - 10;
+    html += '<div class="chopstick" id="chop' + i + '" style="left:' + x + 'px;top:' + y + 'px;">🥢</div>';
+  });
+  $('#philoTable').html(html);
+}
+
+function philoClick(i) {
+  var leftChop = i;
+  var rightChop = (i + 1) % 5;
+  if (philoState[i] === 2) {
+    philoState[i] = 0;
+    chopstickState[leftChop] = 0;
+    chopstickState[rightChop] = 0;
+    $('#philo' + i).removeClass('eating waiting').html('🧑');
+    updateChopsticks();
+    $('#philoOutput').html('Filsuf ' + (i+1) + ' selesai makan dan meletakkan kedua sumpit.');
+    return;
+  }
+  if (chopstickState[leftChop] === 0 && chopstickState[rightChop] === 0) {
+    philoState[i] = 2;
+    chopstickState[leftChop] = 1;
+    chopstickState[rightChop] = 1;
+    $('#philo' + i).removeClass('waiting').addClass('eating').html('😋');
+    updateChopsticks();
+    $('#philoOutput').html('✅ Filsuf ' + (i+1) + ' berhasil ambil kedua sumpit dan sedang MAKAN! Klik lagi untuk selesai makan.');
+  } else if (chopstickState[leftChop] === 0) {
+    philoState[i] = 1;
+    chopstickState[leftChop] = 1;
+    $('#philo' + i).removeClass('eating').addClass('waiting').html('😐');
+    updateChopsticks();
+    $('#philoOutput').html('⏳ Filsuf ' + (i+1) + ' ambil sumpit kiri (#' + (leftChop+1) + '), menunggu sumpit kanan (#' + (rightChop+1) + ')... Bisa DEADLOCK! 😱');
+  } else {
+    $('#philo' + i).addClass('deadlock').html('😱');
+    setTimeout(function(){ $('#philo' + i).removeClass('deadlock').html('🧑'); }, 1000);
+    $('#philoOutput').html('🚫 Filsuf ' + (i+1) + ' tidak bisa ambil sumpit kiri (#' + (leftChop+1) + ') — sudah dipakai! Harus menunggu...');
+  }
+}
+
+function updateChopsticks() {
+  for (var i = 0; i < 5; i++) {
+    if (chopstickState[i] === 1) {
+      $('#chop' + i).addClass('taken').html('🍴');
+    } else {
+      $('#chop' + i).removeClass('taken').html('🥢');
+    }
+  }
+}
+
+function resetPhilo() {
+  philoState = [0,0,0,0,0];
+  chopstickState = [0,0,0,0,0];
+  for (var i = 0; i < 5; i++) {
+    $('#philo' + i).removeClass('eating waiting deadlock').html('🧑');
+    $('#chop' + i).removeClass('taken').html('🥢');
+  }
+  $('#philoOutput').html('Reset! Klik filsuf untuk mulai makan.');
+}
+
+// ─── BOUNDED BUFFER ───
+var bbSize = 6;
+var bbItems = [];
+
+function initBB() {
+  bbItems = [];
+  renderBB();
+}
+
+function renderBB() {
+  var html = '<div style="display:flex; gap:4px; flex-wrap:wrap;">';
+  for (var i = 0; i < bbSize; i++) {
+    if (i < bbItems.length) {
+      html += '<div style="width:44px;height:44px;border:2.5px solid var(--ink);border-radius:4px;background:#d4edda;display:flex;align-items:center;justify-content:center;font-family:var(--font-doodle);font-size:1rem;box-shadow:2px 2px 0 var(--ink);">' + bbItems[i] + '</div>';
+    } else {
+      html += '<div style="width:44px;height:44px;border:2px dashed rgba(44,36,22,0.3);border-radius:4px;background:#f9f9f9;display:flex;align-items:center;justify-content:center;font-family:var(--font-note);font-size:0.7rem;color:#bbb;">kosong</div>';
+    }
+  }
+  html += '</div>';
+  html += '<div style="font-family:var(--font-note);font-size:0.75rem;margin-top:4px;color:var(--ink-light);">Terisi: ' + bbItems.length + '/' + bbSize + ' | empty=' + (bbSize-bbItems.length) + ' | full=' + bbItems.length + '</div>';
+  $('#bbViz').html(html);
+}
+
+var bbCounter = 1;
+function produce() {
+  if (bbItems.length >= bbSize) {
+    $('#bbOutput').html('🚫 <strong>Produsen BLOCKED!</strong> Buffer penuh (full=' + bbSize + '). Harus tunggu konsumen ambil item dulu! [wait(empty) → terblock]');
+    return;
+  }
+  bbItems.push(bbCounter++);
+  renderBB();
+  $('#bbOutput').html('✅ <strong>Produsen</strong> mengisi item #' + (bbCounter-1) + ' ke buffer. [signal(full)] Terisi: ' + bbItems.length + '/' + bbSize);
+}
+
+function consume() {
+  if (bbItems.length === 0) {
+    $('#bbOutput').html('🚫 <strong>Konsumen BLOCKED!</strong> Buffer kosong (full=0). Harus tunggu produsen mengisi dulu! [wait(full) → terblock]');
+    return;
+  }
+  var taken = bbItems.shift();
+  renderBB();
+  $('#bbOutput').html('✅ <strong>Konsumen</strong> mengambil item #' + taken + ' dari buffer. [signal(empty)] Tersisa: ' + bbItems.length + '/' + bbSize);
+}
+
+function resetBB() {
+  bbCounter = 1;
+  initBB();
+  $('#bbOutput').html('Buffer di-reset. Siap untuk produsen dan konsumen.');
+}
+
+// ─── ADDRESS TRANSLATION ───
+function translateAddr() {
+  var la = parseInt($('#logicAddr').val()) || 0;
+  var rr = parseInt($('#relocReg').val()) || 0;
+  var pa = la + rr;
+
+  var html = '<div class="addr-flow">';
+  html += '<div class="addr-box"><div class="addr-sub">CPU</div><div class="addr-val">' + la + '</div><div class="addr-sub">Logical Addr</div></div>';
+  html += '<div class="addr-arrow">+</div>';
+  html += '<div class="addr-box" style="background:#fff3e0;"><div class="addr-sub">MMU</div><div class="addr-val">' + rr + '</div><div class="addr-sub">Reloc. Register</div></div>';
+  html += '<div class="addr-arrow">=</div>';
+  html += '<div class="addr-box" style="background:#d4edda; border-color:#2d7d2d;"><div class="addr-sub">RAM</div><div class="addr-val">' + pa + '</div><div class="addr-sub">Physical Addr</div></div>';
+  html += '</div>';
+
+  $('#addrFlowViz').html(html);
+  $('#addrOutput').html('✅ CPU menghasilkan alamat logis <strong>' + la + '</strong>. MMU menambahkan relocation register <strong>' + rr + '</strong> → Alamat fisik = <strong>' + pa + '</strong>. Inilah yang dibaca dari RAM!');
+}
+
+// ─── PAGING SIMULATOR ───
+var pageFrameMap = [3, 7, 1, 0, 4, 2, 5, 6]; // page 0→frame3, page1→frame7, dll
+
+function initPageTable() {
+  var html = '';
+  var validity = [1,1,0,1,1,0,1,1];
+  pageFrameMap.forEach(function(frame, page) {
+    html += '<tr>';
+    html += '<td>' + page + '</td>';
+    html += '<td>' + (validity[page] ? frame : '-') + '</td>';
+    html += '<td class="' + (validity[page] ? 'valid' : 'invalid') + '">' + (validity[page] ? '✓ Valid' : '✗ Invalid') + '</td>';
+    html += '</tr>';
+  });
+  $('#pageTableBody').html(html);
+}
+
+function translatePage() {
+  var addr = parseInt($('#pageLogicAddr').val()) || 0;
+  var pageSize = parseInt($('#pageSize').val());
+  var validity = [1,1,0,1,1,0,1,1];
+
+  var pageNum = Math.floor(addr / pageSize);
+  var offset = addr % pageSize;
+
+  if (pageNum >= pageFrameMap.length) {
+    $('#pageOutput').html('❌ Page number ' + pageNum + ' melebihi ukuran page table! (max page: ' + (pageFrameMap.length-1) + ')');
+    return;
+  }
+
+  if (!validity[pageNum]) {
+    $('#pageOutput').html('💥 <strong>PAGE FAULT!</strong> Page ' + pageNum + ' tidak ada di memori (valid bit = 0). OS harus ambil dari disk!');
+    return;
+  }
+
+  var frameNum = pageFrameMap[pageNum];
+  var physAddr = frameNum * pageSize + offset;
+
+  $('#pageOutput').html(
+    '✅ Logical Address <strong>' + addr + '</strong> → Page# = <strong>' + pageNum + '</strong>, Offset = <strong>' + offset + '</strong>.' +
+    '<br>Page Table[' + pageNum + '] = Frame <strong>' + frameNum + '</strong>.' +
+    '<br>Physical Address = ' + frameNum + ' × ' + pageSize + ' + ' + offset + ' = <strong>' + physAddr + '</strong>'
+  );
+
+  // Highlight baris di tabel
+  $('#pageTableBody tr').css('background', 'white');
+  $('#pageTableBody tr').eq(pageNum).css('background', 'rgba(245,230,66,0.4)');
+}
+
+// ─── MEMORY BLOCK ───
+var memSegments = [
+  { name: 'OS Kernel', size: 15, color: '#ede7f6', borderColor: '#6d28d9', info: '🔒 OS Kernel — Selalu ada di memori, tidak bisa digusur. Ukuran: ~15%' },
+  { name: 'Proses A', size: 20, color: '#e3f2fd', borderColor: '#1565c0', info: '📦 Proses A — Sedang berjalan di memori. Ukuran: ~20%' },
+  { name: 'Proses B', size: 25, color: '#e8f5e9', borderColor: '#2d7d2d', info: '📦 Proses B — Sedang berjalan. Ukuran: ~25%' },
+  { name: '[Frag]', size: 8, color: '#fff9c4', borderColor: '#f9a825', info: '⚠️ Fragmentasi Eksternal! Memori kosong tapi terpecah kecil-kecil, tidak bisa dipakai oleh proses besar.' },
+  { name: 'Proses C', size: 22, color: '#fce4ec', borderColor: '#880e4f', info: '📦 Proses C — Sedang berjalan. Ukuran: ~22%' },
+  { name: '[Frag]', size: 5, color: '#fff9c4', borderColor: '#f9a825', info: '⚠️ Fragmentasi Eksternal lagi! Sisa memori terbuang sia-sia.' },
+  { name: 'Free', size: 5, color: '#f5f5f5', borderColor: '#bbb', info: '✅ Memori bebas tersedia di sini.' },
+];
+
+function initMemBlock() {
+  var total = memSegments.reduce(function(a,b){return a+b.size;},0);
+  var html = '';
+  memSegments.forEach(function(seg, i) {
+    var pct = (seg.size / total * 100).toFixed(1);
+    html += '<div class="mem-segment" style="width:' + pct + '%;background:' + seg.color + ';border-right:1.5px solid ' + seg.borderColor + ';border-color:' + seg.borderColor + ';" onclick="showMemInfo(' + i + ')">';
+    if (pct > 10) html += '<span style="font-size:0.65rem; line-height:1.2; padding:1px;">' + seg.name + '</span>';
+    html += '</div>';
+  });
+  $('#memBlockViz').html(html);
+}
+
+function showMemInfo(i) {
+  $('#memBlockInfo').html(memSegments[i].info);
+}
+
+// ─── PAGE REPLACEMENT ───
+function runPageReplacement() {
+  var refs = $('#pageRef').val().split(',').map(function(x){ return parseInt(x.trim()); }).filter(function(x){ return !isNaN(x); });
+  var frames = parseInt($('#frameCount').val()) || 3;
+  var algo = $('#pageAlgo').val();
+
+  if (refs.length === 0) { $('#pageRepOutput').html('⚠️ Masukkan referensi page yang valid!'); return; }
+
+  var result;
+  if (algo === 'fifo') result = fifoSim(refs, frames);
+  else if (algo === 'lru') result = lruSim(refs, frames);
+  else result = optimalSim(refs, frames);
+
+  renderPageRepResult(result, refs, frames);
+}
+
+function fifoSim(refs, numFrames) {
+  var memory = [], queue = [], faults = 0, trace = [];
+  refs.forEach(function(page) {
+    var hit = memory.indexOf(page) !== -1;
+    var victim = null;
+    if (!hit) {
+      faults++;
+      if (memory.length < numFrames) {
+        memory.push(page);
+        queue.push(page);
+      } else {
+        victim = queue.shift();
+        memory[memory.indexOf(victim)] = page;
+        queue.push(page);
+      }
+    }
+    trace.push({ page: page, memory: memory.slice(), hit: hit, victim: victim });
+  });
+  return { trace: trace, faults: faults, algo: 'FIFO' };
+}
+
+function lruSim(refs, numFrames) {
+  var memory = [], lastUsed = {}, faults = 0, trace = [];
+  refs.forEach(function(page, t) {
+    var hit = memory.indexOf(page) !== -1;
+    var victim = null;
+    if (!hit) {
+      faults++;
+      if (memory.length < numFrames) {
+        memory.push(page);
+      } else {
+        var lru = memory.reduce(function(oldest, p) {
+          return (lastUsed[p] || 0) < (lastUsed[oldest] || 0) ? p : oldest;
+        });
+        victim = lru;
+        memory[memory.indexOf(lru)] = page;
+      }
+    }
+    lastUsed[page] = t;
+    trace.push({ page: page, memory: memory.slice(), hit: hit, victim: victim });
+  });
+  return { trace: trace, faults: faults, algo: 'LRU' };
+}
+
+function optimalSim(refs, numFrames) {
+  var memory = [], faults = 0, trace = [];
+  refs.forEach(function(page, t) {
+    var hit = memory.indexOf(page) !== -1;
+    var victim = null;
+    if (!hit) {
+      faults++;
+      if (memory.length < numFrames) {
+        memory.push(page);
+      } else {
+        var future = memory.map(function(p) {
+          var next = refs.slice(t+1).indexOf(p);
+          return next === -1 ? Infinity : next;
+        });
+        var idx = future.indexOf(Math.max.apply(null, future));
+        victim = memory[idx];
+        memory[idx] = page;
+      }
+    }
+    trace.push({ page: page, memory: memory.slice(), hit: hit, victim: victim });
+  });
+  return { trace: trace, faults: faults, algo: 'Optimal' };
+}
+
+function renderPageRepResult(result, refs, numFrames) {
+  var trace = result.trace;
+  var faults = result.faults;
+  var hits = refs.length - faults;
+
+  var html = '<div style="overflow-x:auto;">';
+  html += '<table style="border-collapse:collapse; font-family:var(--font-note); font-size:0.75rem; white-space:nowrap;">';
+
+  html += '<tr><td style="padding:2px 4px; border:1px solid rgba(44,36,22,0.2); font-weight:bold;">Referensi</td>';
+  trace.forEach(function(t) {
+    html += '<td style="padding:2px 6px; text-align:center; border:1px solid rgba(44,36,22,0.2); font-weight:bold;">' + t.page + '</td>';
+  });
+  html += '</tr>';
+
+  for (var f = 0; f < numFrames; f++) {
+    html += '<tr><td style="padding:2px 4px; border:1px solid rgba(44,36,22,0.2); color:var(--ink-light);">Frame ' + (f+1) + '</td>';
+    trace.forEach(function(t) {
+      var val = t.memory[f] !== undefined ? t.memory[f] : '';
+      html += '<td style="padding:2px 6px; text-align:center; border:1px solid rgba(44,36,22,0.2);">' + val + '</td>';
+    });
+    html += '</tr>';
+  }
+
+  html += '<tr><td style="padding:2px 4px; border:1px solid rgba(44,36,22,0.2);">Status</td>';
+  trace.forEach(function(t) {
+    var bg = t.hit ? 'background:#d4edda;color:#155724;' : 'background:#f8d7da;color:#721c24;';
+    html += '<td style="padding:2px 6px; text-align:center; border:1px solid rgba(44,36,22,0.2); ' + bg + '">' + (t.hit ? 'Hit' : 'Fault') + '</td>';
+  });
+  html += '</tr>';
+  html += '</table></div>';
+
+  $('#pageRepViz').html(html);
+  var hitRate = (hits/refs.length*100).toFixed(1);
+  $('#pageRepOutput').html(
+    '📊 <strong>' + result.algo + '</strong> | Total Referensi: ' + refs.length +
+    ' | 💥 Page Fault: <strong>' + faults + '</strong>' +
+    ' | ✅ Hit: <strong>' + hits + '</strong>' +
+    ' | Hit Rate: <strong>' + hitRate + '%</strong>'
+  );
+}
+
+// ─── THRASHING GRAPH ───
+function renderThrashingGraph() {
+  var w = Math.min(400, window.innerWidth - 80);
+  var h = 130;
+  var svg = '<svg width="' + w + '" height="' + h + '" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--font-note);">';
+
+  svg += '<rect x="0" y="0" width="' + w + '" height="' + h + '" fill="#f0f4ff" rx="4"/>';
+  svg += '<text x="10" y="16" font-size="10" fill="var(--ink-light)">CPU Utilization (%)</text>';
+
+  var points = [
+    [0.05, 0.05], [0.12, 0.18], [0.20, 0.35], [0.28, 0.55], [0.36, 0.72],
+    [0.44, 0.85], [0.50, 0.90], [0.56, 0.88], [0.62, 0.80], [0.68, 0.60],
+    [0.74, 0.35], [0.80, 0.18], [0.88, 0.10], [0.95, 0.08]
+  ];
+
+  var padL = 35, padB = 25, plotW = w - padL - 10, plotH = h - padB - 20;
+
+  // Axes
+  svg += '<line x1="' + padL + '" y1="20" x2="' + padL + '" y2="' + (h-padB) + '" stroke="var(--ink)" stroke-width="1.5"/>';
+  svg += '<line x1="' + padL + '" y1="' + (h-padB) + '" x2="' + (w-5) + '" y2="' + (h-padB) + '" stroke="var(--ink)" stroke-width="1.5"/>';
+
+  svg += '<text x="' + (padL+2) + '" y="' + (h-padB+14) + '" font-size="9" fill="var(--ink-light)">0</text>';
+  svg += '<text x="' + (padL + plotW*0.5) + '" y="' + (h-padB+14) + '" font-size="9" fill="var(--ink-light)">←Thrashing zona→</text>';
+  svg += '<text x="' + (w/2) + '" y="' + (h-2) + '" font-size="9" fill="var(--ink-light)" text-anchor="middle">Degree of Multiprogramming</text>';
+
+  for (var pct = 0; pct <= 1; pct += 0.25) {
+    var yy = 20 + plotH * (1 - pct);
+    svg += '<text x="' + (padL-3) + '" y="' + (yy+3) + '" font-size="8" fill="var(--ink-light)" text-anchor="end">' + Math.round(pct*100) + '</text>';
+    svg += '<line x1="' + padL + '" y1="' + yy + '" x2="' + (padL+plotW) + '" y2="' + yy + '" stroke="rgba(44,36,22,0.1)" stroke-width="0.5" stroke-dasharray="3,3"/>';
+  }
+
+  // Thrashing zone highlight
+  var tzStart = padL + plotW * 0.56;
+  svg += '<rect x="' + tzStart + '" y="20" width="' + (plotW * 0.42) + '" height="' + plotH + '" fill="rgba(255,0,0,0.06)"/>';
+  svg += '<text x="' + (tzStart + plotW*0.21) + '" y="35" font-size="9" fill="#c0392b" text-anchor="middle">THRASHING!</text>';
+
+  // Curve
+  var pathD = '';
+  points.forEach(function(p, i) {
+    var px = padL + p[0] * plotW;
+    var py = 20 + (1 - p[1]) * plotH;
+    pathD += (i === 0 ? 'M' : 'L') + px.toFixed(1) + ',' + py.toFixed(1);
+  });
+  svg += '<path d="' + pathD + '" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+
+  // Peak marker
+  var peakX = padL + 0.50 * plotW;
+  var peakY = 20 + (1 - 0.90) * plotH;
+  svg += '<circle cx="' + peakX + '" cy="' + peakY + '" r="4" fill="var(--accent-orange)" stroke="var(--ink)" stroke-width="1.5"/>';
+  svg += '<text x="' + (peakX+6) + '" y="' + (peakY-2) + '" font-size="9" fill="var(--accent-orange)">Peak</text>';
+
+  svg += '</svg>';
+  $('#thrashingGraph').html(svg);
+}
+</script>
+</body>
+</html>
