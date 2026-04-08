@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulus Integral — Panduan Belajar UTS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FAF7F2;
+  --warm-white: #FFFEF9;
+  --ink: #1A1410;
+  --ink-soft: #3D3328;
+  --brown: #8B6F47;
+  --brown-light: #C4A882;
+  --amber: #D4882A;
+  --amber-pale: #FEF3E0;
+  --teal: #2A7B6F;
+  --teal-pale: #E0F4F0;
+  --rose: #C44A3A;
+  --rose-pale: #FBE8E5;
+  --blue: #2A5A8F;
+  --blue-pale: #E5EEF8;
+  --purple: #6B3FA0;
+  --purple-pale: #F0E8FA;
+  --border: #E2D8CC;
+  --shadow: rgba(26,20,16,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px);
+}
+.site-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  position: relative;
+}
+.site-header .subtitle {
+  color: var(--brown-light);
+  font-size: 0.9rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 0.4rem;
+  position: relative;
+}
+.badge-row {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+  margin-top: 1.2rem; position: relative;
+}
+.badge {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 99px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--brown-light);
+  letter-spacing: 0.05em;
+}
+
+/* ── NAV ── */
+.nav-bar {
+  background: var(--warm-white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1rem;
+  display: flex;
+  overflow-x: auto;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  scrollbar-width: none;
+}
+.nav-bar::-webkit-scrollbar { display: none; }
+.nav-btn {
+  padding: 0.9rem 1.2rem;
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+.nav-btn:hover { color: var(--amber); }
+.nav-btn.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+/* ── MAIN ── */
+.main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+  line-height: 1.2;
+}
+.section-desc {
+  color: var(--brown);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.card-icon {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.icon-amber { background: var(--amber-pale); color: var(--amber); }
+.icon-teal  { background: var(--teal-pale); color: var(--teal); }
+.icon-rose  { background: var(--rose-pale); color: var(--rose); }
+.icon-blue  { background: var(--blue-pale); color: var(--blue); }
+.icon-purple { background: var(--purple-pale); color: var(--purple); }
+
+/* ── HIGHLIGHT BOXES ── */
+.box {
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.box-amber { background: var(--amber-pale); border-left: 3px solid var(--amber); }
+.box-teal  { background: var(--teal-pale); border-left: 3px solid var(--teal); }
+.box-rose  { background: var(--rose-pale); border-left: 3px solid var(--rose); }
+.box-blue  { background: var(--blue-pale); border-left: 3px solid var(--blue); }
+.box-purple { background: var(--purple-pale); border-left: 3px solid var(--purple); }
+
+.box strong { display: block; font-weight: 600; margin-bottom: 0.3rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ── MATH ── */
+.math {
+  font-family: 'DM Mono', monospace;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin: 0.8rem 0;
+  font-size: 0.92rem;
+  color: var(--ink);
+  overflow-x: auto;
+}
+.math-big {
+  font-family: 'DM Mono', monospace;
+  background: var(--ink);
+  color: #F5E6D0;
+  border-radius: 10px;
+  padding: 1.1rem 1.4rem;
+  margin: 1rem 0;
+  font-size: 1rem;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.math-inline {
+  font-family: 'DM Mono', monospace;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.88em;
+}
+
+/* ── ANALOGY ── */
+.analogy {
+  background: linear-gradient(135deg, #FFF8ED, #FEF0D8);
+  border: 1px dashed var(--brown-light);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.analogy::before {
+  content: '💡 Analogi';
+  display: block;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--brown);
+  margin-bottom: 0.5rem;
+}
+
+/* ── STEPS ── */
+.steps { list-style: none; }
+.steps li {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 0.7rem;
+  align-items: flex-start;
+}
+.step-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.step-content { flex: 1; font-size: 0.9rem; }
+
+/* ── WORKED EXAMPLE ── */
+.example {
+  background: var(--warm-white);
+  border: 1.5px solid var(--amber);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 1.2rem 0;
+}
+.example-header {
+  background: var(--amber);
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.example-body { padding: 1.1rem 1.3rem; }
+.example-soal {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.05rem;
+  color: var(--ink);
+  margin-bottom: 0.8rem;
+  text-align: center;
+  padding: 0.6rem;
+  background: var(--cream);
+  border-radius: 6px;
+}
+.step-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  align-items: flex-start;
+  font-size: 0.88rem;
+}
+.step-label {
+  background: var(--amber-pale);
+  color: var(--amber);
+  border-radius: 4px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+  min-width: 60px;
+  text-align: center;
+}
+.step-label.teal { background: var(--teal-pale); color: var(--teal); }
+.step-label.rose { background: var(--rose-pale); color: var(--rose); }
+.result-box {
+  background: var(--teal-pale);
+  border: 1.5px solid var(--teal);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  margin-top: 0.8rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--teal);
+  text-align: center;
+}
+
+/* ── TABLE ── */
+.table-scroll { overflow-x: auto; margin: 1rem 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+th {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 0.5rem 0.8rem;
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.83rem;
+}
+tr:nth-child(even) td { background: var(--cream); }
+
+/* ── FORMULA GRID ── */
+.formula-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+.formula-card {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+}
+.formula-card .label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brown);
+  margin-bottom: 0.3rem;
+}
+.formula-card .f {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+/* ── TABULASI TABLE ── */
+.tab-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8rem 0;
+  font-size: 0.88rem;
+}
+.tab-table th {
+  background: var(--purple);
+  color: white;
+  padding: 0.5rem 0.8rem;
+  text-align: center;
+}
+.tab-table td {
+  padding: 0.5rem 0.8rem;
+  text-align: center;
+  border: 1px solid var(--border);
+  font-family: 'DM Mono', monospace;
+}
+.tab-table tr:nth-child(odd) td { background: var(--purple-pale); }
+.tab-table .plus { color: var(--teal); font-weight: 700; }
+.tab-table .minus { color: var(--rose); font-weight: 700; }
+
+/* ── QUIZ ── */
+.quiz-q {
+  background: var(--blue-pale);
+  border: 1px solid var(--blue);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+}
+.quiz-q .q-text {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--blue);
+  margin-bottom: 0.8rem;
+}
+.quiz-q .q-math {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--ink);
+  margin-bottom: 0.8rem;
+}
+.quiz-options { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.quiz-opt {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.9rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.83rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.quiz-opt:hover { border-color: var(--blue); color: var(--blue); }
+.quiz-opt.correct { background: var(--teal-pale); border-color: var(--teal); color: var(--teal); }
+.quiz-opt.wrong { background: var(--rose-pale); border-color: var(--rose); color: var(--rose); }
+.quiz-feedback {
+  margin-top: 0.7rem;
+  font-size: 0.85rem;
+  display: none;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.ok { background: var(--teal-pale); color: var(--teal); }
+.quiz-feedback.no { background: var(--rose-pale); color: var(--rose); }
+
+/* ── UTS SOAL SECTION ── */
+.soal-card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.soal-header {
+  padding: 0.7rem 1.2rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.soal-header.amber { background: var(--amber-pale); color: var(--amber); border-bottom: 1px solid #F0D5A0; }
+.soal-header.teal  { background: var(--teal-pale); color: var(--teal); border-bottom: 1px solid #AADDCF; }
+.soal-header.rose  { background: var(--rose-pale); color: var(--rose); border-bottom: 1px solid #F5C0B8; }
+.soal-header.blue  { background: var(--blue-pale); color: var(--blue); border-bottom: 1px solid #AACBE8; }
+.soal-header.purple { background: var(--purple-pale); color: var(--purple); border-bottom: 1px solid #C8A8E8; }
+.soal-body { padding: 1.2rem 1.4rem; }
+.soal-q {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 0.8rem;
+  background: var(--cream);
+  border-radius: 8px;
+  margin: 0.8rem 0;
+  color: var(--ink);
+}
+
+.toggle-btn {
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--brown);
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+.toggle-btn:hover { background: var(--cream); border-color: var(--brown-light); }
+.toggle-content { display: none; margin-top: 0.8rem; }
+.toggle-content.open { display: block; animation: fadeIn 0.2s ease; }
+
+/* ── CHEATSHEET ── */
+.cheat-section {
+  margin-bottom: 1.5rem;
+}
+.cheat-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1.5px solid var(--border);
+}
+.cheat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+.cheat-item {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--border);
+  z-index: 200;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--amber), var(--teal));
+  transition: width 0.3s;
+  width: 0%;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .main { padding: 1.5rem 1rem 3rem; }
+  .formula-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
+<header class="site-header">
+  <h1>∫ Kalkulus Integral</h1>
+  <p class="subtitle">Panduan Belajar UTS — Sem. Genap 2025/2026</p>
+  <div class="badge-row">
+    <span class="badge">INF60222</span>
+    <span class="badge">Dzul Fadli Rahman</span>
+    <span class="badge">Kelas I, J, K, L</span>
+    <span class="badge">Dari nol sampai UTS</span>
+  </div>
+</header>
+
+<nav class="nav-bar" id="nav">
+  <button class="nav-btn active" onclick="show(0)">🏠 Mulai Di Sini</button>
+  <button class="nav-btn" onclick="show(1)">📐 Konsep Dasar</button>
+  <button class="nav-btn" onclick="show(2)">✏️ Integral Tak Tentu</button>
+  <button class="nav-btn" onclick="show(3)">🔀 Substitusi</button>
+  <button class="nav-btn" onclick="show(4)">🧮 Substitusi Aljabar</button>
+  <button class="nav-btn" onclick="show(5)">∂ Integral Parsial</button>
+  <button class="nav-btn" onclick="show(6)">📝 Soal UTS + Jawaban</button>
+  <button class="nav-btn" onclick="show(7)">📋 Contekan 1 Hal.</button>
+</nav>
+
+<main class="main">
+
+<!-- ══════════════════════ 0: START ══════════════════════ -->
+<div class="section active" id="s0">
+  <div class="section-title">Halo, Handika 👋</div>
+  <p class="section-desc">Tenang. Kita mulai dari nol. Beneran dari nol. Baca urut dari atas ya.</p>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-amber">🗺</span> Peta Belajar</div>
+    <p style="font-size:0.9rem;margin-bottom:1rem;">Ini urutannya. Klik tab di atas sesuai urutan belajar:</p>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+      <div style="display:flex;gap:0.8rem;align-items:center;padding:0.6rem 0.8rem;background:var(--amber-pale);border-radius:8px;cursor:pointer" onclick="show(1)">
+        <span style="font-size:1.1rem">1️⃣</span>
+        <div><strong style="font-size:0.9rem">Konsep Dasar</strong> <span style="font-size:0.82rem;color:var(--brown);display:block">Turunan itu apa? Integral itu apa? Suku itu apa?</span></div>
+      </div>
+      <div style="display:flex;gap:0.8rem;align-items:center;padding:0.6rem 0.8rem;background:var(--teal-pale);border-radius:8px;cursor:pointer" onclick="show(2)">
+        <span style="font-size:1.1rem">2️⃣</span>
+        <div><strong style="font-size:0.9rem">Integral Tak Tentu</strong> <span style="font-size:0.82rem;color:var(--brown);display:block">Rumus pangkat, eksponensial, trigonometri</span></div>
+      </div>
+      <div style="display:flex;gap:0.8rem;align-items:center;padding:0.6rem 0.8rem;background:var(--blue-pale);border-radius:8px;cursor:pointer" onclick="show(3)">
+        <span style="font-size:1.1rem">3️⃣</span>
+        <div><strong style="font-size:0.9rem">Integral Substitusi</strong> <span style="font-size:0.82rem;color:var(--brown);display:block">Teknik ganti variabel u</span></div>
+      </div>
+      <div style="display:flex;gap:0.8rem;align-items:center;padding:0.6rem 0.8rem;background:var(--rose-pale);border-radius:8px;cursor:pointer" onclick="show(4)">
+        <span style="font-size:1.1rem">4️⃣</span>
+        <div><strong style="font-size:0.9rem">Substitusi Fungsi Aljabar</strong> <span style="font-size:0.82rem;color:var(--brown);display:block">Pola kuadrat, ada x² + ... ada turunannya</span></div>
+      </div>
+      <div style="display:flex;gap:0.8rem;align-items:center;padding:0.6rem 0.8rem;background:var(--purple-pale);border-radius:8px;cursor:pointer" onclick="show(5)">
+        <span style="font-size:1.1rem">5️⃣</span>
+        <div><strong style="font-size:0.9rem">Integral Parsial</strong> <span style="font-size:0.82rem;color:var(--brown);display:block">Rumus ∫u dv + metode tabulasi</span></div>
+      </div>
+      <div style="display:flex;gap:0.8rem;align-items:center;padding:0.6rem 0.8rem;background:var(--cream);border:1px solid var(--border);border-radius:8px;cursor:pointer" onclick="show(6)">
+        <span style="font-size:1.1rem">📝</span>
+        <div><strong style="font-size:0.9rem">Soal UTS + Pembahasan Lengkap</strong> <span style="font-size:0.82rem;color:var(--brown);display:block">Semua 9 soal kisi-kisi, langkah per langkah</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="analogy">
+    Integral itu seperti menemukan <strong>lagu asal dari not musiknya</strong>. Kamu punya not (turunan), dan kamu mau balik ke lagunya (fungsi asli). Susah? Awalnya iya. Tapi ada pola dan trik yang bisa dihafal.
+  </div>
+
+  <div class="box box-rose">
+    <strong>⚡ Disclaimer</strong>
+    Kamu bilang susah mudeng matematika — fine. Semua penjelasan di sini pakai bahasa santai dulu, rumus belakangan. Analogi dulu, formula kemudian. Let's go.
+  </div>
+</div>
+
+<!-- ══════════════════════ 1: KONSEP DASAR ══════════════════════ -->
+<div class="section" id="s1">
+  <div class="section-title">📐 Konsep Dasar</div>
+  <p class="section-desc">Dari "suku itu apa" sampai "kenapa integral adalah kebalikan turunan". Baca pelan-pelan.</p>
+
+  <!-- SUKU -->
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-amber">✦</span> Suku itu Apa?</div>
+    <p style="font-size:0.9rem">Dalam aljabar, <strong>suku</strong> adalah tiap bagian terpisah dalam sebuah fungsi, dipisahkan oleh + atau −.</p>
+    <div class="math">f(x) = 3x² − 4x + 7</div>
+    <p style="font-size:0.88rem;color:var(--brown)">Fungsi ini punya <strong>3 suku</strong>: <span class="math-inline">3x²</span>, <span class="math-inline">-4x</span>, dan <span class="math-inline">7</span></p>
+    <div class="box box-amber">
+      <strong>Bagian-bagian suku</strong>
+      <span class="math-inline">3x²</span> → angka 3 disebut <strong>koefisien</strong>, x adalah <strong>variabel</strong>, 2 adalah <strong>eksponen/pangkat</strong>
+    </div>
+  </div>
+
+  <!-- TURUNAN -->
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-teal">↗</span> Turunan (Derivatif) itu Apa?</div>
+    <div class="analogy" style="margin-top:0">
+      Bayangkan kamu naik motor. Posisi kamu di jalan itu fungsi F(x). <strong>Turunan</strong> adalah seberapa cepat posisi itu berubah — alias <strong>kecepatan</strong>. Kalau posisinya F(x) = x², maka kecepatan (turunan) = 2x.
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:0.8rem">Aturan turunan yang perlu kamu ingat:</p>
+    <div class="table-scroll">
+      <table>
+        <tr><th>Fungsi f(x)</th><th>Turunan f'(x)</th><th>Contoh</th></tr>
+        <tr><td>xⁿ</td><td>n·xⁿ⁻¹</td><td>x³ → 3x²</td></tr>
+        <tr><td>c (konstan)</td><td>0</td><td>7 → 0</td></tr>
+        <tr><td>eˣ</td><td>eˣ</td><td>eˣ → eˣ (tetap!)</td></tr>
+        <tr><td>sin x</td><td>cos x</td><td>sin x → cos x</td></tr>
+        <tr><td>cos x</td><td>-sin x</td><td>cos x → -sin x</td></tr>
+        <tr><td>ln x</td><td>1/x</td><td>ln x → 1/x</td></tr>
+      </table>
+    </div>
+    <div class="box box-teal" style="margin-top:0.8rem">
+      <strong>Cara kerja aturan pangkat</strong>
+      Turunkan xⁿ: kalikan pangkat ke depan, kurangi pangkat 1.<br>
+      xⁿ → n · xⁿ⁻¹ &nbsp;|&nbsp; Contoh: x⁵ → 5x⁴ &nbsp;|&nbsp; 3x² → 3·2x¹ = 6x
+    </div>
+  </div>
+
+  <!-- INTEGRAL -->
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-rose">↙</span> Integral = Anti-Turunan</div>
+    <div class="analogy" style="margin-top:0">
+      Kalau turunan itu seperti "maju" (dari fungsi ke kecepatan), maka integral itu "mundur" (dari kecepatan kembali ke fungsi asalnya). <strong>Integral adalah operasi kebalikan turunan.</strong>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:0.7rem">Hubungannya:</p>
+    <div class="math-big">
+      F'(x) = f(x)  ←→  ∫ f(x) dx = F(x) + C
+    </div>
+    <p style="font-size:0.88rem;color:var(--brown);margin-bottom:0.8rem">Artinya: kalau F diturunkan menghasilkan f, maka integral dari f adalah F.</p>
+    
+    <div class="box box-blue">
+      <strong>Kenapa ada + C?</strong>
+      Karena ada banyak fungsi yang kalau diturunkan menghasilkan hal yang sama. Contoh: x² + 5, x² + 100, x² − 3 semuanya kalau diturunkan jadi 2x. Jadi kita tulis C (konstanta sembarang) untuk mewakili semua kemungkinan itu.
+    </div>
+
+    <div class="box box-amber" style="margin-top:0.8rem">
+      <strong>Cara baca notasi</strong>
+      <span class="math-inline">∫ 6x² dx</span> dibaca: "integral dari 6x² terhadap x"<br>
+      Simbol ∫ = tanda integral (huruf S besar, dari kata "summa")<br>
+      dx = "terhadap x" (dari kata "differentia")
+    </div>
+  </div>
+
+  <!-- SIN COS TAN REVIEW -->
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-blue">📐</span> Refresher: Sin, Cos, Tan</div>
+    <p style="font-size:0.9rem;margin-bottom:0.8rem">Yang kamu perlu ingat untuk integral, bukan segitiga — tapi rumus integral & turunannya:</p>
+    <div class="table-scroll">
+      <table>
+        <tr><th>Fungsi</th><th>Turunannya</th><th>Integralnya</th></tr>
+        <tr><td>sin x</td><td>cos x</td><td>-cos x + C</td></tr>
+        <tr><td>cos x</td><td>-sin x</td><td>sin x + C</td></tr>
+        <tr><td>tan x</td><td>sec²x</td><td>ln|sec x| + C</td></tr>
+      </table>
+    </div>
+    <div class="box box-rose">
+      <strong>Hafal ini dulu: sin-cos</strong>
+      ∫ sin x dx = −cos x + C (ada minus-nya!)<br>
+      ∫ cos x dx = sin x + C (positif)
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-q">
+    <div class="q-text">Coba test sendiri: Berapa turunan dari x⁴?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="quizAns(this,false,'x⁴ diturunkan: pangkat × x^(pangkat-1) = 4×x³')">x⁵</button>
+      <button class="quiz-opt" onclick="quizAns(this,true,'Betul! Aturan pangkat: n·xⁿ⁻¹ → 4·x³')">4x³</button>
+      <button class="quiz-opt" onclick="quizAns(this,false,'Itu hasil kalau langsung dibagi, bukan diturunkan')">x⁴/4</button>
+    </div>
+    <div class="quiz-feedback" id="qf0"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 2: INTEGRAL TAK TENTU ══════════════════════ -->
+<div class="section" id="s2">
+  <div class="section-title">✏️ Integral Tak Tentu</div>
+  <p class="section-desc">Integral tanpa batas atas-bawah. Hasilnya selalu ada +C. Ini yang paling banyak keluar di kisi-kisi.</p>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-amber">📜</span> 6 Aturan Wajib Hafal</div>
+    
+    <div class="formula-grid">
+      <div class="formula-card">
+        <div class="label">1. Aturan Pangkat</div>
+        <div class="f">∫ xⁿ dx = xⁿ⁺¹/(n+1) + C</div>
+        <div style="font-size:0.75rem;color:var(--brown);margin-top:0.3rem">asal n ≠ -1</div>
+      </div>
+      <div class="formula-card">
+        <div class="label">2. Kasus Khusus n=-1</div>
+        <div class="f">∫ x⁻¹ dx = ∫(1/x)dx = ln|x| + C</div>
+      </div>
+      <div class="formula-card">
+        <div class="label">3. Konstanta</div>
+        <div class="f">∫ c·f(x)dx = c·∫f(x)dx</div>
+        <div style="font-size:0.75rem;color:var(--brown);margin-top:0.3rem">konstanta bisa keluar</div>
+      </div>
+      <div class="formula-card">
+        <div class="label">4. Penjumlahan</div>
+        <div class="f">∫[f±g]dx = ∫f dx ± ∫g dx</div>
+        <div style="font-size:0.75rem;color:var(--brown);margin-top:0.3rem">integralkan suku per suku</div>
+      </div>
+      <div class="formula-card">
+        <div class="label">5. Eksponensial</div>
+        <div class="f">∫ eˣ dx = eˣ + C</div>
+        <div style="font-size:0.75rem;color:var(--brown);margin-top:0.3rem">eˣ adalah keajaiban matematika!</div>
+      </div>
+      <div class="formula-card">
+        <div class="label">6. Nol</div>
+        <div class="f">∫ 0 dx = C</div>
+        <div style="font-size:0.75rem;color:var(--brown);margin-top:0.3rem">integral nol = konstanta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATURAN PANGKAT DETAIL -->
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-teal">✦</span> Cara Pakai Aturan Pangkat — Step by Step</div>
+    <div class="analogy" style="margin-top:0">
+      Kalau turunan itu "kalikan pangkat, kurangi 1", maka integral kebalikannya: "tambah 1 ke pangkat, bagi dengan pangkat baru".
+    </div>
+    <div class="math">∫ xⁿ dx = x^(n+1) / (n+1) + C</div>
+    <ul class="steps">
+      <li><div class="step-num">1</div><div class="step-content">Lihat pangkat n</div></li>
+      <li><div class="step-num">2</div><div class="step-content">Tambah 1 ke pangkat: n → n+1</div></li>
+      <li><div class="step-num">3</div><div class="step-content">Bagi koefisien dengan n+1</div></li>
+      <li><div class="step-num">4</div><div class="step-content">Tambahkan +C di akhir</div></li>
+    </ul>
+
+    <div class="example">
+      <div class="example-header"><span>Contoh A — Soal UTS No.1</span><span>Pangkat biasa</span></div>
+      <div class="example-body">
+        <div class="example-soal">∫ 6x² dx</div>
+        <div class="step-row">
+          <span class="step-label">Pangkat</span>
+          <span>n = 2. Konstanta = 6. Pakai rumus pangkat.</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Hitung</span>
+          <span>= 6 · x^(2+1) / (2+1) = 6 · x³/3</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label teal">Sederh.</span>
+          <span>= 6/3 · x³ = 2x³</span>
+        </div>
+        <div class="result-box">= 2x³ + C</div>
+        <div class="box box-teal" style="margin-top:0.8rem;font-size:0.83rem">
+          <strong>Verifikasi balik</strong>
+          Turunkan 2x³ + C → 2·3x² = 6x² ✓ Sama dengan soal awal!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTOH SOAL 2 -->
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-rose">✦</span> Integralkan Suku Per Suku</div>
+    <p style="font-size:0.9rem;margin-bottom:0.7rem">Kalau ada penjumlahan/pengurangan, integralkan masing-masing suku secara terpisah.</p>
+
+    <div class="example">
+      <div class="example-header"><span>Contoh B — Soal UTS No.2</span><span>3 suku berbeda</span></div>
+      <div class="example-body">
+        <div class="example-soal">∫ (3x² − 4x + 7) dx</div>
+        <div class="step-row">
+          <span class="step-label">Pisah</span>
+          <span>= ∫3x² dx − ∫4x dx + ∫7 dx</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Suku 1</span>
+          <span>∫3x² dx = 3 · x³/3 = x³</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Suku 2</span>
+          <span>∫4x dx = 4 · x²/2 = 2x²</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Suku 3</span>
+          <span>∫7 dx = 7x &nbsp;&nbsp; (konstanta × x)</span>
+        </div>
+        <div class="result-box">= x³ − 2x² + 7x + C</div>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="example-header"><span>Contoh C — Soal UTS No.3</span><span>eˣ + trigonometri</span></div>
+      <div class="example-body">
+        <div class="example-soal">∫ (2eˣ − 3sin x + 4cos x) dx</div>
+        <div class="step-row">
+          <span class="step-label">eˣ</span>
+          <span>∫ 2eˣ dx = 2eˣ</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">sin x</span>
+          <span>∫ −3sin x dx = −3 · (−cos x) = +3cos x</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">cos x</span>
+          <span>∫ 4cos x dx = 4sin x</span>
+        </div>
+        <div class="result-box">= 2eˣ + 3cos x + 4sin x + C</div>
+        <div class="box box-rose" style="margin-top:0.8rem;font-size:0.82rem">
+          <strong>⚠️ Jebakan!</strong>
+          ∫ sin x dx = <strong>−cos x</strong> (ada minusnya). Jadi kalau ada −3sin x, hasilnya −3 × (−cos x) = +3cos x.
+          Minus × minus = plus!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-q">
+    <div class="q-text">Berapa hasil dari ∫ x⁵ dx?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="quizAns(this,false,'Itu hasil turunan, bukan integral. Turunan x⁵ = 5x⁴')">5x⁴ + C</button>
+      <button class="quiz-opt" onclick="quizAns(this,true,'Betul! Pangkat 5+1=6, koefisien 1/(5+1)=1/6. Jadi x⁶/6 + C')">x⁶/6 + C</button>
+      <button class="quiz-opt" onclick="quizAns(this,false,'Salah! Harus ditambah 1 ke pangkat DULU, baru bagi')">x⁴/4 + C</button>
+    </div>
+    <div class="quiz-feedback" id="qf1"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 3: SUBSTITUSI ══════════════════════ -->
+<div class="section" id="s3">
+  <div class="section-title">🔀 Integral Substitusi Sederhana</div>
+  <p class="section-desc">Teknik ganti variabel: ubah bentuk susah ke bentuk yang bisa pakai aturan dasar.</p>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-amber">💡</span> Ide Dasarnya</div>
+    <div class="analogy" style="margin-top:0">
+      Kamu ketemu soal kayak ∫ (2x+1)⁵ dx. Kalau kamu expand itu jadi polinomial panjang banget. Tapi ada cara pintas: ganti bagian dalam (2x+1) dengan huruf u, selesaikan integral u yang lebih simple, lalu ganti balik.
+    </div>
+    <div class="math-big">Jika u = g(x), maka du = g'(x) dx</div>
+    <ul class="steps">
+      <li><div class="step-num">1</div><div class="step-content"><strong>Pilih u</strong> — biasanya bagian dalam kurung atau yang ribet</div></li>
+      <li><div class="step-num">2</div><div class="step-content"><strong>Cari du</strong> — turunkan u terhadap x, tulis jadi du = ... dx</div></li>
+      <li><div class="step-num">3</div><div class="step-content"><strong>Ubah dx</strong> — dari du = ... dx → dx = du/...</div></li>
+      <li><div class="step-num">4</div><div class="step-content"><strong>Substitusi</strong> ke integral asli, selesaikan dalam u</div></li>
+      <li><div class="step-num">5</div><div class="step-content"><strong>Ganti balik</strong> u dengan ekspresi x aslinya</div></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-teal">✦</span> Pola 1: Bentuk (ax + b)ⁿ</div>
+    
+    <div class="example">
+      <div class="example-header"><span>Contoh — Soal UTS No.4</span><span>Linear dalam kurung berpangkat</span></div>
+      <div class="example-body">
+        <div class="example-soal">∫ (2x + 1)⁵ dx</div>
+        <div class="step-row">
+          <span class="step-label">Pilih u</span>
+          <span>u = 2x + 1 &nbsp;&nbsp; (bagian dalam kurung)</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Cari du</span>
+          <span>du/dx = 2 &nbsp;→&nbsp; du = 2 dx &nbsp;→&nbsp; dx = du/2</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Substitusi</span>
+          <span>∫ u⁵ · (du/2) = (1/2) ∫ u⁵ du</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Selesaikan</span>
+          <span>(1/2) · u⁶/6 = u⁶/12</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label teal">Balik</span>
+          <span>Ganti u = 2x + 1</span>
+        </div>
+        <div class="result-box">= (2x + 1)⁶ / 12 + C</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-rose">✦</span> Pola 2: Bentuk 1/(ax + b) — Hasilnya Logaritma</div>
+    <div class="box box-rose" style="margin-top:0">
+      <strong>Ingat!</strong>
+      ∫ 1/u du = ln|u| + C &nbsp; (ini dari aturan n = -1)
+    </div>
+
+    <div class="example">
+      <div class="example-header"><span>Contoh — Soal UTS No.5</span><span>Pecahan → ln</span></div>
+      <div class="example-body">
+        <div class="example-soal">∫ 3/(3x − 2) dx</div>
+        <div class="step-row">
+          <span class="step-label">Pilih u</span>
+          <span>u = 3x − 2</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Cari du</span>
+          <span>du = 3 dx &nbsp;→&nbsp; dx = du/3</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Substitusi</span>
+          <span>∫ 3/u · (du/3) = ∫ (1/u) du</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label teal">Balik</span>
+          <span>= ln|u| + C = ln|3x − 2| + C</span>
+        </div>
+        <div class="result-box">= ln|3x − 2| + C</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-q">
+    <div class="q-text">Kalau u = 5x + 3, berapa du?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="quizAns(this,false,'Itu nilai x dari u, bukan du')">u = 5 + 3x</button>
+      <button class="quiz-opt" onclick="quizAns(this,true,'Betul! Turunkan 5x+3 terhadap x: koefisien 5. Jadi du = 5 dx')">du = 5 dx</button>
+      <button class="quiz-opt" onclick="quizAns(this,false,'Bukan. Turunkan u terhadap x, bukan sebaliknya')">du = x/5 dx</button>
+    </div>
+    <div class="quiz-feedback" id="qf2"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 4: SUBSTITUSI ALJABAR ══════════════════════ -->
+<div class="section" id="s4">
+  <div class="section-title">🧮 Substitusi Fungsi Aljabar</div>
+  <p class="section-desc">Versi lanjut substitusi — di sini u bukan linear, tapi ada x² atau x³ di dalamnya. Kuncinya: <strong>harus ada turunan u di luar kurung</strong>.</p>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-amber">🔍</span> Cara Mengenali Polanya</div>
+    <div class="analogy" style="margin-top:0">
+      Kalau kamu lihat soal integral dan ada dua bagian yang salah satunya kelihatan seperti turunan dari yang lain — itulah tandanya pakai substitusi aljabar.
+    </div>
+    <div class="box box-amber">
+      <strong>Contoh pengenalan pola</strong>
+      ∫ x(x² + 3)⁴ dx<br>
+      → Ada x² + 3 dalam kurung. Turunan x² + 3 adalah 2x.<br>
+      → Di luar kurung ada x (hampir sama dengan 2x, tinggal urus konstantanya!).<br>
+      → Cocok untuk substitusi u = x² + 3.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-teal">✦</span> Pola A: Ada faktor yang cocok dengan du</div>
+
+    <div class="example">
+      <div class="example-header"><span>Contoh — Soal UTS No.6</span><span>Turunan u muncul di luar</span></div>
+      <div class="example-body">
+        <div class="example-soal">∫ x(x² + 3)⁴ dx</div>
+        <div class="step-row">
+          <span class="step-label">Kenali</span>
+          <span>u = x² + 3 &nbsp; (bagian dalam kurung)</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">du</span>
+          <span>du = 2x dx &nbsp;→&nbsp; x dx = du/2</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Substitusi</span>
+          <span>∫ u⁴ · x dx = ∫ u⁴ · (du/2) = (1/2)∫ u⁴ du</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Selesaikan</span>
+          <span>(1/2) · u⁵/5 = u⁵/10</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label teal">Balik</span>
+          <span>u = x² + 3</span>
+        </div>
+        <div class="result-box">= (x² + 3)⁵ / 10 + C</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-blue">✦</span> Pola B: Pembilang = Turunan Penyebut → Langsung ln</div>
+    <div class="box box-blue" style="margin-top:0">
+      <strong>Pola emas yang sering muncul</strong>
+      Kalau integral berbentuk ∫ f'(x)/f(x) dx, jawabannya langsung:<br>
+      = ln|f(x)| + C
+    </div>
+
+    <div class="example">
+      <div class="example-header"><span>Contoh — Soal UTS No.7</span><span>Pembilang = turunan penyebut</span></div>
+      <div class="example-body">
+        <div class="example-soal">∫ (2x + 1)/(x² + x + 4) dx</div>
+        <div class="step-row">
+          <span class="step-label">Cek</span>
+          <span>Penyebut: x² + x + 4. Turunannya: 2x + 1.</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Perhatikan</span>
+          <span>Pembilang (2x+1) TEPAT SAMA dengan turunan penyebut!</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">u</span>
+          <span>u = x² + x + 4 &nbsp;→&nbsp; du = (2x+1) dx</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Subs.</span>
+          <span>∫ du/u = ln|u|</span>
+        </div>
+        <div class="result-box">= ln|x² + x + 4| + C</div>
+        <div class="box box-blue" style="margin-top:0.8rem;font-size:0.82rem">
+          <strong>Cara cepat hafalnya</strong>
+          ∫ (turunan penyebut)/(penyebut) dx = ln|penyebut| + C
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-q">
+    <div class="q-text">Untuk ∫ x²(x³ + 1)⁵ dx, apa pilihan u yang tepat?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="quizAns(this,false,'Kalau u = x², du = 2x dx. Tapi di luar kurung ada x², bukan 2x. Lebih cocok pilihan lain.')">u = x²</button>
+      <button class="quiz-opt" onclick="quizAns(this,true,'Betul! u = x³+1, du = 3x² dx. Di luar ada x² (bisa urus konstantanya).')">u = x³ + 1</button>
+      <button class="quiz-opt" onclick="quizAns(this,false,'u = pangkat 5 tidak logis karena itu bukan bagian yang bisa disederhanakan')">u = pangkat 5</button>
+    </div>
+    <div class="quiz-feedback" id="qf3"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 5: PARSIAL ══════════════════════ -->
+<div class="section" id="s5">
+  <div class="section-title">∂ Integral Parsial</div>
+  <p class="section-desc">Dipakai kalau integrand adalah perkalian dua fungsi berbeda jenis (misal polinom × eksponensial, atau polinom × trigonometri).</p>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-amber">📜</span> Rumus Dasar</div>
+    <div class="math-big">∫ u dv = uv − ∫ v du</div>
+    <p style="font-size:0.9rem;margin-bottom:0.8rem">Cara baca: "integral u kali dv sama dengan uv dikurangi integral v kali du"</p>
+    <div class="box box-amber">
+      <strong>Panduan pilih u dan dv — Aturan LIATE</strong>
+      Pilih u dari yang LEBIH KIRI di daftar ini:<br>
+      <strong>L</strong>ogaritma → <strong>I</strong>nvers trigonometri → <strong>A</strong>ljabar/polinom → <strong>T</strong>rigonometri → <strong>E</strong>ksponensial
+    </div>
+    <div class="box box-teal" style="margin-top:0.5rem">
+      <strong>Logikanya</strong>
+      u itu yang kita turunkan (harusnya makin simple). dv itu yang kita integralkan. Polinom kalau diturunkan terus lama-lama jadi 0 — makanya polinom jadi u.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-rose">✦</span> Cara Pakai Rumus — Parsial Berulang</div>
+
+    <div class="example">
+      <div class="example-header"><span>Contoh — Soal UTS No.8</span><span>Polinom × eˣ, parsial 2x</span></div>
+      <div class="example-body">
+        <div class="example-soal">∫ x²eˣ dx</div>
+        <div style="font-size:0.82rem;color:var(--brown);margin-bottom:0.6rem">x² itu aljabar, eˣ itu eksponensial. Berdasarkan LIATE, u = x².</div>
+        <div class="step-row">
+          <span class="step-label">Set 1</span>
+          <span>u = x², dv = eˣ dx &nbsp;→&nbsp; du = 2x dx, v = eˣ</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Rumus</span>
+          <span>= uv − ∫v du = x²eˣ − ∫eˣ · 2x dx</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Sisa</span>
+          <span>Masih perlu selesaikan ∫ 2xeˣ dx → parsial lagi!</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Set 2</span>
+          <span>u = 2x, dv = eˣ dx &nbsp;→&nbsp; du = 2 dx, v = eˣ</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Rumus</span>
+          <span>∫ 2xeˣ dx = 2xeˣ − ∫ 2eˣ dx = 2xeˣ − 2eˣ</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label teal">Gabung</span>
+          <span>x²eˣ − (2xeˣ − 2eˣ) = x²eˣ − 2xeˣ + 2eˣ</span>
+        </div>
+        <div class="result-box">= eˣ(x² − 2x + 2) + C</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="card-icon icon-purple">📊</span> Metode Tabulasi — Cara Lebih Cepat</div>
+    <div class="analogy" style="margin-top:0">
+      Daripada parsial berulang yang ribet, bikin tabel: kolom kiri turunkan sampai 0, kolom kanan integralkan terus. Kali diagonal dengan tanda bergantian +−+−...
+    </div>
+    <div class="box box-purple">
+      <strong>Format Tabel</strong>
+      Kolom Tanda | Kolom D (diturunkan) | Kolom I (diintegralkan)<br>
+      Kalikan diagonal: D baris n × I baris n+1, dengan tanda baris n.
+    </div>
+
+    <div class="example" style="border-color: var(--purple)">
+      <div class="example-header" style="background:var(--purple)"><span>Contoh — Soal UTS No.9</span><span>Polinom × sin x</span></div>
+      <div class="example-body">
+        <div class="example-soal">∫ x² sin x dx</div>
+        <div style="font-size:0.82rem;color:var(--brown);margin-bottom:0.7rem">f(x) = x² (turunkan), g(x) = sin x (integralkan)</div>
+        <div class="table-scroll">
+          <table class="tab-table">
+            <tr><th>Tanda</th><th>D (turunan)</th><th>I (integral)</th></tr>
+            <tr><td class="plus">+</td><td>x²</td><td>sin x</td></tr>
+            <tr><td class="minus">−</td><td>2x</td><td>−cos x</td></tr>
+            <tr><td class="plus">+</td><td>2</td><td>−sin x</td></tr>
+            <tr><td class="minus">−</td><td>0</td><td>cos x</td></tr>
+          </table>
+        </div>
+        <div style="margin-top:0.8rem;font-size:0.88rem;">
+          <strong>Perkalian diagonal:</strong>
+          <div class="step-row" style="margin-top:0.4rem">
+            <span class="step-label">Baris +</span>
+            <span>(+) x² × (−cos x) = −x²cos x</span>
+          </div>
+          <div class="step-row">
+            <span class="step-label">Baris −</span>
+            <span>(−) 2x × (−sin x) = +2x sin x</span>
+          </div>
+          <div class="step-row">
+            <span class="step-label">Baris +</span>
+            <span>(+) 2 × cos x = +2cos x</span>
+          </div>
+          <div class="step-row">
+            <span class="step-label teal">Stop</span>
+            <span>D = 0 → selesai</span>
+          </div>
+        </div>
+        <div class="result-box">= −x²cos x + 2x sin x + 2cos x + C</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-q">
+    <div class="q-text">Untuk ∫ x·eˣ dx, berdasarkan LIATE mana yang jadi u?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="quizAns(this,true,'Betul! x adalah Aljabar, eˣ adalah Eksponensial. A lebih kiri dari E, jadi u = x.')">u = x</button>
+      <button class="quiz-opt" onclick="quizAns(this,false,'Kalau u = eˣ, du = eˣ dx, v = x²/2. Hasilnya lebih ribet, bukan lebih simple.')">u = eˣ</button>
+    </div>
+    <div class="quiz-feedback" id="qf4"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 6: SOAL UTS ══════════════════════ -->
+<div class="section" id="s6">
+  <div class="section-title">📝 Soal UTS + Pembahasan Lengkap</div>
+  <p class="section-desc">Semua 9 soal dari kisi-kisi UTS 2025/2026. Coba sendiri dulu sebelum klik "Lihat Jawaban".</p>
+
+  <!-- NO 1 -->
+  <div class="soal-card">
+    <div class="soal-header amber">No. 1 — A. Pengantar Dasar Integral</div>
+    <div class="soal-body">
+      <p style="font-size:0.9rem;margin-bottom:0.3rem">Jelaskan hubungan antara turunan dan integral, lalu tentukan:</p>
+      <div class="soal-q">∫ 6x² dx</div>
+      <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban + Penjelasan</button>
+      <div class="toggle-content">
+        <div class="box box-amber">
+          <strong>Penjelasan hubungan</strong>
+          Integral adalah operasi kebalikan (anti-turunan) dari turunan. Jika F'(x) = f(x), maka ∫ f(x) dx = F(x) + C.
+          Contoh: Karena turunan x³ = 3x², maka integral 3x² = x³ + C.
+        </div>
+        <div class="step-row" style="margin-top:0.6rem">
+          <span class="step-label">Aturan</span>
+          <span>∫ xⁿ dx = xⁿ⁺¹/(n+1) + C. Di sini n = 2, koef = 6.</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Hitung</span>
+          <span>= 6 · x^(2+1)/(2+1) = 6 · x³/3 = 2x³</span>
+        </div>
+        <div class="result-box">= 2x³ + C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO 2 -->
+  <div class="soal-card">
+    <div class="soal-header amber">No. 2 — B. Integral Tak Tentu</div>
+    <div class="soal-body">
+      <div class="soal-q">∫ (3x² − 4x + 7) dx</div>
+      <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
+      <div class="toggle-content">
+        <div class="step-row"><span class="step-label">∫3x²</span><span>= 3·x³/3 = x³</span></div>
+        <div class="step-row"><span class="step-label">∫−4x</span><span>= −4·x²/2 = −2x²</span></div>
+        <div class="step-row"><span class="step-label">∫7</span><span>= 7x</span></div>
+        <div class="result-box">= x³ − 2x² + 7x + C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO 3 -->
+  <div class="soal-card">
+    <div class="soal-header teal">No. 3 — B. Integral Tak Tentu</div>
+    <div class="soal-body">
+      <div class="soal-q">∫ (2eˣ − 3sin x + 4cos x) dx</div>
+      <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
+      <div class="toggle-content">
+        <div class="step-row"><span class="step-label">∫2eˣ</span><span>= 2eˣ</span></div>
+        <div class="step-row"><span class="step-label">∫−3sinx</span><span>= −3 × (−cos x) = +3cos x &nbsp; ⚠️ minus × minus = plus!</span></div>
+        <div class="step-row"><span class="step-label">∫4cosx</span><span>= 4sin x</span></div>
+        <div class="result-box">= 2eˣ + 3cos x + 4sin x + C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO 4 -->
+  <div class="soal-card">
+    <div class="soal-header blue">No. 4 — C. Substitusi Sederhana</div>
+    <div class="soal-body">
+      <div class="soal-q">∫ (2x + 1)⁵ dx</div>
+      <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
+      <div class="toggle-content">
+        <div class="step-row"><span class="step-label">u</span><span>u = 2x + 1</span></div>
+        <div class="step-row"><span class="step-label">du</span><span>du = 2 dx &nbsp;→&nbsp; dx = du/2</span></div>
+        <div class="step-row"><span class="step-label">Subs.</span><span>∫ u⁵ · (du/2) = (1/2)·u⁶/6 = u⁶/12</span></div>
+        <div class="step-row"><span class="step-label teal">Balik</span><span>u = 2x + 1</span></div>
+        <div class="result-box">= (2x + 1)⁶ / 12 + C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO 5 -->
+  <div class="soal-card">
+    <div class="soal-header blue">No. 5 — C. Substitusi Sederhana</div>
+    <div class="soal-body">
+      <div class="soal-q">∫ 3/(3x − 2) dx</div>
+      <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
+      <div class="toggle-content">
+        <div class="step-row"><span class="step-label">u</span><span>u = 3x − 2</span></div>
+        <div class="step-row"><span class="step-label">du</span><span>du = 3 dx &nbsp;→&nbsp; dx = du/3</span></div>
+        <div class="step-row"><span class="step-label">Subs.</span><span>∫ 3/u · (du/3) = ∫ (1/u) du = ln|u|</span></div>
+        <div class="result-box">= ln|3x − 2| + C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO 6 -->
+  <div class="soal-card">
+    <div class="soal-header rose">No. 6 — D. Substitusi Fungsi Aljabar</div>
+    <div class="soal-body">
+      <div class="soal-q">∫ x(x² + 3)⁴ dx</div>
+      <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
+      <div class="toggle-content">
+        <div class="box box-rose" style="margin-bottom:0.7rem;font-size:0.83rem">
+          <strong>Kenali pola</strong>
+          u = x² + 3. Turunannya 2x. Di luar ada x. Cocok!
+        </div>
+        <div class="step-row"><span class="step-label">u</span><span>u = x² + 3</span></div>
+        <div class="step-row"><span class="step-label">du</span><span>du = 2x dx &nbsp;→&nbsp; x dx = du/2</span></div>
+        <div class="step-row"><span class="step-label">Subs.</span><span>∫ u⁴ · (du/2) = (1/2) · u⁵/5 = u⁵/10</span></div>
+        <div class="step-row"><span class="step-label teal">Balik</span><span>u = x² + 3</span></div>
+        <div class="result-box">= (x² + 3)⁵ / 10 + C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO 7 -->
+  <div class="soal-card">
+    <div class="soal-header rose">No. 7 — D. Substitusi Fungsi Aljabar</div>
+    <div class="soal-body">
+      <div class="soal-q">∫ (2x + 1)/(x² + x + 4) dx</div>
+      <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
+      <div class="toggle-content">
+        <div class="box box-rose" style="margin-bottom:0.7rem;font-size:0.83rem">
+          <strong>Trik deteksi: cek apakah pembilang = turunan penyebut</strong>
+          Penyebut: x² + x + 4. Turunannya: 2x + 1. Pembilang: 2x + 1. 
+          SAMA PERSIS! → langsung ln.
+        </div>
+        <div class="step-row"><span class="step-label">u</span><span>u = x² + x + 4</span></div>
+        <div class="step-row"><span class="step-label">du</span><span>du = (2x + 1) dx &nbsp; (tepat = pembilang)</span></div>
+        <div class="step-row"><span class="step-label">Subs.</span><span>∫ du/u = ln|u|</span></div>
+        <div class="result-box">= ln|x² + x + 4| + C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO 8 -->
+  <div class="soal-card">
+    <div class="soal-header purple">No. 8 — E. Integral Parsial (Rumus)</div>
+    <div class="soal-body">
+      <div class="soal-q">∫ x²eˣ dx</div>
+      <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
+      <div class="toggle-content">
+        <div class="box box-purple" style="margin-bottom:0.7rem;font-size:0.83rem">
+          <strong>LIATE: x² = Aljabar, eˣ = Eksponensial → u = x²</strong>
+          Perlu parsial dua kali karena derajat polinom = 2.
+        </div>
+        <div style="font-size:0.85rem;font-weight:600;margin:0.5rem 0 0.3rem;color:var(--purple)">Iterasi 1:</div>
+        <div class="step-row"><span class="step-label">Set</span><span>u = x², dv = eˣ dx &nbsp;→&nbsp; du = 2x dx, v = eˣ</span></div>
+        <div class="step-row"><span class="step-label">Hasil</span><span>= x²eˣ − ∫ eˣ·2x dx</span></div>
+        <div style="font-size:0.85rem;font-weight:600;margin:0.5rem 0 0.3rem;color:var(--purple)">Iterasi 2 (selesaikan ∫2xeˣ dx):</div>
+        <div class="step-row"><span class="step-label">Set</span><span>u = 2x, dv = eˣ dx &nbsp;→&nbsp; du = 2 dx, v = eˣ</span></div>
+        <div class="step-row"><span class="step-label">Hasil</span><span>= 2xeˣ − ∫ 2eˣ dx = 2xeˣ − 2eˣ</span></div>
+        <div style="font-size:0.85rem;font-weight:600;margin:0.5rem 0 0.3rem;color:var(--purple)">Gabungkan:</div>
+        <div class="step-row"><span class="step-label teal">Final</span><span>x²eˣ − (2xeˣ − 2eˣ) = x²eˣ − 2xeˣ + 2eˣ</span></div>
+        <div class="result-box">= eˣ(x² − 2x + 2) + C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO 9 -->
+  <div class="soal-card">
+    <div class="soal-header purple">No. 9 — E. Integral Parsial (Tabulasi)</div>
+    <div class="soal-body">
+      <div class="soal-q">∫ x² sin x dx</div>
+      <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
+      <div class="toggle-content">
+        <div class="box box-purple" style="margin-bottom:0.7rem;font-size:0.83rem">
+          <strong>f(x) = x² → turunkan sampai 0. g(x) = sin x → integralkan terus.</strong>
+        </div>
+        <div class="table-scroll">
+          <table class="tab-table">
+            <tr><th>Tanda</th><th>D (turunan)</th><th>I (integral)</th></tr>
+            <tr><td class="plus">+</td><td>x²</td><td>sin x</td></tr>
+            <tr><td class="minus">−</td><td>2x</td><td>−cos x</td></tr>
+            <tr><td class="plus">+</td><td>2</td><td>−sin x</td></tr>
+            <tr><td class="minus">−</td><td>0</td><td>cos x</td></tr>
+          </table>
+        </div>
+        <div style="font-size:0.85rem;margin-top:0.7rem;">
+          <strong>Perkalian diagonal (D baris n × I baris n+1 × tanda baris n):</strong>
+          <div class="step-row" style="margin-top:0.5rem"><span class="step-label">+</span><span>x² × (−cos x) = −x²cos x</span></div>
+          <div class="step-row"><span class="step-label">−</span><span>2x × (−sin x) = +2x sin x &nbsp; (minus × minus = +)</span></div>
+          <div class="step-row"><span class="step-label">+</span><span>2 × cos x = +2cos x</span></div>
+        </div>
+        <div class="result-box">= −x²cos x + 2x sin x + 2cos x + C</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 7: CHEATSHEET ══════════════════════ -->
+<div class="section" id="s7">
+  <div class="section-title">📋 Contekan 1 Halaman</div>
+  <p class="section-desc">Ini yang perlu kamu tulis di kertas contekan. Compact, padat. Print mental sebelum UTS.</p>
+
+  <div style="background:var(--warm-white);border:2px solid var(--ink);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem">
+    <div style="text-align:center;margin-bottom:1.2rem">
+      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900">KALKULUS INTEGRAL — UTS 2025/2026</div>
+      <div style="font-size:0.75rem;color:var(--brown);letter-spacing:0.1em;text-transform:uppercase">INF60222 · Dosen: Dzul Fadli Rahman · Semester 2</div>
+    </div>
+
+    <div class="cheat-section">
+      <div class="cheat-title">A. Rumus Dasar Integral Tak Tentu</div>
+      <div class="cheat-grid">
+        <div class="cheat-item">∫ xⁿ dx = xⁿ⁺¹/(n+1) + C &nbsp;(n≠−1)</div>
+        <div class="cheat-item">∫ x⁻¹ dx = ln|x| + C</div>
+        <div class="cheat-item">∫ eˣ dx = eˣ + C</div>
+        <div class="cheat-item">∫ c·f(x) dx = c·∫f(x) dx</div>
+        <div class="cheat-item">∫ [f±g] dx = ∫f dx ± ∫g dx</div>
+        <div class="cheat-item">∫ 0 dx = C</div>
+      </div>
+    </div>
+
+    <div class="cheat-section">
+      <div class="cheat-title">B. Integral Trigonometri</div>
+      <div class="cheat-grid">
+        <div class="cheat-item">∫ sin x dx = −cos x + C</div>
+        <div class="cheat-item">∫ cos x dx = sin x + C</div>
+        <div class="cheat-item">∫ sec²x dx = tan x + C</div>
+        <div class="cheat-item">∫ csc²x dx = −cot x + C</div>
+        <div class="cheat-item">∫ tan x dx = ln|sec x| + C</div>
+        <div class="cheat-item">∫ sec x dx = ln|tan x + sec x| + C</div>
+      </div>
+    </div>
+
+    <div class="cheat-section">
+      <div class="cheat-title">C. Substitusi — Langkah</div>
+      <div style="font-size:0.82rem;font-family:'DM Mono',monospace;background:var(--cream);border-radius:6px;padding:0.7rem 0.9rem;line-height:2">
+        1. Pilih u (bagian dalam / penyebut / yang ribet)<br>
+        2. Cari du = turunan(u) · dx<br>
+        3. Ubah: dx = du / turunan(u)<br>
+        4. Substitusi semua x → u, selesaikan<br>
+        5. Ganti balik u → ekspresi x
+      </div>
+    </div>
+
+    <div class="cheat-section">
+      <div class="cheat-title">D. Pola Substitusi Aljabar</div>
+      <div class="cheat-grid">
+        <div class="cheat-item">∫(ax+b)ⁿ dx → u=ax+b, du=a dx</div>
+        <div class="cheat-item">∫1/(ax+b) dx = (1/a)·ln|ax+b|+C</div>
+        <div class="cheat-item">∫f'(x)/f(x) dx = ln|f(x)| + C ⭐</div>
+        <div class="cheat-item">∫x(x²+c)ⁿ dx → u=x²+c, x dx=du/2</div>
+      </div>
+    </div>
+
+    <div class="cheat-section">
+      <div class="cheat-title">E. Integral Parsial</div>
+      <div style="font-size:0.82rem;font-family:'DM Mono',monospace;background:var(--cream);border-radius:6px;padding:0.7rem 0.9rem;line-height:2">
+        Rumus: ∫ u dv = uv − ∫ v du<br>
+        Pilih u: LIATE → L=log, I=inv.trig, A=aljabar, T=trig, E=eˣ<br>
+        u = yang paling kiri di LIATE<br>
+        Tabulasi: kolom D(turunkan) dan I(integralkan), kali diagonal +−+−
+      </div>
+    </div>
+
+    <div class="cheat-section">
+      <div class="cheat-title">F. 9 Jawaban Soal UTS</div>
+      <div class="cheat-grid">
+        <div class="cheat-item">1. ∫6x²dx = 2x³ + C</div>
+        <div class="cheat-item">2. ∫(3x²−4x+7)dx = x³−2x²+7x+C</div>
+        <div class="cheat-item">3. ∫(2eˣ−3sinx+4cosx)dx = 2eˣ+3cosx+4sinx+C</div>
+        <div class="cheat-item">4. ∫(2x+1)⁵dx = (2x+1)⁶/12 + C</div>
+        <div class="cheat-item">5. ∫3/(3x−2)dx = ln|3x−2| + C</div>
+        <div class="cheat-item">6. ∫x(x²+3)⁴dx = (x²+3)⁵/10 + C</div>
+        <div class="cheat-item">7. ∫(2x+1)/(x²+x+4)dx = ln|x²+x+4|+C</div>
+        <div class="cheat-item">8. ∫x²eˣdx = eˣ(x²−2x+2) + C</div>
+        <div class="cheat-item">9. ∫x²sinx dx = −x²cosx+2xsinx+2cosx+C</div>
+      </div>
+    </div>
+
+    <div style="background:var(--amber-pale);border:1px dashed var(--amber);border-radius:8px;padding:0.7rem 0.9rem;margin-top:0.5rem;font-size:0.78rem;font-family:'DM Mono',monospace;color:var(--ink-soft)">
+      ⭐ TIPS UTS: Selalu cek dengan turunkan hasil → harus sama dengan soal!<br>
+      Jangan lupa +C untuk integral tak tentu!<br>
+      ln|...| → pasti dari substitusi yang hasilnya ∫du/u
+    </div>
+  </div>
+
+  <div class="box box-teal">
+    <strong>Cara pakai halaman ini</strong>
+    Salin bagian yang kamu anggap paling susah diingat. Prioritaskan: rumus trig (karena sering salah tanda), langkah substitusi, dan tabel tabulasi parsial.
+  </div>
+</div>
+
+</main>
+
+<script>
+const sections = document.querySelectorAll('.section');
+const navBtns = document.querySelectorAll('.nav-btn');
+
+function show(i) {
+  sections.forEach((s,j) => {
+    s.classList.toggle('active', j === i);
+  });
+  navBtns.forEach((b,j) => {
+    b.classList.toggle('active', j === i);
+  });
+  const prog = document.getElementById('prog');
+  prog.style.width = ((i / (sections.length - 1)) * 100) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggle(btn) {
+  const content = btn.nextElementSibling;
+  const isOpen = content.classList.contains('open');
+  content.classList.toggle('open', !isOpen);
+  btn.textContent = isOpen ? '▸ Lihat Jawaban' : '▾ Sembunyikan';
+}
+
+function quizAns(btn, correct, msg) {
+  const opts = btn.parentElement.querySelectorAll('.quiz-opt');
+  const fb = btn.closest('.quiz-q').querySelector('.quiz-feedback');
+  opts.forEach(o => { o.classList.remove('correct','wrong'); o.disabled = true; });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  fb.textContent = (correct ? '✓ ' : '✗ ') + msg;
+  fb.className = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
+}
+</script>
+</body>
+</html>
