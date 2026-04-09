@@ -742,12 +742,12 @@ tr:nth-child(even) td { background: var(--cream); }
       </div>
       <div class="formula-card">
         <div class="label">3. Konstanta</div>
-        <div class="f">∫ c·f(x)dx = c·∫f(x)dx</div>
+        <div class="f">∫ c·f(x)dx = c·∫f(x)dx + C</div>
         <div style="font-size:0.75rem;color:var(--brown);margin-top:0.3rem">konstanta bisa keluar</div>
       </div>
       <div class="formula-card">
         <div class="label">4. Penjumlahan</div>
-        <div class="f">∫[f±g]dx = ∫f dx ± ∫g dx</div>
+        <div class="f">∫[f±g]dx = ∫f dx ± ∫g dx + C</div>
         <div style="font-size:0.75rem;color:var(--brown);margin-top:0.3rem">integralkan suku per suku</div>
       </div>
       <div class="formula-card">
@@ -817,15 +817,15 @@ tr:nth-child(even) td { background: var(--cream); }
         </div>
         <div class="step-row">
           <span class="step-label">Suku 1</span>
-          <span>∫3x² dx = 3 · x³/3 = x³</span>
+          <span>∫3x² dx = 3 · x³/3 = x³ + C</span>
         </div>
         <div class="step-row">
           <span class="step-label">Suku 2</span>
-          <span>∫4x dx = 4 · x²/2 = 2x²</span>
+          <span>∫4x dx = 4 · x²/2 = 2x² + C</span>
         </div>
         <div class="step-row">
           <span class="step-label">Suku 3</span>
-          <span>∫7 dx = 7x &nbsp;&nbsp; (konstanta × x)</span>
+          <span>∫7 dx = 7x + C &nbsp;&nbsp; (konstanta × x)</span>
         </div>
         <div class="result-box">= x³ − 2x² + 7x + C</div>
       </div>
@@ -837,20 +837,20 @@ tr:nth-child(even) td { background: var(--cream); }
         <div class="example-soal">∫ (2eˣ − 3sin x + 4cos x) dx</div>
         <div class="step-row">
           <span class="step-label">eˣ</span>
-          <span>∫ 2eˣ dx = 2eˣ</span>
+          <span>∫ 2eˣ dx = 2eˣ + C</span>
         </div>
         <div class="step-row">
           <span class="step-label">sin x</span>
-          <span>∫ −3sin x dx = −3 · (−cos x) = +3cos x</span>
+          <span>∫ −3sin x dx = −3 · (−cos x) = +3cos x + C</span>
         </div>
         <div class="step-row">
           <span class="step-label">cos x</span>
-          <span>∫ 4cos x dx = 4sin x</span>
+          <span>∫ 4cos x dx = 4sin x + C</span>
         </div>
         <div class="result-box">= 2eˣ + 3cos x + 4sin x + C</div>
         <div class="box box-rose" style="margin-top:0.8rem;font-size:0.82rem">
           <strong>⚠️ Jebakan!</strong>
-          ∫ sin x dx = <strong>−cos x</strong> (ada minusnya). Jadi kalau ada −3sin x, hasilnya −3 × (−cos x) = +3cos x.
+          ∫ sin x dx = <strong>−cos x + C</strong> (ada minusnya). Jadi kalau ada −3sin x, hasilnya −3 × (−cos x) = +3cos x + C.
           Minus × minus = plus!
         </div>
       </div>
@@ -906,7 +906,7 @@ tr:nth-child(even) td { background: var(--cream); }
         </div>
         <div class="step-row">
           <span class="step-label">Substitusi</span>
-          <span>∫ u⁵ · (du/2) = (1/2) ∫ u⁵ du</span>
+          <span>∫ u⁵ · (du/2) = (1/2) ∫ u⁵ du + C</span>
         </div>
         <div class="step-row">
           <span class="step-label">Selesaikan</span>
@@ -942,7 +942,7 @@ tr:nth-child(even) td { background: var(--cream); }
         </div>
         <div class="step-row">
           <span class="step-label">Substitusi</span>
-          <span>∫ 3/u · (du/3) = ∫ (1/u) du</span>
+          <span>∫ 3/u · (du/3) = ∫ (1/u) du + C</span>
         </div>
         <div class="step-row">
           <span class="step-label teal">Balik</span>
@@ -1000,7 +1000,7 @@ tr:nth-child(even) td { background: var(--cream); }
         </div>
         <div class="step-row">
           <span class="step-label">Substitusi</span>
-          <span>∫ u⁴ · x dx = ∫ u⁴ · (du/2) = (1/2)∫ u⁴ du</span>
+          <span>∫ u⁴ · x dx = ∫ u⁴ · (du/2) = (1/2)∫ u⁴ du + C</span>
         </div>
         <div class="step-row">
           <span class="step-label">Selesaikan</span>
@@ -1070,7 +1070,7 @@ tr:nth-child(even) td { background: var(--cream); }
 
   <div class="card">
     <div class="card-title"><span class="card-icon icon-amber">📜</span> Rumus Dasar</div>
-    <div class="math-big">∫ u dv = uv − ∫ v du</div>
+    <div class="math-big">∫ u dv = uv − ∫ v du + C</div>
     <p style="font-size:0.9rem;margin-bottom:0.8rem">Cara baca: "integral u kali dv sama dengan uv dikurangi integral v kali du"</p>
     <div class="box box-amber">
       <strong>Panduan pilih u dan dv — Aturan LIATE</strong>
@@ -1097,7 +1097,7 @@ tr:nth-child(even) td { background: var(--cream); }
         </div>
         <div class="step-row">
           <span class="step-label">Rumus</span>
-          <span>= uv − ∫v du = x²eˣ − ∫eˣ · 2x dx</span>
+          <span>= uv − ∫v du = x²eˣ − ∫eˣ · 2x dx + C</span>
         </div>
         <div class="step-row">
           <span class="step-label">Sisa</span>
@@ -1109,7 +1109,7 @@ tr:nth-child(even) td { background: var(--cream); }
         </div>
         <div class="step-row">
           <span class="step-label">Rumus</span>
-          <span>∫ 2xeˣ dx = 2xeˣ − ∫ 2eˣ dx = 2xeˣ − 2eˣ</span>
+          <span>∫ 2xeˣ dx = 2xeˣ − ∫ 2eˣ dx = 2xeˣ − 2eˣ + C</span>
         </div>
         <div class="step-row">
           <span class="step-label teal">Gabung</span>
@@ -1203,7 +1203,7 @@ tr:nth-child(even) td { background: var(--cream); }
         </div>
         <div class="step-row">
           <span class="step-label">Hitung</span>
-          <span>= 6 · x^(2+1)/(2+1) = 6 · x³/3 = 2x³</span>
+          <span>= 6 · x^(2+1)/(2+1) = 6 · x³/3 = 2x³ + C</span>
         </div>
         <div class="result-box">= 2x³ + C</div>
       </div>
@@ -1217,9 +1217,9 @@ tr:nth-child(even) td { background: var(--cream); }
       <div class="soal-q">∫ (3x² − 4x + 7) dx</div>
       <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
       <div class="toggle-content">
-        <div class="step-row"><span class="step-label">∫3x²</span><span>= 3·x³/3 = x³</span></div>
-        <div class="step-row"><span class="step-label">∫−4x</span><span>= −4·x²/2 = −2x²</span></div>
-        <div class="step-row"><span class="step-label">∫7</span><span>= 7x</span></div>
+        <div class="step-row"><span class="step-label">∫3x²</span><span>= 3·x³/3 = x³ + C</span></div>
+        <div class="step-row"><span class="step-label">∫−4x</span><span>= −4·x²/2 = −2x² + C</span></div>
+        <div class="step-row"><span class="step-label">∫7</span><span>= 7x + C</span></div>
         <div class="result-box">= x³ − 2x² + 7x + C</div>
       </div>
     </div>
@@ -1232,9 +1232,9 @@ tr:nth-child(even) td { background: var(--cream); }
       <div class="soal-q">∫ (2eˣ − 3sin x + 4cos x) dx</div>
       <button class="toggle-btn" onclick="toggle(this)">▸ Lihat Jawaban</button>
       <div class="toggle-content">
-        <div class="step-row"><span class="step-label">∫2eˣ</span><span>= 2eˣ</span></div>
-        <div class="step-row"><span class="step-label">∫−3sinx</span><span>= −3 × (−cos x) = +3cos x &nbsp; ⚠️ minus × minus = plus!</span></div>
-        <div class="step-row"><span class="step-label">∫4cosx</span><span>= 4sin x</span></div>
+        <div class="step-row"><span class="step-label">∫2eˣ</span><span>= 2eˣ + C</span></div>
+        <div class="step-row"><span class="step-label">∫−3sinx</span><span>= −3 × (−cos x) = +3cos x + C &nbsp; ⚠️ minus × minus = plus!</span></div>
+        <div class="step-row"><span class="step-label">∫4cosx</span><span>= 4sin x + C</span></div>
         <div class="result-box">= 2eˣ + 3cos x + 4sin x + C</div>
       </div>
     </div>
@@ -1327,7 +1327,7 @@ tr:nth-child(even) td { background: var(--cream); }
         <div class="step-row"><span class="step-label">Hasil</span><span>= x²eˣ − ∫ eˣ·2x dx</span></div>
         <div style="font-size:0.85rem;font-weight:600;margin:0.5rem 0 0.3rem;color:var(--purple)">Iterasi 2 (selesaikan ∫2xeˣ dx):</div>
         <div class="step-row"><span class="step-label">Set</span><span>u = 2x, dv = eˣ dx &nbsp;→&nbsp; du = 2 dx, v = eˣ</span></div>
-        <div class="step-row"><span class="step-label">Hasil</span><span>= 2xeˣ − ∫ 2eˣ dx = 2xeˣ − 2eˣ</span></div>
+        <div class="step-row"><span class="step-label">Hasil</span><span>= 2xeˣ − ∫ 2eˣ dx = 2xeˣ − 2eˣ + C</span></div>
         <div style="font-size:0.85rem;font-weight:600;margin:0.5rem 0 0.3rem;color:var(--purple)">Gabungkan:</div>
         <div class="step-row"><span class="step-label teal">Final</span><span>x²eˣ − (2xeˣ − 2eˣ) = x²eˣ − 2xeˣ + 2eˣ</span></div>
         <div class="result-box">= eˣ(x² − 2x + 2) + C</div>
@@ -1383,8 +1383,8 @@ tr:nth-child(even) td { background: var(--cream); }
         <div class="cheat-item">∫ xⁿ dx = xⁿ⁺¹/(n+1) + C &nbsp;(n≠−1)</div>
         <div class="cheat-item">∫ x⁻¹ dx = ln|x| + C</div>
         <div class="cheat-item">∫ eˣ dx = eˣ + C</div>
-        <div class="cheat-item">∫ c·f(x) dx = c·∫f(x) dx</div>
-        <div class="cheat-item">∫ [f±g] dx = ∫f dx ± ∫g dx</div>
+        <div class="cheat-item">∫ c·f(x) dx = c·∫f(x) dx + C</div>
+        <div class="cheat-item">∫ [f±g] dx = ∫f dx ± ∫g dx + C</div>
         <div class="cheat-item">∫ 0 dx = C</div>
       </div>
     </div>
@@ -1425,7 +1425,7 @@ tr:nth-child(even) td { background: var(--cream); }
     <div class="cheat-section">
       <div class="cheat-title">E. Integral Parsial</div>
       <div style="font-size:0.82rem;font-family:'DM Mono',monospace;background:var(--cream);border-radius:6px;padding:0.7rem 0.9rem;line-height:2">
-        Rumus: ∫ u dv = uv − ∫ v du<br>
+        Rumus: ∫ u dv = uv − ∫ v du + C<br>
         Pilih u: LIATE → L=log, I=inv.trig, A=aljabar, T=trig, E=eˣ<br>
         u = yang paling kiri di LIATE<br>
         Tabulasi: kolom D(turunkan) dan I(integralkan), kali diagonal +−+−
